@@ -269,58 +269,136 @@ export default function HomePage() {
 
 
         <section className="shop band">
-          <div className="wrap"><div className="grid">
-            <div className="rv">
-             <div className="eyebrow lab a">E-commerce Solutions</div>
+          <div className="wrap">
 
-<h2 className="serif">
-  Online stores built to <span className="it">grow your business</span>.
-</h2>
+            <div className="shop-top">
+              <div className="shop-copy rv">
+                <div className="eyebrow lab a">E-commerce Solutions</div>
+                <h2 className="serif">Online stores built to <span className="it">grow your business</span>.</h2>
+                <p>We design and develop high-performance e-commerce platforms that deliver seamless shopping experiences, simplify management, and turn visitors into loyal customers.</p>
+                <div className="actions">
+                  <a href="tel:+447485222490" className="btn-line">Start a Project <span className="arw">→</span></a>
+                  <a href="/work" className="arwlink">View Our Work <span className="arw">→</span></a>
+                </div>
+              </div>
 
-<p>
-  We design and develop high-performance e-commerce platforms that deliver
-  seamless shopping experiences, simplify management, and turn visitors into
-  loyal customers.
-</p>
+              <div className="shop-stage rv">
+                <svg className="shop-art" viewBox="0 0 540 420" role="img" aria-label="A storefront with a live basket and a rising conversion curve">
+                  <defs>
+                    <filter id="chipShadow" x="-30%" y="-30%" width="160%" height="180%">
+                      <feDropShadow dx="0" dy="10" stdDeviation="10" floodColor="#26201A" floodOpacity="0.16" />
+                    </filter>
+                  </defs>
 
-<div className="actions">
-  <a href="tel:+447485222490" className="btn-line">
-    Start a Project <span className="arw">→</span>
-  </a>
+                  {/* browser window */}
+                  <rect className="pane" x="20" y="20" width="440" height="310" rx="6" />
+                  <line className="ln" x1="20" y1="56" x2="460" y2="56" />
+                  <circle className="dot" cx="40" cy="38" r="3.5" />
+                  <circle className="dot" cx="54" cy="38" r="3.5" />
+                  <circle className="dot" cx="68" cy="38" r="3.5" />
+                  <rect className="bar" x="100" y="31" width="180" height="14" rx="7" />
 
-  <a href="/work" className="arwlink">
-    View Our Work <span className="arw">→</span>
-  </a>
-</div>
+                  {/* hero band */}
+                  <rect className="wash" x="36" y="70" width="408" height="76" rx="4" />
+                  <rect className="hot" x="52" y="88" width="104" height="9" rx="4" />
+                  <rect className="bar" x="52" y="104" width="168" height="6" rx="3" />
+                  <rect className="hot" x="52" y="120" width="64" height="16" rx="8" />
+                  <g className="line" transform="translate(374,88)">
+                    <path d="M6,14 H38 L34,44 H10 Z" />
+                    <path d="M15,14 V9 a7,7 0 0 1 14,0 V14" />
+                  </g>
+
+                  {/* product grid */}
+                  <g>
+                    <rect className="pane" x="36" y="164" width="120" height="100" rx="4" />
+                    <rect className="wash" x="46" y="174" width="100" height="54" rx="2" />
+                    <rect className="bar" x="46" y="238" width="58" height="6" rx="3" />
+                    <rect className="bar" x="46" y="250" width="34" height="5" rx="2.5" />
+                  </g>
+                  <g>
+                    <rect className="pane sel" x="174" y="164" width="120" height="100" rx="4" />
+                    <rect className="wash hot-wash" x="184" y="174" width="100" height="54" rx="2" />
+                    <rect className="hot" x="184" y="238" width="58" height="6" rx="3" />
+                    <rect className="bar" x="184" y="250" width="34" height="5" rx="2.5" />
+                  </g>
+                  <g>
+                    <rect className="pane" x="312" y="164" width="120" height="100" rx="4" />
+                    <rect className="wash" x="322" y="174" width="100" height="54" rx="2" />
+                    <rect className="bar" x="322" y="238" width="58" height="6" rx="3" />
+                    <rect className="bar" x="322" y="250" width="34" height="5" rx="2.5" />
+                  </g>
+
+                  <circle className="dot" cx="220" cy="292" r="3.5" />
+                  <circle className="hot" cx="236" cy="292" r="4" />
+                  <circle className="dot" cx="252" cy="292" r="3.5" />
+
+                  {/* basket chip */}
+                  <g filter="url(#chipShadow)" transform="translate(330,296)">
+                    <rect className="chip" x="0" y="0" width="186" height="80" rx="8" />
+                    <g className="line" transform="translate(20,24)">
+                      <path d="M4,10 H28 L25,32 H7 Z" />
+                      <path d="M11,10 V6 a5,5 0 0 1 10,0 V10" />
+                    </g>
+                    <rect className="bar" x="66" y="24" width="94" height="7" rx="3.5" />
+                    <rect className="bar" x="66" y="40" width="62" height="6" rx="3" />
+                    <rect className="hot" x="66" y="56" width="44" height="8" rx="4" />
+                  </g>
+
+                  {/* conversion chip */}
+                  <g filter="url(#chipShadow)" transform="translate(24,288)">
+                    <rect className="chip" x="0" y="0" width="176" height="104" rx="8" />
+                    <rect className="bar" x="18" y="18" width="72" height="7" rx="3.5" />
+                    <line className="ln" x1="18" y1="86" x2="158" y2="86" />
+                    <path className="spark" d="M18,76 L48,60 L78,66 L110,42 L150,24" />
+                    <circle className="hot" cx="150" cy="24" r="4.5" />
+                  </g>
+                </svg>
+              </div>
             </div>
-            <div className="rv">
-            <ul className="checklist">
-  <li className="chk-shopping">Fast, intuitive shopping experiences</li>
-  <li className="chk-payment">Secure payment gateway integration</li>
-  <li className="chk-responsive">Responsive across desktop, tablet & mobile</li>
-  <li className="chk-inventory">Advanced inventory & order management</li>
-  <li className="chk-seo">SEO-optimized architecture for better visibility</li>
-  <li className="chk-scalable">Scalable platform built for business growth</li>
-</ul>
 
+            <div className="shop-feats rv">
+              <div className="feat">
+                <span className="fic"><svg viewBox="0 0 24 24"><path d="M4 7 h16 l-1.6 12 H5.6 Z" /><path d="M9 7 V5.5 a3 3 0 0 1 6 0 V7" /><path d="M8.5 11 h7" /></svg></span>
+                <div><h4 className="serif">Fast, intuitive shopping</h4><p>Discovery, cart, and checkout tuned so buying never stalls.</p></div>
+              </div>
+              <div className="feat">
+                <span className="fic"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="2" /><path d="M3 10.5 h18" /><path d="M6.5 15.5 h4" /></svg></span>
+                <div><h4 className="serif">Secure payments</h4><p>Stripe, PayPal, and Razorpay integrated and properly tested.</p></div>
+              </div>
+              <div className="feat">
+                <span className="fic"><svg viewBox="0 0 24 24"><rect x="2.5" y="5" width="13" height="14" rx="2" /><rect x="17.5" y="8" width="4" height="11" rx="1.5" /><path d="M6 16 h6" /></svg></span>
+                <div><h4 className="serif">Responsive by default</h4><p>One build that holds its shape on desktop, tablet, and phone.</p></div>
+              </div>
+              <div className="feat">
+                <span className="fic"><svg viewBox="0 0 24 24"><path d="M12 3 21 7.5 V16.5 L12 21 3 16.5 V7.5 Z" /><path d="M3 7.5 12 12 21 7.5 M12 12 V21" /></svg></span>
+                <div><h4 className="serif">Inventory &amp; orders</h4><p>Stock, fulfilment, and returns managed from one calm place.</p></div>
+              </div>
+              <div className="feat">
+                <span className="fic"><svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5" /><path d="M15.5 15.5 21 21" /><path d="M8 10.5 h5" /></svg></span>
+                <div><h4 className="serif">SEO-ready architecture</h4><p>Clean structure and metadata so the right pages get found.</p></div>
+              </div>
+              <div className="feat">
+                <span className="fic"><svg viewBox="0 0 24 24"><path d="M4 18 V13 M10 18 V9 M16 18 V11 M22 18 V5" /><path d="M2 21 h20" /></svg></span>
+                <div><h4 className="serif">Built to scale</h4><p>Foundations that cope as catalogue, traffic, and team grow.</p></div>
+              </div>
             </div>
+
+            <div className="mini-table rv">
+              <div>
+                <div className="mt-k">Platform</div>
+                <div className="mt-v lab">Shopify · WooCommerce · Custom</div>
+              </div>
+              <div>
+                <div className="mt-k">Payments</div>
+                <div className="mt-v lab">Stripe · PayPal · Razorpay</div>
+              </div>
+              <div>
+                <div className="mt-k">Performance</div>
+                <div className="mt-v lab">Fast · Secure · Scalable</div>
+              </div>
+            </div>
+
           </div>
-<div className="mini-table">
-  <div>
-    <div className="mt-k">Platform</div>
-    <div className="mt-v lab">Shopify · WooCommerce · Custom</div>
-  </div>
-
-  <div>
-    <div className="mt-k">Payments</div>
-    <div className="mt-v lab">Stripe · PayPal · Razorpay</div>
-  </div>
-
-  <div>
-    <div className="mt-k">Performance</div>
-    <div className="mt-v lab">Fast · Secure · Scalable</div>
-  </div>
-</div></div>
         </section>
 
 
@@ -403,18 +481,50 @@ export default function HomePage() {
                 </div>
               </div>
               <div className="rows">
-                <div className="card highlight-card">
-                  <div className="lab">Featured · Website</div>
-                  <h4 className="serif">HBM Partners</h4>
-                  <p>A considered digital presence for a professional services firm, built around clarity, trust, and thoughtful product storytelling.</p>
-                  <a href="https://hbm.salaro.com/" className="arwlink">View the site <span className="arw">→</span></a>
-                </div>
-                <div className="card highlight-card">
-                  <div className="lab">More work</div>
+
+                <a href="https://hbm.salaro.com/" target="_blank" rel="noopener noreferrer" className="feat-card">
+                  <div className="feat-media">
+                    <svg viewBox="0 0 400 200" role="img" aria-label="Preview of the HBM Partners site">
+                      <rect className="fr" x="20" y="14" width="360" height="172" rx="5" />
+                      <line className="fr-l" x1="20" y1="42" x2="380" y2="42" />
+                      <circle className="fr-d" cx="36" cy="28" r="2.5" />
+                      <circle className="fr-d" cx="46" cy="28" r="2.5" />
+                      <circle className="fr-d" cx="56" cy="28" r="2.5" />
+                      <rect className="fr-b" x="238" y="24" width="30" height="7" rx="3.5" />
+                      <rect className="fr-b" x="276" y="24" width="30" height="7" rx="3.5" />
+                      <rect className="fr-h" x="314" y="22" width="46" height="11" rx="5.5" />
+                      <rect className="fr-t" x="44" y="66" width="150" height="12" rx="6" />
+                      <rect className="fr-t" x="44" y="86" width="112" height="12" rx="6" />
+                      <rect className="fr-b" x="44" y="112" width="176" height="6" rx="3" />
+                      <rect className="fr-b" x="44" y="124" width="140" height="6" rx="3" />
+                      <rect className="fr-h" x="44" y="146" width="62" height="14" rx="7" />
+                      <rect className="fr-w" x="246" y="62" width="112" height="102" rx="4" />
+                      <path className="fr-s" d="M258,140 L286,118 L312,126 L346,88" />
+                      <circle className="fr-e" cx="346" cy="88" r="4" />
+                    </svg>
+                    <span className="feat-ribbon lab">Featured · Website</span>
+                  </div>
+                  <div className="feat-body">
+                    <div className="feat-row">
+                      <h4 className="serif">HBM Partners</h4>
+                      <span className="feat-host lab">hbm.salaro.com</span>
+                    </div>
+                    <p>A considered digital presence for a professional services firm, built around clarity, trust, and thoughtful product storytelling.</p>
+                    <div className="feat-tags"><span>Professional services</span><span>Brand &amp; build</span><span>Live</span></div>
+                    <span className="arwlink">View the site <span className="arw">→</span></span>
+                  </div>
+                </a>
+
+                <a href="tel:+447485222490" className="next-card">
+                  <div className="next-mark" aria-hidden="true">
+                    <svg viewBox="0 0 64 64"><path d="M32 18 V46 M18 32 H46" /></svg>
+                  </div>
+                  <div className="lab a">More work</div>
                   <h4 className="serif">Your project next.</h4>
                   <p>Digital strategy, bespoke builds, and practical support for teams that need a reliable partner without the usual agency noise.</p>
-                  <a href="tel:+447485222490" className="arwlink">Start a conversation <span className="arw">→</span></a>
-                </div>
+                  <span className="arwlink">Start a conversation <span className="arw">→</span></span>
+                </a>
+
               </div>
             </div>
           </div>

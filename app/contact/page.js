@@ -69,7 +69,7 @@ export default function ContactPage() {
           <div className="wrap">
             <div className="hero-inner">
               <div className="hero-copy">
-                <div className="eyebrow tag rust">Contact — start a conversation</div>
+                <div className="eyebrow tag">Contact — start a conversation</div>
                 <h1 className="serif">
                   <span className="reveal-line"><span>Let's <span className="it">start</span> a</span></span>
                   <span className="reveal-line"><span>conversation.</span></span>
@@ -77,7 +77,7 @@ export default function ContactPage() {
                 <p>We work with founders, product teams and marketing leads who need a calm partner for their next digital build.</p>
               </div>
               <div className="hero-viz">
-                <div className="viz-cap"><span className="tag rust">Response window</span><span className="dotlive"><i></i>Open for projects</span></div>
+                <div className="viz-cap"><span className="tag">Response window</span><span className="dotlive"><i></i>Open for projects</span></div>
                 <div className="viz-fig"><span className="serif">Direct</span><span className="tag">response</span></div>
                 <div className="respbar"><span className="resp-fill"></span></div>
                 <div className="resp-axis"><span>Now</span><span>Within a day</span><span>Clear next step</span></div>
@@ -107,7 +107,7 @@ export default function ContactPage() {
     
             <div className="col-left rv">
               <div className="sec-head">
-                <div className="tag rust">Start a project</div>
+                <div className="tag">Start a project</div>
                 <div className="serif">Send a <span className="it">note</span>.</div>
                 <p className="lead">Tell us what you're trying to build, where you are today, and what success would look like.</p>
               </div>
@@ -135,7 +135,7 @@ export default function ContactPage() {
 
     
             <div className="col-right rv">
-              <div className="sec-head"><div className="tag rust">How this goes</div></div>
+              <div className="sec-head"><div className="tag">How this goes</div></div>
               <div className="steps" id="steps">
                 <div className="spine" id="spine"></div>
                 <div className="step"><div className="n">01</div><h4>You write.</h4><p>A short note via this form or by email. No NDA is needed upfront.</p></div>
@@ -190,7 +190,7 @@ export default function ContactPage() {
         <section className="cta">
           <div className="wrap">
             <div>
-              <div className="tag">Ready to start?</div>
+                <div className="tag">Ready to start?</div>
               <h2 className="serif">Take your <em>business</em> online — the right way.</h2>
             </div>
             <div className="btns">
@@ -205,7 +205,7 @@ export default function ContactPage() {
           <div className="wrap">
             <div className="foot-top">
               <div>
-                <div className="brand">Sala<span style={{color: 'var(--rust)'}}>ro</span></div>
+                <div className="brand">Sala<span style={{color: 'var(--accent)'}}>ro</span></div>
                 <p>A UK-led digital consultancy. Practising since 1995.</p>
               </div>
               <div className="fcol"><h5>Pages</h5><a href="#">Home</a><a href="/practice">Practice</a><a href="/work">Work</a><a href="/studio">Studio</a><a href="/writing">Writing</a></div>
