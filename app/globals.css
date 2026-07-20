@@ -147,7 +147,7 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opa
 
 /* --- spec strip --- */
 .p-home .shop .mini-table{position:relative;z-index:1;display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:64px;padding-top:34px;border-top:1px solid var(--line)}
-.p-home .shop .mini-table div{padding:0 34px;border-left:1px solid var(--line-fine)}
+.p-home .shop .mini-table div{border-left:1px solid var(--line-fine)}
 .p-home .shop .mini-table div:first-child{border-left:none;padding-left:0}
 .p-home .shop .mini-table .mt-k{font-family:"Fraunces",serif;font-weight:300;font-size:17px;color:var(--ink)}
 .p-home .shop .mini-table .mt-v{margin-top:10px;color:var(--accent)}
@@ -399,7 +399,7 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opa
 .p-home .shop .grid{position:relative;z-index:1;display:grid;grid-template-columns:1.1fr .9fr;gap:80px;align-items:center}
 .p-home .shop h2{font-family:"Fraunces",serif;font-weight:250;font-size:clamp(30px,3.9vw,46px);line-height:1.1;letter-spacing:-.02em;max-width:36ch;position:relative}
 .p-home .shop h2::after{content:"";display:block;width:96px;height:2px;background:var(--accent);margin:24px 0 0;opacity:.9}
-.p-home .shop p{margin-top:28px;color:var(--ink-soft);max-width:46ch;line-height:1.8}
+.p-home .shop p{color:var(--ink-soft);max-width:46ch;line-height:1.8}
 .p-home .shop .actions{margin-top:44px;display:flex;gap:18px;align-items:center;flex-wrap:wrap}
 .p-home .shop .actions .btn-line{border-color:var(--accent);color:var(--accent);background:rgba(154,68,38,.1);box-shadow:0 0 0 1px rgba(154,68,38,.08);transition:background .35s,transform .35s,box-shadow .35s}
 .p-home .shop .actions .btn-line:hover{background:rgba(154,68,38,.16);box-shadow:0 14px 28px rgba(154,68,38,.08);transform:translateY(-1px)}
@@ -1366,7 +1366,7 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opa
 .p-practice .top-cta:hover{background:var(--ink);color:var(--paper)}
 .p-practice .hero{padding:110px 0 70px}
 .p-practice .hero .eyebrow{margin-bottom:34px}
-.p-practice .hero h1{font-family:"Fraunces",serif;font-weight:300;font-size:clamp(48px,8.6vw,120px);line-height:.98;letter-spacing:-.035em;max-width:11ch}
+.p-practice .hero h1{font-family:"Fraunces",serif;font-weight:300;font-size:clamp(48px,8.6vw,86px);line-height:.98;letter-spacing:-.035em;max-width:11ch}
 .p-practice .hero h1 .rust{font-weight:300}
 .p-practice .hero .sub{margin-top:40px;max-width:46ch;color:var(--ink-soft);font-size:17px;line-height:1.7}
 .p-practice .scroll{margin-top:70px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:12px}
@@ -1531,7 +1531,7 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opa
 /* --- hero: same scale as practice --- */
 .p-work .hero{padding:110px 0 70px}
 .p-work .hero .eyebrow{margin-bottom:34px}
-.p-work .hero h1{font-family:"Fraunces",serif;font-weight:300;font-size:clamp(48px,8.6vw,120px);line-height:.98;letter-spacing:-.035em;max-width:11ch}
+.p-work .hero h1{font-family:"Fraunces",serif;font-weight:300;font-size:clamp(48px,8.6vw,86px);line-height:.98;letter-spacing:-.035em;max-width:11ch}
 .p-work .hero h1 .rust{font-weight:300}
 .p-work .hero .sub{margin-top:40px;max-width:46ch;color:var(--ink-soft);font-size:17px;line-height:1.7}
 .p-work .hero-inner{display:grid;grid-template-columns:1.05fr .95fr;gap:64px;align-items:center}
@@ -2194,7 +2194,7 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opa
 .p-contact .hero .eyebrow{margin-bottom:34px;display:flex;align-items:center;gap:14px}
 .p-contact .hero .eyebrow::before{content:"";width:44px;height:1px;background:var(--rust)}
 .p-contact .hero h1{
-    font-size:clamp(56px,9.5vw,124px);
+    font-size:clamp(56px,9.5vw,86px);
     letter-spacing:-.02em;max-width:14ch;
   }
 .p-contact .hero p{
@@ -2209,7 +2209,7 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opa
 .p-contact .stat{padding:40px 34px;border-left:1px solid var(--line-soft)}
 .p-contact .stat:first-child{border-left:none;padding-left:0}
 .p-contact .stat:last-child{padding-right:0}
-.p-contact .stat .num{font-family:"Fraunces",serif;font-size:52px;font-weight:300;line-height:1;letter-spacing:-.02em}
+.p-contact .stat .num{font-family:"Fraunces",serif;font-size:32px;font-weight:300;line-height:1;letter-spacing:-.02em}
 .p-contact .stat .num em{font-style:normal;color:var(--rust);font-size:26px;vertical-align:super;margin-left:2px}
 .p-contact .stat .lbl{margin-top:16px}
 .p-contact .main{padding:82px 0 70px}
