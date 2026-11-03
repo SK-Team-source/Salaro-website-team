@@ -119,10 +119,14 @@ export default function ArchivePage() {
               <div className="y serif">2025</div>
               <div className="rows">
 <<<<<<< HEAD
+<<<<<<< HEAD
                 <a href="https://hbmpartners.fr/" className="row" data-cat="advisory"><span className="p-name serif">H.B.M. Partners</span><span className="p-d">Advisory</span><span className="p-s">Natural resources</span><span className="p-a">Open →</span></a>
 =======
                 <a href="https://hbm.salaro.com" className="row" data-cat="advisory"><span className="p-name serif">H.B.M. Partners</span><span className="p-d">Advisory</span><span className="p-s">Natural resources</span><span className="p-a">Open →</span></a>
 >>>>>>> origin/main
+=======
+                <a href="https://hbmpartners.fr/" className="row" data-cat="advisory"><span className="p-name serif">H.B.M. Partners</span><span className="p-d">Advisory</span><span className="p-s">Natural resources</span><span className="p-a">Open →</span></a>
+>>>>>>> master
               </div>
             </div>
 

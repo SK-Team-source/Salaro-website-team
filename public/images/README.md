@@ -1,4 +1,7 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> master
 # Image Directory Structure
 
 ## Folder Organization
@@ -69,6 +72,7 @@ import Image from 'next/image';
 ```jsx
 <img src="/images/avatars/team-member.jpg" alt="Team member" />
 ```
+<<<<<<< HEAD
 =======
 # Image Directory Structure
 
@@ -141,3 +145,5 @@ import Image from 'next/image';
 <img src="/images/avatars/team-member.jpg" alt="Team member" />
 ```
 >>>>>>> origin/main
+=======
+>>>>>>> master

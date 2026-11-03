@@ -1,4 +1,7 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> master
 (function initTopbarToggle(){
   const initTopbar = (topbar) => {
     if (topbar.dataset.menuToggleInit === 'true') return;
@@ -97,6 +100,7 @@
     run();
   }
 })();
+<<<<<<< HEAD
 =======
 (function initTopbarToggle(){
   const initTopbar = (topbar) => {
@@ -197,3 +201,5 @@
   }
 })();
 >>>>>>> origin/main
+=======
+>>>>>>> master

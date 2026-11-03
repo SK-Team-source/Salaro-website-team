@@ -1,4 +1,7 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> master
 'use client';
 import { useEffect } from 'react';
 
@@ -17,6 +20,7 @@ export default function LegalPageClient({ children }) {
 
   return <>{children}</>;
 }
+<<<<<<< HEAD
 =======
 'use client';
 import { useEffect } from 'react';
@@ -37,3 +41,5 @@ export default function LegalPageClient({ children }) {
   return <>{children}</>;
 }
 >>>>>>> origin/main
+=======
+>>>>>>> master

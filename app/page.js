@@ -746,7 +746,7 @@ export default function HomePage() {
 
                 <a href="https://hbmpartners.fr/" target="_blank" rel="noopener noreferrer" className="feat-card">
                   <div className="feat-media">
-                    <img src="/images/portfolio/hbmpatners.png" alt="Preview of the HBM Partners website" />
+                    <img src="/images/portfolio/hbmpartners.png" alt="Preview of the HBM Partners site" />
                     <span className="feat-ribbon lab">Featured · Website</span>
                   </div>
                   <div className="feat-body">

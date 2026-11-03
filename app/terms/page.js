@@ -1,4 +1,7 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> master
 import LegalPageClient from '../components/LegalPageClient';
 
 export const metadata = {
@@ -103,6 +106,7 @@ export default function TermsPage() {
     </LegalPageClient>
   );
 }
+<<<<<<< HEAD
 =======
 import LegalPageClient from '../components/LegalPageClient';
 
@@ -209,3 +213,5 @@ export default function TermsPage() {
   );
 }
 >>>>>>> origin/main
+=======
+>>>>>>> master
