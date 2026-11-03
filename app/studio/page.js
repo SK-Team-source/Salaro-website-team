@@ -436,7 +436,11 @@ const CASES = [
     mono: 'HBM',
     name: 'H.B.M. Partners',
     tag: 'Advisory · Natural resources',
+<<<<<<< HEAD
     url: 'https://hbmpartners.fr/',
+=======
+    url: 'https://hbm.salaro.com/',
+>>>>>>> origin/main
     body: "A London- and Paris-based advisory that structures energy and critical-mineral projects, pairing technical due diligence with institutional capital. We shaped the site around clear product storytelling — a narrative from intelligence to capital to resources, sector pages for oil & gas, mining and renewables, and a track record that turns complex deals into credible proof for family offices and funds.",
   },
   {
