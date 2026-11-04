@@ -618,76 +618,147 @@ export default function HomePage() {
               </div>
 
               <div className="shop-stage rv">
-                <svg className="shop-art" viewBox="0 0 540 420" role="img" aria-label="A storefront with a live basket and a rising conversion curve">
-                  <defs>
-                    <filter id="chipShadow" x="-30%" y="-30%" width="160%" height="180%">
-                      <feDropShadow dx="0" dy="10" stdDeviation="10" floodColor="#26201A" floodOpacity="0.16" />
-                    </filter>
-                  </defs>
-
-                  {/* browser window */}
-                  <rect className="pane" x="20" y="20" width="440" height="310" rx="6" />
-                  <line className="ln" x1="20" y1="56" x2="460" y2="56" />
-                  <circle className="dot" cx="40" cy="38" r="3.5" />
-                  <circle className="dot" cx="54" cy="38" r="3.5" />
-                  <circle className="dot" cx="68" cy="38" r="3.5" />
-                  <rect className="bar" x="100" y="31" width="180" height="14" rx="7" />
-
-                  {/* hero band */}
-                  <rect className="wash" x="36" y="70" width="408" height="76" rx="4" />
-                  <rect className="hot" x="52" y="88" width="104" height="9" rx="4" />
-                  <rect className="bar" x="52" y="104" width="168" height="6" rx="3" />
-                  <rect className="hot" x="52" y="120" width="64" height="16" rx="8" />
-                  <g className="line" transform="translate(374,88)">
-                    <path d="M6,14 H38 L34,44 H10 Z" />
-                    <path d="M15,14 V9 a7,7 0 0 1 14,0 V14" />
+                <svg className="shop-art" viewBox="0 0 540 412" role="img" aria-label="Animated storefront: a shopper picks a category, chooses a product, adds it to the cart, checks out and gets an order confirmation">
+                  {/* browser chrome + persistent site header */}
+                  <rect className="pane" x="20" y="20" width="500" height="310" rx="6" />
+                  <line className="ln" x1="20" y1="52" x2="520" y2="52" />
+                  <circle className="dot" cx="38" cy="36" r="3.5" />
+                  <circle className="dot" cx="52" cy="36" r="3.5" />
+                  <circle className="dot" cx="66" cy="36" r="3.5" />
+                  <rect className="bar" x="100" y="29" width="220" height="14" rx="7" />
+                  <line className="ln" x1="20" y1="86" x2="520" y2="86" />
+                  <rect className="hot" x="36" y="64" width="54" height="9" rx="4.5" />
+                  <rect className="bar" x="150" y="66" width="30" height="5" rx="2.5" />
+                  <rect className="bar" x="190" y="66" width="30" height="5" rx="2.5" />
+                  <rect className="bar" x="230" y="66" width="30" height="5" rx="2.5" />
+                  <rect className="bar" x="330" y="62" width="110" height="14" rx="7" />
+                  <g className="line" transform="translate(464,56)"><path d="M3,6 H21 L19,19 H5 Z" /><path d="M8,6 V4 a4,4 0 0 1 8,0 V6" /></g>
+                  <g className="badge"><circle className="hot" cx="490" cy="60" r="7" /><text className="tx-w" x="490" y="63" textAnchor="middle">1</text></g>
+                  {/* 1 · category */}<g className="sc sc1">
+                  <rect className="wash" x="36" y="98" width="468" height="64" rx="4" />
+                  <rect className="hot" x="52" y="112" width="120" height="9" rx="4.5" />
+                  <rect className="bar" x="52" y="128" width="190" height="6" rx="3" />
+                  <rect className="hot" x="52" y="142" width="60" height="12" rx="6" />
+                  <text className="tx" x="36" y="182">Shop by category</text>
+                  <rect className="pane" x="36" y="192" width="148" height="124" rx="4" />
+                  <rect className="wash" x="46" y="202" width="128" height="70" rx="2" />
+                  <text className="ts" x="46" y="298" fontSize="14">Homeware</text>
+                  <rect className="bar" x="46" y="305" width="36" height="3" rx="1.5" />
+                  <rect className="pane" x="196" y="192" width="148" height="124" rx="4" />
+                  <rect className="wash hot-wash" x="206" y="202" width="128" height="70" rx="2" />
+                  <text className="ts" x="206" y="298" fontSize="14">Apparel</text>
+                  <rect className="bar" x="206" y="305" width="36" height="3" rx="1.5" />
+                  <rect className="pane" x="356" y="192" width="148" height="124" rx="4" />
+                  <rect className="wash" x="366" y="202" width="128" height="70" rx="2" />
+                  <text className="ts" x="366" y="298" fontSize="14">Gadgets</text>
+                  <rect className="bar" x="366" y="305" width="36" height="3" rx="1.5" />
+                  <rect className="hl" x="196" y="192" width="148" height="124" rx="4" style={{animationDelay:'1.65s'}} />
+                  <circle className="rip" cx="270" cy="238" r="10" style={{animationDelay:'1.65s'}} />
                   </g>
-
-                  {/* product grid */}
-                  <g>
-                    <rect className="pane" x="36" y="164" width="120" height="100" rx="4" />
-                    <rect className="wash" x="46" y="174" width="100" height="54" rx="2" />
-                    <rect className="bar" x="46" y="238" width="58" height="6" rx="3" />
-                    <rect className="bar" x="46" y="250" width="34" height="5" rx="2.5" />
+                  {/* 2 · products */}<g className="sc sc2">
+                  <text className="ts" x="36" y="116" fontSize="17">Apparel</text>
+                  <rect className="bar" x="400" y="104" width="104" height="8" rx="4" />
+                  <rect className="pane" x="36" y="128" width="148" height="186" rx="4" />
+                  <rect className="wash" x="46" y="138" width="128" height="96" rx="2" />
+                  <rect className="bar" x="46" y="248" width="84" height="7" rx="3.5" />
+                  <rect className="bar" x="46" y="262" width="50" height="6" rx="3" />
+                  <rect className="hot" x="46" y="284" width="54" height="10" rx="5" />
+                  <rect className="pane" x="196" y="128" width="148" height="186" rx="4" />
+                  <rect className="wash hot-wash" x="206" y="138" width="128" height="96" rx="2" />
+                  <rect className="bar" x="206" y="248" width="84" height="7" rx="3.5" />
+                  <rect className="bar" x="206" y="262" width="50" height="6" rx="3" />
+                  <rect className="hot" x="206" y="284" width="54" height="10" rx="5" />
+                  <rect className="pane" x="356" y="128" width="148" height="186" rx="4" />
+                  <rect className="wash" x="366" y="138" width="128" height="96" rx="2" />
+                  <rect className="bar" x="366" y="248" width="84" height="7" rx="3.5" />
+                  <rect className="bar" x="366" y="262" width="50" height="6" rx="3" />
+                  <rect className="hot" x="366" y="284" width="54" height="10" rx="5" />
+                  <rect className="hl" x="196" y="128" width="148" height="186" rx="4" style={{animationDelay:'4.65s'}} />
+                  <circle className="rip" cx="270" cy="188" r="10" style={{animationDelay:'4.65s'}} />
                   </g>
-                  <g>
-                    <rect className="pane sel" x="174" y="164" width="120" height="100" rx="4" />
-                    <rect className="wash hot-wash" x="184" y="174" width="100" height="54" rx="2" />
-                    <rect className="hot" x="184" y="238" width="58" height="6" rx="3" />
-                    <rect className="bar" x="184" y="250" width="34" height="5" rx="2.5" />
+                  {/* 3 · add to cart */}<g className="sc sc3">
+                  <rect className="pane" x="36" y="102" width="214" height="212" rx="4" />
+                  <rect className="wash" x="46" y="112" width="194" height="192" rx="2" />
+                  <path className="tee" d="M103,170 L125,156 Q143,170 161,156 L183,170 L172,186 L164,180 V232 H122 V180 L114,186 Z" />
+                  <rect className="hot" x="270" y="114" width="160" height="10" rx="5" />
+                  <rect className="bar" x="270" y="134" width="110" height="7" rx="3.5" />
+                  <rect className="bar" x="270" y="158" width="220" height="6" rx="3" />
+                  <rect className="bar" x="270" y="170" width="200" height="6" rx="3" />
+                  <rect className="bar" x="270" y="182" width="150" height="6" rx="3" />
+                  <text className="tx" x="270" y="212">Size</text>
+                  <rect className="pane" x="270" y="220" width="26" height="20" rx="2" />
+                  <rect className="pane sel" x="302" y="220" width="26" height="20" rx="2" />
+                  <rect className="pane" x="334" y="220" width="26" height="20" rx="2" />
+                  <rect className="hot" x="270" y="262" width="160" height="34" rx="17" />
+                  <text className="tx-w btn1" x="350" y="283" textAnchor="middle">Add to cart</text>
+                  <text className="tx-w btn2" x="350" y="283" textAnchor="middle">Added ✓</text>
+                  <circle className="rip" cx="350" cy="279" r="10" style={{animationDelay:'7.65s'}} />
+                  <circle className="hot fly" cx="350" cy="279" r="5" />
                   </g>
-                  <g>
-                    <rect className="pane" x="312" y="164" width="120" height="100" rx="4" />
-                    <rect className="wash" x="322" y="174" width="100" height="54" rx="2" />
-                    <rect className="bar" x="322" y="238" width="58" height="6" rx="3" />
-                    <rect className="bar" x="322" y="250" width="34" height="5" rx="2.5" />
+                  {/* 4 · checkout */}<g className="sc sc4">
+                  <text className="ts" x="36" y="118" fontSize="17">Checkout</text>
+                  <rect className="pane" x="36" y="132" width="262" height="26" rx="3" />
+                  <rect className="bar grow" x="46" y="141" width="120" height="8" rx="4" style={{animationDelay:'9.3s'}} />
+                  <rect className="pane" x="36" y="166" width="262" height="26" rx="3" />
+                  <rect className="bar grow" x="46" y="175" width="170" height="8" rx="4" style={{animationDelay:'9.8s'}} />
+                  <rect className="pane" x="36" y="200" width="262" height="26" rx="3" />
+                  <rect className="bar grow" x="46" y="209" width="90" height="8" rx="4" style={{animationDelay:'10.3s'}} />
+                  <rect className="pane" x="36" y="238" width="262" height="40" rx="3" />
+                  <rect className="hot" x="46" y="251" width="30" height="14" rx="2" />
+                  <circle className="dot" cx="96" cy="258" r="3" />
+                  <circle className="dot" cx="110" cy="258" r="3" />
+                  <circle className="dot" cx="124" cy="258" r="3" />
+                  <rect className="pane" x="318" y="104" width="186" height="210" rx="4" />
+                  <rect className="wash" x="330" y="116" width="40" height="40" rx="3" />
+                  <rect className="bar" x="380" y="122" width="90" height="7" rx="3.5" />
+                  <rect className="bar" x="380" y="136" width="56" height="6" rx="3" />
+                  <line className="ln" x1="330" y1="172" x2="492" y2="172" />
+                  <rect className="bar" x="330" y="184" width="50" height="6" rx="3" />
+                  <rect className="bar" x="440" y="184" width="50" height="6" rx="3" />
+                  <rect className="bar" x="330" y="202" width="50" height="6" rx="3" />
+                  <rect className="bar" x="440" y="202" width="50" height="6" rx="3" />
+                  <line className="ln" x1="330" y1="220" x2="492" y2="220" />
+                  <rect className="hot" x="330" y="232" width="60" height="8" rx="4" />
+                  <rect className="hot" x="440" y="231" width="52" height="9" rx="4.5" />
+                  <rect className="hot" x="330" y="262" width="162" height="34" rx="17" />
+                  <text className="tx-w" x="411" y="283" textAnchor="middle">Place order</text>
+                  <rect className="hl" x="330" y="262" width="162" height="34" rx="17" style={{animationDelay:'10.65s'}} />
+                  <circle className="rip" cx="411" cy="279" r="10" style={{animationDelay:'10.65s'}} />
                   </g>
-
-                  <circle className="dot" cx="220" cy="292" r="3.5" />
-                  <circle className="hot" cx="236" cy="292" r="4" />
-                  <circle className="dot" cx="252" cy="292" r="3.5" />
-
-                  {/* basket chip */}
-                  <g filter="url(#chipShadow)" transform="translate(330,296)">
-                    <rect className="chip" x="0" y="0" width="186" height="80" rx="8" />
-                    <g className="line" transform="translate(20,24)">
-                      <path d="M4,10 H28 L25,32 H7 Z" />
-                      <path d="M11,10 V6 a5,5 0 0 1 10,0 V10" />
-                    </g>
-                    <rect className="bar" x="66" y="24" width="94" height="7" rx="3.5" />
-                    <rect className="bar" x="66" y="40" width="62" height="6" rx="3" />
-                    <rect className="hot" x="66" y="56" width="44" height="8" rx="4" />
+                  {/* 5 · confirmed */}<g className="sc sc5">
+                  <circle className="rip" cx="270" cy="150" r="34" style={{animationDelay:'12.3s'}} />
+                  <circle className="ok" cx="270" cy="150" r="34" /><path className="tick" d="M254,151 L265,162 L287,138" />
+                  <text className="ts" x="270" y="214" textAnchor="middle" fontSize="21">Order confirmed</text>
+                  <rect className="pane" x="190" y="228" width="160" height="22" rx="11" />
+                  <text className="tx" x="270" y="243" textAnchor="middle">Order #SL-20418</text>
+                  <rect className="bar" x="205" y="264" width="130" height="6" rx="3" />
+                  <rect className="bar" x="225" y="278" width="90" height="6" rx="3" />
+                  <rect className="hot" x="220" y="294" width="100" height="18" rx="9" />
+                  <text className="tx-w" x="270" y="306" textAnchor="middle" fontSize="8">Track order</text>
                   </g>
-
-                  {/* conversion chip */}
-                  <g filter="url(#chipShadow)" transform="translate(24,288)">
-                    <rect className="chip" x="0" y="0" width="176" height="104" rx="8" />
-                    <rect className="bar" x="18" y="18" width="72" height="7" rx="3.5" />
-                    <line className="ln" x1="18" y1="86" x2="158" y2="86" />
-                    <path className="spark" d="M18,76 L48,60 L78,66 L110,42 L150,24" />
-                    <circle className="hot" cx="150" cy="24" r="4.5" />
-                  </g>
-                </svg>
+                  <g className="cur"><path d="M0,0 L0,16 L4.2,12.2 L7.2,19 L9.8,17.8 L6.9,11.2 L12.5,11 Z" /></g>
+                  {/* step tracker */}
+                  <circle className="stpr stpr0" cx="70" cy="364" r="10" />
+                  <circle className="stp stp0" cx="70" cy="364" r="10" />
+                  <text className="stn stn0" x="70" y="367.5" textAnchor="middle">1</text>
+                  <text className="stl stl0" x="70" y="392" textAnchor="middle">Category</text>
+                  <circle className="stpr stpr1" cx="175" cy="364" r="10" />
+                  <circle className="stp stp1" cx="175" cy="364" r="10" />
+                  <text className="stn stn1" x="175" y="367.5" textAnchor="middle">2</text>
+                  <text className="stl stl1" x="175" y="392" textAnchor="middle">Product</text>
+                  <circle className="stpr stpr2" cx="280" cy="364" r="10" />
+                  <circle className="stp stp2" cx="280" cy="364" r="10" />
+                  <text className="stn stn2" x="280" y="367.5" textAnchor="middle">3</text>
+                  <text className="stl stl2" x="280" y="392" textAnchor="middle">Add to cart</text>
+                  <circle className="stpr stpr3" cx="385" cy="364" r="10" />
+                  <circle className="stp stp3" cx="385" cy="364" r="10" />
+                  <text className="stn stn3" x="385" y="367.5" textAnchor="middle">4</text>
+                  <text className="stl stl3" x="385" y="392" textAnchor="middle">Checkout</text>
+                  <circle className="stpr stpr4" cx="490" cy="364" r="10" />
+                  <circle className="stp stp4" cx="490" cy="364" r="10" />
+                  <text className="stn stn4" x="490" y="367.5" textAnchor="middle">5</text>
+                  <text className="stl stl4" x="490" y="392" textAnchor="middle">Confirmed</text>
+                  </svg>
               </div>
             </div>
 

@@ -230,7 +230,7 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opa
 
 /* --- spec strip: mirrors .svc-markers (cell padding, not container padding, so dividers run full height) --- */
 .p-home .shop .mini-table{position:relative;z-index:1;display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:0;padding-top:0;border-top:1px solid var(--line)}
-.p-home .shop .mini-table > div{padding:34px 44px 0;border-left:1px solid var(--line)}
+.p-home .shop .mini-table > div{padding:34px 44px 0;border-left:none}
 .p-home .shop .mini-table > div:first-child{border-left:none;padding-left:0}
 .p-home .shop .mini-table .mt-k{font-family:"Fraunces",serif;font-weight:300;font-size:17px;color:var(--ink)}
 .p-home .shop .mini-table .mt-v{margin-top:10px;color:var(--accent)}
@@ -3320,3 +3320,116 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opa
 /* Cross-platform animation: no extra space above or below the artwork */
 .p-home .device,.p-home .device .mobile-signal{padding-top:0;padding-bottom:0;margin-top:0;margin-bottom:0}
 .p-home .device .mobile-signal{gap:0}
+
+/* ---------- animated purchase flow (category → product → cart → checkout → confirmed), 15s loop ---------- */
+.p-home .shop-art .tx{font-family:"JetBrains Mono",monospace;font-size:8.5px;letter-spacing:.14em;text-transform:uppercase;fill:var(--muted)}
+.p-home .shop-art .tx-w{font-family:"JetBrains Mono",monospace;font-size:9px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;fill:#fff}
+.p-home .shop-art .ts{font-family:"Fraunces",serif;font-weight:300;letter-spacing:-.01em;fill:var(--ink)}
+.p-home .shop-art .tee{fill:var(--paper);stroke:var(--accent);stroke-width:1.4;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+.p-home .shop-art .sc{opacity:0}
+.p-home .shop-art .sc1{opacity:1}
+.p-home .shop-art .hl{fill:none;stroke:var(--accent);stroke-width:1.4;opacity:0;vector-effect:non-scaling-stroke}
+.p-home .shop-art .rip{fill:none;stroke:var(--accent);stroke-width:1.4;opacity:0;transform-box:fill-box;transform-origin:center}
+.p-home .shop-art .cur{opacity:0;fill:var(--ink);stroke:var(--paper);stroke-width:1.2;filter:drop-shadow(0 2px 3px rgba(38,32,26,.3))}
+.p-home .shop-art .badge{opacity:0;transform-box:fill-box;transform-origin:center}
+.p-home .shop-art .fly{opacity:0}
+.p-home .shop-art .btn2{opacity:0}
+.p-home .shop-art .grow{transform-box:fill-box;transform-origin:left center}
+.p-home .shop-art .ok{fill:rgba(122,47,28,.08);stroke:var(--accent);stroke-width:1.4;transform-box:fill-box;transform-origin:center}
+.p-home .shop-art .tick{fill:none;stroke:var(--accent);stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:50;stroke-dashoffset:50}
+.p-home .shop-art .stp{fill:var(--paper);stroke:var(--line);stroke-width:1.4}
+.p-home .shop-art .stl{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;fill:var(--muted)}
+
+.p-home .shop-stage.in .shop-art .sc{animation:flowScene 15s ease infinite backwards}
+.p-home .shop-stage.in .shop-art .sc2{animation-delay:3s}
+.p-home .shop-stage.in .shop-art .sc3{animation-delay:6s}
+.p-home .shop-stage.in .shop-art .sc4{animation-delay:9s}
+.p-home .shop-stage.in .shop-art .sc5{animation-delay:12s}
+.p-home .shop-stage.in .shop-art .hl{animation:flowHold 15s linear infinite backwards}
+.p-home .shop-stage.in .shop-art .rip{animation:flowRip 15s ease-out infinite backwards}
+.p-home .shop-stage.in .shop-art .grow{animation:flowGrow 15s ease-out infinite backwards}
+.p-home .shop-stage.in .shop-art .cur{animation:flowCursor 15s ease-in-out infinite}
+.p-home .shop-stage.in .shop-art .badge{animation:flowBadge 15s ease infinite}
+.p-home .shop-stage.in .shop-art .fly{animation:flowFly 15s ease-in-out infinite}
+.p-home .shop-stage.in .shop-art .btn1{animation:flowBtn1 15s linear infinite}
+.p-home .shop-stage.in .shop-art .btn2{animation:flowBtn2 15s linear infinite}
+.p-home .shop-stage.in .shop-art .ok{animation:flowOk 15s ease infinite}
+.p-home .shop-stage.in .shop-art .tick{animation:flowTick 15s ease-out infinite}
+.p-home .shop-stage.in .shop-art .stp0{animation:flowStp0 15s linear infinite}
+.p-home .shop-stage.in .shop-art .stl0{animation:flowLbl0 15s linear infinite}
+.p-home .shop-stage.in .shop-art .stp1{animation:flowStp1 15s linear infinite}
+.p-home .shop-stage.in .shop-art .stl1{animation:flowLbl1 15s linear infinite}
+.p-home .shop-stage.in .shop-art .stp2{animation:flowStp2 15s linear infinite}
+.p-home .shop-stage.in .shop-art .stl2{animation:flowLbl2 15s linear infinite}
+.p-home .shop-stage.in .shop-art .stp3{animation:flowStp3 15s linear infinite}
+.p-home .shop-stage.in .shop-art .stl3{animation:flowLbl3 15s linear infinite}
+.p-home .shop-stage.in .shop-art .stp4{animation:flowStp4 15s linear infinite}
+.p-home .shop-stage.in .shop-art .stl4{animation:flowLbl4 15s linear infinite}
+
+@keyframes flowScene{0%{opacity:0;transform:translateY(6px)}2.5%,18%{opacity:1;transform:none}20%,100%{opacity:0;transform:none}}
+@keyframes flowHold{0%{opacity:0}1%,9%{opacity:1}10%,100%{opacity:0}}
+@keyframes flowRip{0%{opacity:.55;transform:scale(1)}4%,100%{opacity:0;transform:scale(2.4)}}
+@keyframes flowGrow{0%{transform:scaleX(0)}2.5%,19%{transform:scaleX(1)}20%,100%{transform:scaleX(0)}}
+@keyframes flowCursor{
+  0%{opacity:0;transform:translate(440px,300px)}
+  2%{opacity:1;transform:translate(440px,300px)}
+  10%,14%{opacity:1;transform:translate(270px,238px)}
+  29%,33%{opacity:1;transform:translate(270px,188px)}
+  49%,53%{opacity:1;transform:translate(350px,279px)}
+  59%,61%{opacity:1;transform:translate(476px,68px)}
+  69%,74%{opacity:1;transform:translate(411px,279px)}
+  80%{opacity:1;transform:translate(440px,306px)}
+  82%,100%{opacity:0;transform:translate(440px,306px)}
+}
+@keyframes flowBadge{0%,56%{opacity:0;transform:scale(.4)}58%{opacity:1;transform:scale(1.3)}60%,97%{opacity:1;transform:scale(1)}99%,100%{opacity:0;transform:scale(.4)}}
+@keyframes flowFly{0%,51.5%{opacity:0;transform:translate(0,0) scale(1)}52%{opacity:1;transform:translate(0,0) scale(1)}57%{opacity:1;transform:translate(126px,-211px) scale(.5)}57.5%,100%{opacity:0;transform:translate(126px,-211px) scale(.5)}}
+@keyframes flowBtn1{0%,51%{opacity:1}51.5%,100%{opacity:0}}
+@keyframes flowBtn2{0%,51%{opacity:0}51.5%,100%{opacity:1}}
+@keyframes flowOk{0%,80%{opacity:0;transform:scale(.7)}83%{opacity:1;transform:scale(1.06)}85%,100%{opacity:1;transform:scale(1)}}
+@keyframes flowTick{0%,81%{stroke-dashoffset:50}86%,100%{stroke-dashoffset:0}}
+@keyframes flowStp0{0%,97%{fill:var(--accent);stroke:var(--accent)}99%,100%{fill:var(--paper);stroke:var(--line)}}
+@keyframes flowLbl0{0%,97%{fill:var(--accent)}99%,100%{fill:var(--muted)}}
+@keyframes flowStp1{0%,19.9%{fill:var(--paper);stroke:var(--line)}20%,97%{fill:var(--accent);stroke:var(--accent)}99%,100%{fill:var(--paper);stroke:var(--line)}}
+@keyframes flowLbl1{0%,19.9%{fill:var(--muted)}20%,97%{fill:var(--accent)}99%,100%{fill:var(--muted)}}
+@keyframes flowStp2{0%,39.9%{fill:var(--paper);stroke:var(--line)}40%,97%{fill:var(--accent);stroke:var(--accent)}99%,100%{fill:var(--paper);stroke:var(--line)}}
+@keyframes flowLbl2{0%,39.9%{fill:var(--muted)}40%,97%{fill:var(--accent)}99%,100%{fill:var(--muted)}}
+@keyframes flowStp3{0%,59.9%{fill:var(--paper);stroke:var(--line)}60%,97%{fill:var(--accent);stroke:var(--accent)}99%,100%{fill:var(--paper);stroke:var(--line)}}
+@keyframes flowLbl3{0%,59.9%{fill:var(--muted)}60%,97%{fill:var(--accent)}99%,100%{fill:var(--muted)}}
+@keyframes flowStp4{0%,79.9%{fill:var(--paper);stroke:var(--line)}80%,97%{fill:var(--accent);stroke:var(--accent)}99%,100%{fill:var(--paper);stroke:var(--line)}}
+@keyframes flowLbl4{0%,79.9%{fill:var(--muted)}80%,97%{fill:var(--accent)}99%,100%{fill:var(--muted)}}
+
+@media(prefers-reduced-motion:reduce){
+  .p-home .shop-stage.in .shop-art *{animation:none!important}
+  .p-home .shop-art .sc{opacity:0}
+  .p-home .shop-art .sc5{opacity:1}
+  .p-home .shop-art .badge{opacity:1}
+  .p-home .shop-art .tick{stroke-dashoffset:0}
+  .p-home .shop-art .stp{fill:var(--accent);stroke:var(--accent)}
+  .p-home .shop-art .stl{fill:var(--accent)}
+    .p-home .shop-art .cur,.p-home .shop-art .fly,.p-home .shop-art .hl,.p-home .shop-art .rip{display:none}
+}
+
+/* step tracker: no connecting line — each step pops with a ring pulse and fills in as it is reached */
+.p-home .shop-art .stpr{fill:none;stroke:var(--accent);stroke-width:1.4;opacity:0;transform-box:fill-box;transform-origin:center}
+.p-home .shop-art .stn{font-family:"JetBrains Mono",monospace;font-size:9.5px;font-weight:500;fill:var(--muted)}
+.p-home .shop-stage.in .shop-art .stpr0{animation:flowRing0 15s ease-out infinite}
+.p-home .shop-stage.in .shop-art .stn0{animation:flowNum0 15s linear infinite}
+.p-home .shop-stage.in .shop-art .stpr1{animation:flowRing1 15s ease-out infinite}
+.p-home .shop-stage.in .shop-art .stn1{animation:flowNum1 15s linear infinite}
+.p-home .shop-stage.in .shop-art .stpr2{animation:flowRing2 15s ease-out infinite}
+.p-home .shop-stage.in .shop-art .stn2{animation:flowNum2 15s linear infinite}
+.p-home .shop-stage.in .shop-art .stpr3{animation:flowRing3 15s ease-out infinite}
+.p-home .shop-stage.in .shop-art .stn3{animation:flowNum3 15s linear infinite}
+.p-home .shop-stage.in .shop-art .stpr4{animation:flowRing4 15s ease-out infinite}
+.p-home .shop-stage.in .shop-art .stn4{animation:flowNum4 15s linear infinite}
+@keyframes flowRing0{0%{opacity:.7;transform:scale(1)}4%,100%{opacity:0;transform:scale(1.9)}}
+@keyframes flowNum0{0%,97%{fill:#fff}99%,100%{fill:var(--muted)}}
+@keyframes flowRing1{0%,19.9%{opacity:0;transform:scale(1)}20%{opacity:.7;transform:scale(1)}24%,100%{opacity:0;transform:scale(1.9)}}
+@keyframes flowNum1{0%,19.9%{fill:var(--muted)}20%,97%{fill:#fff}99%,100%{fill:var(--muted)}}
+@keyframes flowRing2{0%,39.9%{opacity:0;transform:scale(1)}40%{opacity:.7;transform:scale(1)}44%,100%{opacity:0;transform:scale(1.9)}}
+@keyframes flowNum2{0%,39.9%{fill:var(--muted)}40%,97%{fill:#fff}99%,100%{fill:var(--muted)}}
+@keyframes flowRing3{0%,59.9%{opacity:0;transform:scale(1)}60%{opacity:.7;transform:scale(1)}64%,100%{opacity:0;transform:scale(1.9)}}
+@keyframes flowNum3{0%,59.9%{fill:var(--muted)}60%,97%{fill:#fff}99%,100%{fill:var(--muted)}}
+@keyframes flowRing4{0%,79.9%{opacity:0;transform:scale(1)}80%{opacity:.7;transform:scale(1)}84%,100%{opacity:0;transform:scale(1.9)}}
+@keyframes flowNum4{0%,79.9%{fill:var(--muted)}80%,97%{fill:#fff}99%,100%{fill:var(--muted)}}
+@media(prefers-reduced-motion:reduce){.p-home .shop-art .stn{fill:#fff}.p-home .shop-art .stpr{display:none}}
