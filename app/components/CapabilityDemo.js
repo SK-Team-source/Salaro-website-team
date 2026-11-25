@@ -1,139 +1,24 @@
-﻿'use client';
-
-import { useState } from 'react';
-
-const CONTROLS = [
-  ['Layout', 'Detail', 'Launch'],
-  ['Browse', 'Select', 'Checkout'],
-  ['Desktop', 'Tablet', 'Mobile'],
-  ['Connect', 'Process', 'Deliver'],
-];
-
-function WebDemo() {
-  return (
-    <div className="demo-browser">
-      <div className="demo-chrome">● ● ●</div>
-      <div className="demo-layout">
-        <div>
-          <i />
-          <i />
-          <b />
-        </div>
-        <div className="demo-picture">
-          <span />
-        </div>
-      </div>
-      <div className="demo-bottom">
-        <i />
-        <i />
-        <i />
-      </div>
-    </div>
-  );
-}
-
-function CommerceDemo() {
-  return (
-    <>
-      <div className="demo-products">
-        <div>
-          <span>◻</span>
-          <i />
-          <b />
-        </div>
-        <div>
-          <span>◻</span>
-          <i />
-          <b />
-        </div>
-        <div>
-          <span>◻</span>
-          <i />
-          <b />
-        </div>
-      </div>
-      <div className="demo-float">Cart +1</div>
-    </>
-  );
-}
-
-function AppDemo() {
-  return (
-    <div className="demo-screen">
-      <div className="demo-chrome">● ● ●</div>
-      <div className="demo-layout">
-        <div>
-          <i />
-          <i />
-          <b />
-        </div>
-        <div className="demo-picture">
-          <span />
-        </div>
-      </div>
-      <div className="demo-bottom">
-        <i />
-        <i />
-        <i />
-      </div>
-    </div>
-  );
-}
-
-function AiDemo({ step }) {
-  const active = [step === 0 ? 0 : step === 1 ? 1 : 2];
-  return (
-    <svg className="demo-network" viewBox="0 0 320 180" aria-hidden="true">
-      <path d="M60 90 L160 40 L260 90 L160 140 Z" />
-      <path d="M60 90 L160 140" />
-      <path d="M160 40 L160 140" />
-      <path d="M260 90 L160 40" />
-      <circle cx="60" cy="90" r="18" className={active.includes(0) ? 'active' : ''} />
-      <circle cx="160" cy="40" r="18" className={active.includes(1) ? 'active' : ''} />
-      <circle cx="260" cy="90" r="18" className={active.includes(2) ? 'active' : ''} />
-      <circle cx="160" cy="140" r="18" className={step >= 1 ? 'active' : ''} />
-      <text x="60" y="94" textAnchor="middle">In</text>
-      <text x="160" y="44" textAnchor="middle">AI</text>
-      <text x="260" y="94" textAnchor="middle">Out</text>
-      <text x="160" y="144" textAnchor="middle">Data</text>
-    </svg>
-  );
-}
-
-const DEMOS = [WebDemo, CommerceDemo, AppDemo, AiDemo];
-
-export default function CapabilityDemo({ type = 0 }) {
-  const [step, setStep] = useState(0);
-  const Demo = DEMOS[type] || DEMOS[0];
-  const controls = CONTROLS[type] || CONTROLS[0];
-
-  const handleMove = (event) => {
-    const rect = event.currentTarget.getBoundingClientRect();
-    const x = ((event.clientX - rect.left) / rect.width) * 100;
-    const y = ((event.clientY - rect.top) / rect.height) * 100;
-    event.currentTarget.style.setProperty('--mx', `${x}%`);
-    event.currentTarget.style.setProperty('--my', `${y}%`);
-  };
-
-  return (
-    <div className={`cap-demo cap-${type}`} data-step={step}>
-      <div className="cap-canvas" onMouseMove={handleMove}>
-        <div className="cap-orbit" />
-        <div className="cap-orbit second" />
-        <Demo step={step} />
-      </div>
-      <div className="cap-controls">
-        {controls.map((label, index) => (
-          <button
-            key={label}
-            type="button"
-            aria-pressed={step === index}
-            onClick={() => setStep(index)}
-          >
-            {label}
-          </button>
-        ))}
-      </div>
-    </div>
-  );
+'use client';
+import {useState,useId,useEffect} from 'react';
+const modes=[['Layout','Detail','Launch'],['Browse','Select','Checkout'],['Desktop','Tablet','Mobile'],['Connect','Process','Deliver']];
+const descriptions=[['Plan the page structure','Build the responsive interface','Preview the finished experience'],['Explore the storefront','Review selected products','Complete a sample checkout'],['Desktop workspace','Tablet layout','Mobile experience'],['Receive a customer request','Analyse and route the request','Deliver an automated response']];
+export default function CapabilityDemo({type}){
+ const [step,setStep]=useState(0),[hover,setHover]=useState(null); const id=useId(); const s=hover??step;
+ const [paused,setPaused]=useState(false),[focused,setFocused]=useState(false);
+ const tone=['#376b65','#955b35','#4b6586','#755780'][type];
+ useEffect(()=>{const motion=window.matchMedia('(prefers-reduced-motion: reduce)');let timer;const sync=()=>{clearTimeout(timer);if(!motion.matches&&!paused&&!focused&&!document.hidden)timer=setTimeout(()=>setStep(i=>(i+1)%3),4000+type*250)};sync();motion.addEventListener('change',sync);document.addEventListener('visibilitychange',sync);return()=>{clearTimeout(timer);motion.removeEventListener('change',sync);document.removeEventListener('visibilitychange',sync)}},[step,paused,focused,type]);
+ const w=[242,158,90][s], x=(320-w)/2;
+ const panel=(x,y,w,h)=> <rect x={x} y={y} width={w} height={h} rx="8" className="live-panel"/>;
+ const label=(x,y,t)=> <text x={x} y={y} className="live-label" textAnchor="middle">{t}</text>;
+ return <div className="live-demo" style={{"--demo-tone":tone,"--demo-step":s}} onPointerEnter={e=>{if(e.pointerType==='mouse')setPaused(true)}} onPointerLeave={()=>{setHover(null);setPaused(false)}} onFocusCapture={()=>setFocused(true)} onBlurCapture={e=>{if(!e.currentTarget.contains(e.relatedTarget))setFocused(false)}}>
+ <div className="live-canvas" onPointerMove={e=>{const r=e.currentTarget.getBoundingClientRect();e.currentTarget.style.setProperty('--px',`${(e.clientX-r.left)/r.width*100}%`);e.currentTarget.style.setProperty('--py',`${(e.clientY-r.top)/r.height*100}%`);}}>
+ <svg viewBox="0 0 320 210" role="img" aria-label={descriptions[type][s]}>
+ <defs><linearGradient id={id} x2="1" y2="1"><stop stopColor="#f5eee5"/><stop offset="1" stopColor={tone}/></linearGradient></defs>
+ <g className="live-scene">
+ {type===0&&<>{panel(26,25,268,160)}<path d="M26 47H294" className="live-line"/>{[38,47,56].map(n=><circle key={n} cx={n} cy="36" r="2.5" fill={tone}/>)}<rect x="40" y="59" width="240" height="76" rx="5" fill={s===2?`url(#${id})`:'#f3e4d5'}/><path d="M52 75H133M52 86H117M52 98H126" className="live-line"/><rect x="52" y="110" width="49" height="13" rx="4" fill={tone}/><g className="live-float"><rect x="174" y="68" width="90" height="58" rx="5" fill={s===0?'none':`url(#${id})`} stroke="#a76a49" strokeDasharray={s===0?'4 4':undefined}/><path d="M184 116L205 91L220 106L236 81L254 116Z" fill={s===0?'none':'#fff5e8'} stroke="#a76a49"/></g>{[40,122,204].map(n=><g key={n}><rect x={n} y="145" width="76" height="27" rx="4" fill={s===0?'#eee5dc':'#efd1b7'}/><path d={`M${n+8} 154h40m-40 7h25`} className="live-line"/></g>)}{s===1&&<g>{panel(190,8,113,32)}{label(246,28,'< / >  BUILD')}</g>}{s===2&&<g>{panel(195,8,108,32)}{label(249,28,'✓  READY')}</g>}</>}
+ {type===1&&<>{panel(20,28,280,150)}{label(65,44,'STORE')}{[0,1,2].map(n=><g key={n} className={s===1&&n===1?'live-selected':''}><rect x={33+n*88} y="58" width="78" height="96" rx="6" fill="#fff8f0" stroke="#d7b69c"/><rect x={40+n*88} y="65" width="64" height="48" rx="4" fill={`url(#${id})`}/><path d={`M${55+n*88} 103v-23h34v23z m8 -23q9 -17 18 0`} fill="#fff4e6" stroke="#a76a49"/><path d={`M${42+n*88} 124h48m-48 8h30`} className="live-line"/><rect x={42+n*88} y="139" width="42" height="8" rx="3" fill={tone}/></g>)}{s>0&&<g className="live-float">{panel(158,83,148,110)}{label(232,101,s===1?'YOUR BASKET':'CHECKOUT')}<path d="M173 115h116m-116 12h80m-80 12h100" className="live-line"/><rect x="173" y="153" width="116" height="25" rx="5" fill={tone}/><text x="231" y="169" textAnchor="middle" fill="white" fontSize="10">{s===1?'1 ITEM SELECTED':'✓ ORDER COMPLETE'}</text></g>}</>}
+ {type===2&&<><g className="live-device"><rect x={x} y="24" width={w} height="158" rx={s===2?14:8} className="live-panel"/><rect x={x+7} y="40" width={w-14} height="128" rx="4" fill="#f4e2d0"/><rect x={x+13} y="48" width={w-26} height="43" rx="4" fill={`url(#${id})`}/>{[0,1,2].map(n=><g key={n}><rect x={x+13} y={98+n*21} width={w-26} height="16" rx="3" fill="#fff"/><circle cx={x+22} cy={106+n*21} r="3" fill={tone}/><path d={`M${x+30} ${106+n*21}h${w-49}`} className="live-line"/></g>)}<circle cx="160" cy="175" r="2" fill={tone}/></g>{label(160,199,'ONE CONNECTED EXPERIENCE')}</>}
+ {type===3&&<>{[48,105,162].map((y,i)=><g key={y}><path d={`M76 ${y} C110 ${y} 110 105 132 105 M188 105 C210 105 210 ${y} 244 ${y}`} className={'live-wire '+(s===i?'live-active':'')}/>{panel(8,y-15,68,30)}{label(42,y+4,['Chat','Data','Tasks'][i])}{panel(244,y-15,68,30)}{label(278,y+4,['Reply','Insight','Action'][i])}</g>)}<circle cx="160" cy="105" r="39" fill="#f3d8bf" className="live-ring"/><circle cx="160" cy="105" r="28" fill={s===1?tone:'#a69a91'}/><text x="160" y="110" fill="white" textAnchor="middle" fontSize="16" fontWeight="bold">AI</text>{label(160,196,['RECEIVE REQUEST','PROCESS WORKFLOW','DELIVER RESULT'][s])}</>}
+ </g></svg></div>
+ <div className="live-controls" role="group" aria-label="Interactive service illustration">{modes[type].map((m,i)=><button key={m} type="button" aria-pressed={s===i} onPointerEnter={e=>{if(e.pointerType==='mouse')setHover(i)}} onPointerLeave={()=>setHover(null)} onClick={()=>{setStep(i);setHover(null)}}>{m}</button>)}</div><div className="live-description">{descriptions[type][s]}</div></div>;
 }

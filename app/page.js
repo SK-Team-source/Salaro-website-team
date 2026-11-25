@@ -5,16 +5,37 @@ import PhpNoticeBar from './components/PhpNoticeBar';
 
 export default function HomePage() {
   const [activeStage, setActiveStage] = useState(0);
+  const [stagePaused, setStagePaused] = useState(false);
+  const [stageFocused, setStageFocused] = useState(false);
+  useEffect(() => {
+    const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let timer;
+    const sync = () => { clearTimeout(timer); if (!motion.matches && !stagePaused && !stageFocused && !document.hidden) timer = setTimeout(() => setActiveStage(i => (i + 1) % 5), 5000); };
+    sync(); motion.addEventListener('change', sync); document.addEventListener('visibilitychange', sync);
+    return () => { clearTimeout(timer); motion.removeEventListener('change', sync); document.removeEventListener('visibilitychange', sync); };
+  }, [activeStage, stagePaused, stageFocused]);
   const [deviceFocus, setDeviceFocus] = useState(0);
-  const [focus, setFocus] = useState(0);
-  const [chartMode, setChartMode] = useState(0);
-  const chart = chartMode === 0 ? [56,47,53,38,43,29,23] : [65,59,44,48,32,35,18];
-  const chartCurve = chart.reduce((path, y, i) => {
-    const x = 10 + i * 36;
-    return i === 0 ? `M${x},${y}` : `${path} C${x-18},${chart[i-1]} ${x-18},${y} ${x},${y}`;
-  }, "");
-  const nodes = [[45,42],[255,42],[45,145],[255,145],[150,94]];
-  const labels = ["Build","Migrate","Advise","Scale","Core"];
+  const [deviceHover, setDeviceHover] = useState(false);
+  const [deviceKeyboard, setDeviceKeyboard] = useState(false);
+  useEffect(() => {
+    const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let timer;
+    const sync = () => {
+      window.clearTimeout(timer);
+      if (!motion.matches && !deviceHover && !deviceKeyboard && !document.hidden) {
+        timer = window.setTimeout(() => setDeviceFocus(i => (i + 1) % 4), 4000);
+      }
+    };
+    sync();
+    motion.addEventListener('change', sync);
+    document.addEventListener('visibilitychange', sync);
+    return () => {
+      window.clearTimeout(timer);
+      motion.removeEventListener('change', sync);
+      document.removeEventListener('visibilitychange', sync);
+    };
+  }, [deviceFocus, deviceHover, deviceKeyboard]);
+
   useEffect(() => {
     const elements = document.querySelectorAll('.p-home .rv');
     if (!('IntersectionObserver' in window)) {
@@ -59,21 +80,7 @@ export default function HomePage() {
             <div className="hero-left">
               <span className="lab a">A UK-led digital consultancy</span>
               <span className="lab">Practising since 1995</span>
-              <div className="journey-ledger"><span className="lab a">Our journey</span><div className="journey-years"><b>1995</b><span className="hero-journey-track" aria-hidden="true"><i /></span><b>Today</b></div><p>Built on code, not templates.</p></div>
-              <div className="hero-graphic editorial-network">
-                <span className="lab">Topology · explore the practice</span>
-                <svg viewBox="0 0 300 185" aria-hidden="true">
-                  <defs><pattern id="hero-grid-v5" width="15" height="15" patternUnits="userSpaceOnUse"><path d="M15 0H0V15" fill="none" stroke="#b69b85" strokeOpacity=".18"/></pattern></defs>
-                  <rect width="300" height="185" fill="url(#hero-grid-v5)"/>
-                  <ellipse cx="150" cy="94" rx="110" ry="67" className="v5-orbit"/><circle cx="150" cy="94" r="38" className="v5-orbit inner"/>
-                  <circle r="3" fill="#a4442a" className="v5-packet"><animateMotion key={focus} dur="1.8s" repeatCount="indefinite" path={`M150 94 L${nodes[focus][0]} ${nodes[focus][1]} L150 94`}/></circle>
-                  {nodes.slice(0,4).map(([x,y],i)=><line key={i} x1={x} y1={y} x2="150" y2="94" className={focus===i||focus===4?'active-edge':'quiet-edge'}/>)}
-                  {nodes.map(([x,y],i)=><g key={i} onPointerEnter={()=>setFocus(i)} onClick={()=>setFocus(i)}><circle cx={x} cy={y} r="19" fill="transparent"/><circle cx={x} cy={y} r={focus===i?8:5} className={focus===i?'active-node':'quiet-node'}/><text x={x} y={y+(i<2?-16:23)} textAnchor="middle">{labels[i].toUpperCase()}</text></g>)}
-                </svg>
-                <div className="topology-controls">{labels.map((label,i)=><button key={label} aria-pressed={focus===i} onFocus={()=>setFocus(i)} onPointerEnter={()=>setFocus(i)} onClick={()=>setFocus(i)}>{label}</button>)}</div>
-                <p className="topology-description" aria-live="polite">{["Bespoke digital products.","Practical digital transformation.","Expert human oversight.","Long-term support and growth.","Strategy, development and review."][focus]}</p>
-              </div>
-
+              <EngineeringHero />
             </div>
 
             <div className="hero-right">
@@ -88,27 +95,7 @@ export default function HomePage() {
                 </a>
               </div>
               <div className="built">Built on code, not templates.</div>
-              <div className="hero-proof">            <div className="hero-viz">
-              <div className="viz-head"><span className="lab a">Pipeline</span><span className="live"><i></i>Illustrative</span></div>
-              <div className="v5-chart-tabs">{["Delivery", "Capacity"].map((name,i)=><button key={name} aria-pressed={chartMode===i} onClick={()=>setChartMode(i)}>{name}</button>)}</div>
-              <svg className="spark teal-pipeline" viewBox="0 0 240 84" role="img" aria-label="Illustrative delivery and capacity workflow curve">
-                <defs><linearGradient id="hero-teal-area" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#527c76" stopOpacity=".32"/><stop offset="100%" stopColor="#527c76" stopOpacity=".02"/></linearGradient></defs>
-                {[20,40,60,80].map(y=><line key={y} x1="10" x2="230" y1={y} y2={y} stroke="#b9cbc3" strokeDasharray="2 4" opacity=".65"/>)}
-                <g key={chartMode}>
-                  <path className="teal-area" d={`${chartCurve} L226,80 L10,80 Z`} fill="url(#hero-teal-area)"/>
-                  <path className="teal-curve" d={chartCurve} pathLength="1" fill="none"/>
-                  <circle className="teal-particle" r="2.8" fill="#39736b"><animateMotion dur="4s" repeatCount="indefinite" path={chartCurve}/></circle>
-                  {chart.map((y,i)=><g key={i} className="teal-point"><circle cx={10+i*36} cy={y} r="9" fill="transparent"/><circle className={i===6?'teal-halo endpoint':'teal-halo'} cx={10+i*36} cy={y} r="7"/><circle className="teal-dot" cx={10+i*36} cy={y} r={i===6?3.5:2.5}/></g>)}
-                </g>
-              </svg>
-              <div className="hstat"><b className="serif">30+</b><span>years of practice</span></div>
-              <div className="hstat"><b className="serif">Direct</b><span>collaboration</span></div>
-            </div>              <div className="ops">
-                <span className="lab">Pipeline live · queue clear</span>
-                <span className="lab">Human review · engaged</span>
-                <span className="lab">Repo access · on request</span>
-              </div>
-</div>
+
             </div>
 
           </div></div>
@@ -126,16 +113,16 @@ export default function HomePage() {
               <span className="lab a">Human judgment · lead</span>
               <span className="lab">Build pipeline · explore</span>
             </div>
-            <div className="journey-panel journey-linear">
+            <div className="journey-panel journey-linear final-journey" style={{"--active-point": `${10 + activeStage * 20}%`}} onPointerEnter={e=>{if(e.pointerType==='mouse')setStagePaused(true)}} onPointerLeave={()=>setStagePaused(false)} onFocusCapture={()=>setStageFocused(true)} onBlurCapture={e=>{if(!e.currentTarget.contains(e.relatedTarget))setStageFocused(false)}}>
               <div className="journey-progress" aria-hidden="true"><span style={{width:`${activeStage*25}%`,"--journey-progress":`${activeStage*25}%`}} /></div>
               <div className="journey-steps" aria-label="Development stages">
                 {deliveryStages.map((item,i)=>(<button type="button" key={item.name} className={`journey-step ${activeStage===i?'selected':''}`} aria-pressed={activeStage===i} onMouseEnter={()=>setActiveStage(i)} onFocus={()=>setActiveStage(i)} onClick={()=>setActiveStage(i)}>
-                  <span className="journey-art"><StageGraphic index={i}/></span><span className="journey-node" aria-hidden="true"><i/></span><span className="journey-index">{["i","ii","iii","iv","v"][i]}</span><span className="journey-name">{item.name}</span><span className="journey-short">{item.short}</span>
+                  <span className="journey-art"><StageGraphic index={i}/></span><span className="journey-name">{item.name}</span><span className="journey-short">{item.short}</span><span className="journey-node" aria-hidden="true"><i/></span>
                 </button>))}
               </div>
-              <div className="journey-detail" key={activeStage}>
+              <div className="journey-connector" aria-hidden="true"/><div className="journey-detail" key={activeStage}>
                 <div><span className="lab a">Stage 0{activeStage+1} · {deliveryStages[activeStage].name}</span><h3 className="serif">{deliveryStages[activeStage].title}</h3><p>{deliveryStages[activeStage].description}</p></div>
-                <div className="journey-detail-right"><span className="lab">Focus areas</span><div className="journey-focus-row"><div className="journey-tags">{deliveryStages[activeStage].tags.map(tag=><span key={tag}>{tag}</span>)}</div><button type="button" onClick={()=>setActiveStage((activeStage+1)%5)}>{activeStage===4?'Back to discover':'Explore next stage'} <span aria-hidden="true">→</span></button></div></div>
+                <div className="journey-detail-right"><span className="lab">Focus areas</span><div className="journey-focus-row"><div className="journey-tags">{deliveryStages[activeStage].tags.map(tag=><span key={tag}>{tag}</span>)}</div></div></div>
               </div>
             </div>
             <div className="pipe-foot">
@@ -253,22 +240,26 @@ export default function HomePage() {
               <div className="marker lab device-signature"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true"><path d="m12 3 9 5-9 5-9-5 9-5Z M3 12l9 5 9-5 M3 16l9 5 9-5"/></svg>Bespoke digital products</span><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></svg>Practical delivery</span></div>
             </div>
             <div className="device rv">
-              <div className="mobile-signal">
+              <div className="mobile-signal" data-device={deviceFocus}
+                onPointerEnter={e => { if (e.pointerType === 'mouse') setDeviceHover(true); }}
+                onPointerLeave={() => setDeviceHover(false)}
+                onFocusCapture={e => { if (e.target.matches(':focus-visible')) setDeviceKeyboard(true); }}
+                onBlurCapture={e => { if (!e.currentTarget.contains(e.relatedTarget)) setDeviceKeyboard(false); }}>
 <div className="responsive-lab">
   <div className="lab-toolbar"><span><i /> RESPONSIVE WORKSPACE</span><span>{['Desktop','Laptop','Tablet','Mobile'][deviceFocus]} · {['1440','1024','768','390'][deviceFocus]} px</span></div>
   <div className="lab-stage">
     <div className="lab-orbit" aria-hidden="true" />
     <div className={`lab-device lab-device-${deviceFocus}`}>
-      <div className="lab-browser"><span><i/><i/><i/></span><small>Responsive preview</small><span>↗</span></div>
-      <div className="lab-screen">
-        <div className="lab-screen-nav"><b>Studio.</b><span>Work &nbsp; About</span><i/></div>
-        <div className="lab-screen-hero"><div><small>DESIGNED TO ADAPT</small><strong>One idea.<br/>Every screen.</strong><span className="lab-mini-cta">Explore →</span></div><svg viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="48" fill="#dce9df"/><circle cx="60" cy="60" r="34" fill="none" stroke="#70978b" strokeDasharray="3 5"/><path d="M24 80L60 20L96 80Z" fill="#426e68" opacity=".85"/><circle cx="78" cy="70" r="23" fill="#d7a57f"/><circle cx="60" cy="60" r="5" fill="#fffaf3"/></svg></div>
-        <div className="lab-screen-grid">{['Design','Build','Scale'].map((label,i)=><div key={label}><span>0{i+1}</span><b>{label}</b><i/><i/></div>)}</div>
+      <div className="lab-browser"><span><i/><i/><i/></span><small>Salaro · Responsive preview</small><span>↗</span></div>
+      <div className="lab-screen" key={deviceFocus}>
+        <div className="lab-screen-nav"><b>Salaro.</b><span>Solutions &nbsp; Work</span><i/></div>
+        <div className="lab-screen-hero"><div><small>ENGINEERED FOR EVERY SCREEN</small><strong>One platform.<br/>Every device.</strong><span className="lab-mini-cta">Explore solutions →</span></div><svg viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="48" fill="#dce9df"/><circle cx="60" cy="60" r="34" fill="none" stroke="#70978b" strokeDasharray="3 5"/><g className="lab-code-art" fill="none" stroke="var(--device-accent)" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M45 44L29 60L45 76M75 44L91 60L75 76M68 35L52 85"/><circle cx="60" cy="60" r="42" strokeWidth="1" strokeDasharray="5 9" className="lab-code-ring"/></g></svg></div>
+        <div className="lab-screen-grid">{['Web','Apps','Commerce'].map((label,i)=><div key={label}><span>0{i+1}</span><b>{label}</b><i/><i/></div>)}</div>
       </div>
     </div>
   </div>
 </div>
-<div className="eco-controls" aria-label="Explore devices">{['Desktop','Laptop','Tablet','Mobile'].map((label,i)=><button type="button" key={label} aria-pressed={deviceFocus===i} onClick={()=>setDeviceFocus(i)} onPointerEnter={(event)=>{if(event.pointerType==='mouse')setDeviceFocus(i)}}>{label}</button>)}</div>
+<div className="eco-controls" aria-label="Explore devices">{['Desktop','Laptop','Tablet','Mobile'].map((label,i)=><button type="button" key={label} aria-pressed={deviceFocus===i} onClick={()=>setDeviceFocus(i)}>{label}{deviceFocus===i && <span key={deviceFocus} className="lab-device-progress" aria-hidden="true"/>}</button>)}</div>
 <p className="eco-caption">One architecture, every device</p>
               </div>
             </div>
@@ -538,5 +529,25 @@ function CommerceShowcase() {
     </svg>
     <div className="commerce-tabs" aria-label="Explore shopping stages">{stages.map((s,i)=><button type="button" key={s} aria-pressed={step===i} onClick={()=>setStep(i)} onPointerEnter={()=>setStep(i)} onFocus={()=>setStep(i)}>{String(i+1).padStart(2,'0')} · {s}</button>)}</div>
     <p className="commerce-note" aria-live="polite">{notes[step]}</p>
+  </div>;
+}
+
+
+function EngineeringHero(){
+  return <div className="blueprint-hero" onPointerMove={e=>{if(e.pointerType!== 'mouse')return;const r=e.currentTarget.getBoundingClientRect();e.currentTarget.style.setProperty('--bp-x',`${(e.clientX-r.left-r.width/2)/30}px`);e.currentTarget.style.setProperty('--bp-y',`${(e.clientY-r.top-r.height/2)/30}px`);}} onPointerLeave={e=>{e.currentTarget.style.removeProperty('--bp-x');e.currentTarget.style.removeProperty('--bp-y');}}>
+    <svg className="bp-art" viewBox="0 0 480 365" role="img" aria-label="Digital architecture layers assemble into a finished website">
+      <defs><radialGradient id="bp-halo"><stop stopColor="#d7c2a6" stopOpacity=".36"/><stop offset="1" stopColor="#d7c2a6" stopOpacity="0"/></radialGradient><linearGradient id="bp-paper" x2="1" y2="1"><stop stopColor="#fffaf1"/><stop offset="1" stopColor="#eadbc8"/></linearGradient></defs>
+      <ellipse cx="240" cy="185" rx="220" ry="170" fill="url(#bp-halo)"/>
+      <g className="bp-float">
+        <ellipse cx="240" cy="302" rx="145" ry="18" fill="#9b8067" opacity=".09"/>
+        <g className="bp-guides" fill="none" stroke="#b29a80" strokeWidth=".8" strokeDasharray="3 5"><path d="M65 130L245 55L415 145L235 220Z M65 130V222L235 312L415 237V145M235 220V312"/><path d="M40 235L235 340L440 254M40 228V242M440 247V261"/></g>
+        <g className="bp-layer bp-base"><path d="M75 224L245 153L405 238L235 309Z" fill="#d9c5ab" stroke="#a88e72"/><path d="M75 224V232L235 317L405 246V238L235 309Z" fill="#c6ad90" stroke="#a88e72"/><path d="M104 225L245 166L375 237L235 295Z" fill="none" stroke="#a88e72" strokeDasharray="3 4"/><path className="bp-signal" pathLength="100" d="M104 225L245 166L375 237L235 295Z"/></g>
+        <g className="bp-layer bp-code"><path d="M75 178L245 107L405 192L235 263Z" fill="#dce7de" fillOpacity=".94" stroke="#829f91"/><g transform="matrix(1 -.418 .88 .468 75 178)" fill="none" stroke="#557c70" strokeWidth="1.5"><rect x="18" y="18" width="132" height="145" rx="3"/><path d="M18 35H150M30 48H90M40 62H125M40 76H105M30 90H115M40 104H85M30 118H100M30 132H65"/><path d="M110 105l-9 9 9 9m15-18 9 9-9 9" stroke="#7a2f1c"/></g></g>
+        <g className="bp-layer bp-design"><path d="M75 124L245 53L405 138L235 209Z" fill="url(#bp-paper)" stroke="#a58a72" strokeWidth="1.2"/><g transform="matrix(1 -.418 .88 .468 75 124)"><rect x="10" y="10" width="150" height="160" rx="3" fill="#fcf8ef" stroke="#c5b19b"/><path d="M10 30H160" stroke="#c5b19b"/><text x="20" y="24" fontSize="11" fontFamily="Georgia" fill="#7a2f1c">salaro.</text><rect x="20" y="40" width="130" height="77" fill="#eee1d0"/><path d="M29 55H83M29 65H75" stroke="#7a2f1c" strokeWidth="3"/><path d="M29 78H73M29 85H65" stroke="#b09c86" strokeWidth="2"/><rect x="29" y="94" width="39" height="12" fill="#7a2f1c"/><rect x="91" y="50" width="49" height="55" fill="#b5cbbd"/><path d="M99 91L112 69L122 83L134 60" fill="none" stroke="#49776c" strokeWidth="2"/>{[20,65,110].map(x=><g key={x}><rect x={x} y="128" width="40" height="25" fill="#dce7de"/><path d={`M${x} 159h32`} stroke="#a58a72"/></g>)}</g></g>
+        <g className="bp-labels" fontSize="10" letterSpacing="1.6" fill="#7a2f1c"><path d="M65 87H112L145 100M350 174H425M65 265H115" fill="none" stroke="#b29a80" strokeWidth=".8"/><text x="20" y="82">DESIGN</text><text x="425" y="166" textAnchor="end">CODE</text><text x="20" y="258">DEPLOY</text></g>
+      </g>
+    </svg>
+    <p className="bp-caption serif">From architecture to experience.</p>
+    <div className="bp-footer"><span>1995</span><span>Built on code, not templates</span><span>Today</span></div>
   </div>;
 }
