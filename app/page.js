@@ -88,7 +88,7 @@ export default function HomePage() {
               <h1 className="serif"><span className="hero-reveal-part">Custom digital solutions for</span>{" "}<em className="it hero-reveal-part">businesses</em>{" "}<span className="hero-reveal-part">ready to scale.</span></h1>
               <p className="sub">We work with growing businesses to shape bespoke digital products, practical transformation, and long-term support with calm delivery.</p>
               <div className="actions">
-                <a href="/contact" className="btn-line">Take your business online <span className="arw">→</span></a>
+                <a href="/contact" className="btn-line">Take your business online <span className="arw" aria-hidden="true"><svg className="arw-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></span></a>
                 <a href="tel:+447485222490" className="direct-call">
                   <span className="direct-call-icon" aria-hidden="true"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.96.35 1.9.69 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.26a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.69A2 2 0 0 1 22 16.92z"/><path d="M15 2a7 7 0 0 1 7 7M15 6a3 3 0 0 1 3 3"/></svg></span>
                   <span className="direct-call-content"><span>Call us directly</span><strong>07485 222490</strong></span><span className="direct-call-arrow" aria-hidden="true">↗</span>
@@ -418,6 +418,33 @@ export default function HomePage() {
 
 
         <section className="sector band">
+          <div className="section-net-bg" aria-hidden="true">
+            <svg viewBox="0 0 1200 520" preserveAspectRatio="none">
+              <g className="net-lines">
+                <line x1="60" y1="420" x2="220" y2="280" />
+                <line x1="220" y1="280" x2="420" y2="340" />
+                <line x1="420" y1="340" x2="560" y2="180" />
+                <line x1="560" y1="180" x2="760" y2="240" />
+                <line x1="760" y1="240" x2="920" y2="120" />
+                <line x1="920" y1="120" x2="1120" y2="200" />
+                <line x1="220" y1="280" x2="320" y2="120" />
+                <line x1="420" y1="340" x2="520" y2="460" />
+                <line x1="760" y1="240" x2="840" y2="400" />
+                <line x1="920" y1="120" x2="1040" y2="60" />
+                <line x1="320" y1="120" x2="560" y2="180" />
+                <line x1="520" y1="460" x2="840" y2="400" />
+              </g>
+              <g className="net-nodes">
+                <circle cx="60" cy="420" r="4" /><circle cx="220" cy="280" r="5" /><circle cx="420" cy="340" r="4" />
+                <circle cx="560" cy="180" r="6" /><circle cx="760" cy="240" r="4" /><circle cx="920" cy="120" r="5" />
+                <circle cx="1120" cy="200" r="4" /><circle cx="320" cy="120" r="4" /><circle cx="520" cy="460" r="4" />
+                <circle cx="840" cy="400" r="5" /><circle cx="1040" cy="60" r="3" />
+              </g>
+              <g className="net-pulses">
+                <circle cx="560" cy="180" r="12" /><circle cx="220" cy="280" r="10" /><circle cx="920" cy="120" r="10" />
+              </g>
+            </svg>
+          </div>
           <div className="wrap rv">
             <div className="eyebrow lab a">Sector focus · growing businesses</div>
             <div className="two">
@@ -501,8 +528,16 @@ function StageGraphic({index}) {return <svg className="journey-svg" viewBox="0 0
 function CommerceShowcase() {
   const [step, setStep] = useState(0);
   const stages = ['Browse', 'Basket', 'Checkout'];
+  const [paused, setPaused] = useState(false);
+  useEffect(() => {
+    const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let timer;
+    const sync = () => { clearInterval(timer); if (!paused && !motion.matches && !document.hidden) timer = setInterval(() => setStep(i => (i + 1) % 3), 4000); };
+    sync(); motion.addEventListener('change', sync); document.addEventListener('visibilitychange', sync);
+    return () => { clearInterval(timer); motion.removeEventListener('change', sync); document.removeEventListener('visibilitychange', sync); };
+  }, [paused]);
   const notes = ['Discover products in a clear, responsive storefront.', 'Review your selection in a frictionless basket.', 'Complete the journey with a streamlined checkout.'];
-  return <div className="commerce-demo" data-step={step}>
+  return <div className="commerce-demo" data-step={step} onPointerEnter={()=>setPaused(true)} onPointerLeave={()=>setPaused(false)} onFocus={()=>setPaused(true)} onBlur={e=>{if(!e.currentTarget.contains(e.relatedTarget))setPaused(false)}}>
     <div className="commerce-demo-head"><span>COMMERCE / INTERACTIVE DEMO</span><span className="commerce-status">● {stages[step]}</span></div>
     <svg viewBox="0 0 540 330" role="img" aria-label={`Illustrative storefront: ${stages[step]}`}>
       <defs><linearGradient id="commerceWash" x2="1" y2="1"><stop stopColor="#e3eee7"/><stop offset="1" stopColor="#f4e4cb"/></linearGradient></defs>
@@ -548,6 +583,6 @@ function EngineeringHero(){
       </g>
     </svg>
     <p className="bp-caption serif">From architecture to experience.</p>
-    <div className="bp-footer"><span>1995</span><span>Built on code, not templates</span><span>Today</span></div>
+    <div className="bp-footer"><span>1995</span><span className="bp-journey-arrow" aria-hidden="true"><svg viewBox="0 0 240 16" preserveAspectRatio="none"><path d="M1 8H237M229 2L237 8L229 14" fill="none" stroke="currentColor" strokeWidth="1.2" vectorEffect="non-scaling-stroke"/><path className="bp-arrow-signal" d="M1 8H229" fill="none" stroke="currentColor" strokeWidth="2" vectorEffect="non-scaling-stroke"/></svg></span><span>Today</span></div>
   </div>;
 }

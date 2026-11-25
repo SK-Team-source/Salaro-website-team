@@ -299,7 +299,8 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opa
 .p-home .hero .sub{margin-top:40px;max-width:50ch;font-size:18px;color:var(--ink-soft);line-height:1.75}
 .p-home .hero .actions{margin-top:48px;display:flex;align-items:center;gap:34px;flex-wrap:wrap}
 .p-home .btn-line{display:inline-flex;align-items:center;gap:14px;border:1px solid var(--ink);color:var(--ink);font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;padding:16px 30px;transition:all .5s cubic-bezier(.19,1,.22,1)}
-.p-home .btn-line .arw{transition:transform .5s cubic-bezier(.19,1,.22,1)}
+.p-home .btn-line .arw{display:inline-flex;align-items:center;transition:transform .5s cubic-bezier(.19,1,.22,1)}
+.p-home .btn-line .arw-icon{width:20px;height:20px;display:block;overflow:visible}
 .p-home .btn-line:hover{background:var(--ink);color:var(--paper)}
 .p-home .btn-line:hover .arw{transform:translateX(6px)}
 .p-home .phone{font-size:14px;color:var(--muted);letter-spacing:.01em}
@@ -3772,7 +3773,7 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opa
 /* V45: decorative wired network, scoped to homepage hero */
 .p-home .hero-motion-v13{position:relative;isolation:isolate;overflow:hidden}
 .p-home .hero-motion-v13 > .wrap{position:relative;z-index:1}
-.p-home .hero-motion-v13 > .hero-wired-field{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;opacity:.68;transition:opacity .4s ease;mask-image:linear-gradient(90deg,#000 0%,#000 3%,#0004 12%,#000 33%,#0002 48%,#0002 78%,#000 94%)}
+.p-home .hero-motion-v13 > .hero-wired-field{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;opacity:.62;transition:opacity .4s ease;mask-image:linear-gradient(90deg,#000 0%,#000 4%,#0004 14%,#000 28%,#0001 42%,#0001 82%,#0003 100%)}
 .p-home .hero-wired-field svg{display:block;width:100%;height:100%;max-width:none;overflow:hidden}
 .p-home .hero-wired-field .hero-wire{color:#a66b50;fill:none;stroke:currentColor;stroke-width:1;stroke-linejoin:round;stroke-linecap:round}
 .p-home .hero-wired-field .wire-teal{color:#527c76}
@@ -3965,3 +3966,62 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opa
 @keyframes bpSignal{to{stroke-dashoffset:-100}}
 @media(max-width:480px){.p-home .bp-footer{font-size:9px}.p-home .bp-caption{margin-bottom:18px}}
 @media(prefers-reduced-motion:reduce){.p-home .blueprint-hero *{animation:none!important;transition:none!important}.p-home .bp-art{transform:none!important}}
+
+/* Hero heritage arrow */
+.p-home .bp-footer{display:flex;align-items:center;gap:14px;}
+.p-home .bp-footer .bp-journey-arrow{flex:1;min-width:0;color:#7a2f1c;display:flex;align-items:center;}
+.p-home .bp-journey-arrow svg{display:block;width:100%;height:16px;overflow:visible;}
+.p-home .bp-arrow-signal{stroke-dasharray:22 240;animation:bpHeritageFlow 3.5s linear infinite;}
+@keyframes bpHeritageFlow{from{stroke-dashoffset:22;}to{stroke-dashoffset:-240;}}
+@media(prefers-reduced-motion:reduce){.p-home .bp-arrow-signal{animation:none;display:none;}}
+
+/* Single-scene capability workflows */
+.p-home .capabilities-v21 .workflow-demo .live-canvas{padding:10px;color:var(--demo-tone);}
+.p-home .capabilities-v21 .workflow-demo .live-canvas svg{height:auto;aspect-ratio:320/210;max-height:none;font-family:system-ui,sans-serif;}
+.wf-scene{animation:wf-enter .55s ease both;}.wf-reveal{animation:wf-enter .55s ease both;}.wf-cursor{animation:wf-cursor 2s ease both;}.wf-click{animation:wf-click 1s 1s both;}.wf-tick{stroke-dasharray:250;stroke-dashoffset:250;animation:wf-draw 1.2s .2s ease forwards;}.wf-spin{transform-origin:160px 96px;animation:wf-spin 5s linear infinite;}.wf-pulse{animation:wf-pulse 1s ease infinite;}.wf-bar{transform-box:fill-box;transform-origin:bottom;animation:wf-grow .8s ease both;}
+@keyframes wf-enter{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}@keyframes wf-cursor{from{transform:translate(25px,-22px);opacity:0}45%,100%{transform:translate(0,0);opacity:1}}@keyframes wf-click{from{opacity:1;transform:scale(.4)}to{opacity:0;transform:scale(1.5)}}@keyframes wf-draw{to{stroke-dashoffset:0}}@keyframes wf-spin{to{transform:rotate(360deg)}}@keyframes wf-pulse{50%{opacity:.25}}@keyframes wf-grow{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@media(prefers-reduced-motion:reduce){.workflow-demo *{animation:none!important;transition:none!important}.workflow-demo .wf-tick{stroke-dashoffset:0}.workflow-demo .wf-click{display:none}}
+/* Slender integrated timeline pointer */
+@media(min-width:701px){.p-home .final-journey .journey-connector{height:38px;z-index:2;}.p-home .final-journey .journey-connector:before,.p-home .final-journey .journey-connector:after{top:auto;bottom:-1px;width:16px;height:45px;left:var(--active-point);transform:translateX(-50%);clip-path:polygon(50% 0,100% 100%,0 100%);border:0;background:#d6b9a4;transition:left .6s ease;}.p-home .final-journey .journey-connector:after{width:14px;height:43px;bottom:-2px;background:#fbf4ed;}}
+
+/* Project-led agency polish: alternating warm medium and light surfaces. */
+.p-home .shop.band{background:#ece3d8;}
+.p-home .clients.band{background:#faf8f3;}
+.p-home .sector.band{background:#c5d5cd;}
+.p-home .ethos{background:#f9f5ee;}
+.p-home .shop .feat,.p-home .sector-metric,.p-home .featured-work-v34 .feat-card,.p-home .featured-work-v34 .next-card{transition:transform .35s ease,box-shadow .35s ease,border-color .35s ease;}
+.p-home .featured-work-v34 .feat-media{position:relative;overflow:hidden;isolation:isolate;}
+.p-home .featured-work-v34 .feat-media svg{transition:transform .65s cubic-bezier(.2,.75,.2,1);transform-origin:center;}
+.p-home .featured-work-v34 .feat-media:after{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,transparent 35%,#fff9 49%,transparent 63%);transform:translateX(-110%);transition:transform .85s ease;}
+.p-home .featured-work-v34 .feat-card:is(:hover,:focus-visible) .feat-media:after{transform:translateX(110%);}
+.p-home .featured-work-v34 .feat-card:is(:hover,:focus-visible) .feat-media svg{transform:scale(1.055) translateY(-3px);}
+.p-home .featured-work-v34 .feat-card:is(:hover,:focus-visible),.p-home .featured-work-v34 .next-card:is(:hover,:focus-visible){transform:translateY(-5px);box-shadow:0 16px 35px #60442b16;}
+.p-home .clients .rv.in .fr-s{stroke-dasharray:180;stroke-dashoffset:180;animation:agencyDraw 1.8s .3s ease forwards;}
+.p-home .shop .commerce-flow-row{transition:opacity .45s ease;}
+.p-home .shop .commerce-demo[data-step="1"] .commerce-product.featured{filter:drop-shadow(0 4px 6px #426e6850);}
+.p-home .shop .commerce-demo[data-step="2"] .commerce-flow-row:last-of-type{animation:agencyConfirm .7s ease both;}
+.p-home .shop .feat:hover,.p-home .sector-metric:hover{transform:translateY(-3px);}
+.p-home .sector .rv.in .sector-metric-icon svg path{stroke-dasharray:100;stroke-dashoffset:100;animation:agencyDraw 1.4s ease forwards;}
+.p-home .sector .rv.in .sector-wave{transform-origin:bottom;animation:agencyWave 1.4s ease both;}
+.p-home .ethos .big em{background-image:linear-gradient(#a66c50,#a66c50);background-repeat:no-repeat;background-position:0 100%;background-size:0 1px;transition:background-size 1.3s ease;}
+.p-home .ethos .big.in em{background-size:100% 1px;}
+@keyframes agencyDraw{to{stroke-dashoffset:0;}}
+@keyframes agencyWave{from{transform:scaleY(.2);opacity:.3;}to{transform:scaleY(1);opacity:1;}}
+@keyframes agencyConfirm{from{opacity:.4;}to{opacity:1;}}
+@media(prefers-reduced-motion:reduce){.p-home .featured-work-v34 .feat-media:after{display:none;}.p-home .featured-work-v34 .feat-media svg,.p-home .featured-work-v34 .feat-card,.p-home .featured-work-v34 .next-card,.p-home .shop .feat,.p-home .sector-metric{transition:none;transform:none!important;}.p-home .clients .rv.in .fr-s,.p-home .sector .rv.in .sector-metric-icon svg path{animation:none;stroke-dashoffset:0;}.p-home .sector .rv.in .sector-wave,.p-home .shop .commerce-flow-row{animation:none!important;}.p-home .ethos .big em{transition:none;}}
+
+/* Subtle animated network background for sector band */
+.p-home .sector.band{position:relative;overflow:hidden;}
+.p-home .sector.band > .wrap{position:relative;z-index:1;}
+.p-home .section-net-bg{position:absolute;inset:0;pointer-events:none;z-index:0;opacity:.45;}
+.p-home .section-net-bg svg{width:100%;height:100%;display:block;}
+.p-home .section-net-bg .net-lines line{stroke:#8f877b;stroke-width:1.1;stroke-dasharray:6 10;stroke-linecap:round;opacity:.38;animation:sector-net-flow 18s linear infinite;}
+.p-home .section-net-bg .net-lines line:nth-child(3n){animation-duration:22s;opacity:.28;}
+.p-home .section-net-bg .net-lines line:nth-child(4n){animation-direction:reverse;animation-duration:20s;}
+.p-home .section-net-bg .net-nodes circle{fill:#f6f1ea;stroke:#8f877b;stroke-width:1.4;opacity:.65;}
+.p-home .section-net-bg .net-pulses circle{fill:none;stroke:#a79c8e;stroke-width:1.4;opacity:0;transform-box:fill-box;transform-origin:center;animation:sector-net-pulse 6s ease-out infinite;}
+.p-home .section-net-bg .net-pulses circle:nth-child(2){animation-delay:2s;}
+.p-home .section-net-bg .net-pulses circle:nth-child(3){animation-delay:4s;}
+@keyframes sector-net-flow{from{stroke-dashoffset:0;}to{stroke-dashoffset:-160;}}
+@keyframes sector-net-pulse{0%{opacity:.35;transform:scale(.35);}70%{opacity:0;transform:scale(2.2);}100%{opacity:0;transform:scale(2.2);}}
+@media(prefers-reduced-motion:reduce){.p-home .section-net-bg .net-lines line,.p-home .section-net-bg .net-pulses circle{animation:none!important;}.p-home .section-net-bg .net-pulses circle{opacity:0;}}
