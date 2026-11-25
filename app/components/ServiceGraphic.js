@@ -1,0 +1,10 @@
+export default function ServiceGraphic({type}){
+ const paths=['M22 76 H158','M22 76 H158','M22 76 H158','M22 76 H158'];
+ return <svg className={'service-art art-'+type} viewBox="0 0 180 108" aria-hidden="true">
+ <rect className="art-bg" x="1" y="1" width="178" height="106" rx="12"/>
+ {type===0&&<><rect className="art-frame" x="24" y="19" width="132" height="70" rx="6"/><path d="M24 34H156"/><circle cx="34" cy="27" r="2"/><circle cx="42" cy="27" r="2"/><path className="art-accent" d="M39 47H82 M39 56H70 M39 65H76"/><rect className="art-fill art-pop" x="98" y="43" width="44" height="32" rx="4"/><path className="art-accent art-flow" d="M103 67L113 57L121 62L136 48"/></>}
+ {type===1&&<><rect className="art-frame" x="20" y="24" width="88" height="62" rx="5"/><rect className="art-fill" x="30" y="35" width="28" height="24" rx="3"/><path d="M66 39H97M66 48H88M30 70H96"/><g className="art-pop"><rect className="art-frame" x="112" y="38" width="48" height="46" rx="7"/><path className="art-accent" d="M120 53H150L146 65H125L120 48H116"/><circle cx="128" cy="72" r="2"/><circle cx="144" cy="72" r="2"/></g><path className="art-flow art-accent" d="M108 30Q135 12 143 36"/></>}
+ {type===2&&<><rect className="art-frame" x="20" y="23" width="105" height="62" rx="5"/><path d="M20 35H125M32 46H78M32 55H68M32 64H82"/><g className="art-pop"><rect className="art-frame" x="110" y="38" width="42" height="57" rx="7"/><rect className="art-fill" x="117" y="48" width="28" height="32" rx="3"/><path className="art-accent" d="M120 63H142M131 53V73"/><circle cx="131" cy="87" r="2"/></g><path className="art-flow art-accent" d="M77 72Q94 95 110 74"/></>}
+ {type===3&&<><path className="art-flow art-accent" d="M25 25L90 54L155 25M25 83L90 54L155 83M25 54H155"/><circle className="art-fill art-pop" cx="90" cy="54" r="19"/><path className="art-accent" d="M80 54H100M90 44V64"/>{[[25,25],[25,54],[25,83],[155,25],[155,54],[155,83]].map(([x,y])=><circle key={`${x}-${y}`} className="art-frame art-node" cx={x} cy={y} r="6"/>)}</>}
+ </svg>;
+}
