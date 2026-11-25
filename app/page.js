@@ -4,7 +4,6 @@ import CapabilityDemo from './components/CapabilityDemo';
 import PhpNoticeBar from './components/PhpNoticeBar';
 
 export default function HomePage() {
-  const [menuOpen, setMenuOpen] = useState(false);
   const [activeStage, setActiveStage] = useState(0);
   const [stagePaused, setStagePaused] = useState(false);
   const [stageFocused, setStageFocused] = useState(false);
@@ -62,8 +61,7 @@ export default function HomePage() {
         <div className="topbar">
           <div className="wrap">
             <a href="/" className="brand">Sala<span>ro</span></a>
-            <button type="button" className="home-menu-toggle" aria-expanded={menuOpen} aria-controls="home-navigation" onClick={()=>setMenuOpen(v=>!v)}>{menuOpen ? "Close" : "Menu"}</button>
-            <nav id="home-navigation" className={`nav ${menuOpen ? "menu-open" : ""}`} onClick={()=>setMenuOpen(false)} onKeyDown={e=>{if(e.key==="Escape")setMenuOpen(false)}}><a href="/practice">Practice</a><a href="/work">Work</a><a href="/studio">Studio</a><a href="/writing">Writing</a><a href="/contact">Contact</a></nav>
+            <nav id="home-navigation" className="nav"><a href="/practice">Practice</a><a href="/work">Work</a><a href="/studio">Studio</a><a href="/writing">Writing</a><a href="/contact">Contact</a></nav>
             <a href="/contact" className="top-cta">Start a project</a>
           </div>
         </div>
