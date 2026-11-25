@@ -4,6 +4,7 @@ import CapabilityDemo from './components/CapabilityDemo';
 import PhpNoticeBar from './components/PhpNoticeBar';
 
 export default function HomePage() {
+  const [menuOpen, setMenuOpen] = useState(false);
   const [activeStage, setActiveStage] = useState(0);
   const [stagePaused, setStagePaused] = useState(false);
   const [stageFocused, setStageFocused] = useState(false);
@@ -38,6 +39,9 @@ export default function HomePage() {
 
   useEffect(() => {
     const elements = document.querySelectorAll('.p-home .rv');
+     const bands = document.querySelectorAll('.p-home .agency-atmosphere');
+     const motionObserver = 'IntersectionObserver' in window ? new IntersectionObserver(entries => entries.forEach(entry => entry.target.classList.toggle('agency-visible', entry.isIntersecting))) : null;
+     bands.forEach(el => motionObserver ? motionObserver.observe(el) : el.classList.add('agency-visible'));
     if (!('IntersectionObserver' in window)) {
       elements.forEach(el => el.classList.add('in'));
       return;
@@ -49,7 +53,7 @@ export default function HomePage() {
       }
     }), { threshold: 0, rootMargin: '0px 0px -16px 0px' });
     elements.forEach(el => io.observe(el));
-    return () => io.disconnect();
+    return () => { io.disconnect(); motionObserver?.disconnect(); };
   }, []);
 
   return (
@@ -58,24 +62,43 @@ export default function HomePage() {
         <div className="topbar">
           <div className="wrap">
             <a href="/" className="brand">Sala<span>ro</span></a>
-            <nav className="nav"><a href="/practice">Practice</a><a href="/work">Work</a><a href="/studio">Studio</a><a href="/writing">Writing</a><a href="/contact">Contact</a></nav>
+            <button type="button" className="home-menu-toggle" aria-expanded={menuOpen} aria-controls="home-navigation" onClick={()=>setMenuOpen(v=>!v)}>{menuOpen ? "Close" : "Menu"}</button>
+            <nav id="home-navigation" className={`nav ${menuOpen ? "menu-open" : ""}`} onClick={()=>setMenuOpen(false)} onKeyDown={e=>{if(e.key==="Escape")setMenuOpen(false)}}><a href="/practice">Practice</a><a href="/work">Work</a><a href="/studio">Studio</a><a href="/writing">Writing</a><a href="/contact">Contact</a></nav>
             <a href="/contact" className="top-cta">Start a project</a>
           </div>
         </div>
 
 
         <header className="hero drifting-field hero-motion-v13" onPointerLeave={e=>{e.currentTarget.style.removeProperty("--hero-x");e.currentTarget.style.removeProperty("--hero-y");}} onPointerMove={e=>{const r=e.currentTarget.getBoundingClientRect(); e.currentTarget.style.setProperty("--hero-x",`${e.clientX-r.left}px`);e.currentTarget.style.setProperty("--hero-y",`${e.clientY-r.top}px`);}}>
-          <div className="hero-wired-field" aria-hidden="true"><svg viewBox="0 0 1920 900" preserveAspectRatio="none" focusable="false">
-            <g className="hero-wire wire-copper"><path d="M0 75 H125 L170 30 H460 L500 70 H610"/><path className="wire-signal" d="M0 75 H125 L170 30 H460 L500 70 H610" pathLength="100" style={{animationDelay:"-0.0s"}}/><circle cx="0" cy="75" r="3"/><circle cx="170" cy="30" r="3"/><circle cx="500" cy="70" r="3"/></g>
-            <g className="hero-wire wire-teal"><path d="M0 310 H38 L72 276 V155 L105 122"/><path className="wire-signal" d="M0 310 H38 L72 276 V155 L105 122" pathLength="100" style={{animationDelay:"-1.3s"}}/><circle cx="0" cy="310" r="3"/><circle cx="72" cy="276" r="3"/><circle cx="105" cy="122" r="3"/></g>
-            <g className="hero-wire wire-copper"><path d="M0 650 H45 L75 620 V440"/><path className="wire-signal" d="M0 650 H45 L75 620 V440" pathLength="100" style={{animationDelay:"-2.6s"}}/><circle cx="0" cy="650" r="3"/><circle cx="75" cy="620" r="3"/></g>
-            <g className="hero-wire wire-copper"><path d="M650 0 V38 L690 78 H820"/><path className="wire-signal" d="M650 0 V38 L690 78 H820" pathLength="100" style={{animationDelay:"-3.9s"}}/><circle cx="650" cy="0" r="3"/><circle cx="690" cy="78" r="3"/></g>
-            <g className="hero-wire wire-teal"><path d="M1600 0 V42 L1640 82 H1770 L1840 152 H1920"/><path className="wire-signal" d="M1600 0 V42 L1640 82 H1770 L1840 152 H1920" pathLength="100" style={{animationDelay:"-5.2s"}}/><circle cx="1600" cy="0" r="3"/><circle cx="1640" cy="82" r="3"/><circle cx="1840" cy="152" r="3"/></g>
-            <g className="hero-wire wire-copper"><path d="M1920 290 H1850 L1810 330 V470 L1760 520 H1650"/><path className="wire-signal" d="M1920 290 H1850 L1810 330 V470 L1760 520 H1650" pathLength="100" style={{animationDelay:"-6.5s"}}/><circle cx="1920" cy="290" r="3"/><circle cx="1810" cy="330" r="3"/><circle cx="1760" cy="520" r="3"/></g>
-            <g className="hero-wire wire-copper"><path d="M1920 720 H1830 L1780 670 H1660"/><path className="wire-signal" d="M1920 720 H1830 L1780 670 H1660" pathLength="100" style={{animationDelay:"-7.8s"}}/><circle cx="1920" cy="720" r="3"/><circle cx="1780" cy="670" r="3"/></g>
-            <g className="hero-wire wire-teal"><path d="M610 900 V790 L650 750 V570 L680 540"/><path className="wire-signal" d="M610 900 V790 L650 750 V570 L680 540" pathLength="100" style={{animationDelay:"-9.1s"}}/><circle cx="610" cy="900" r="3"/><circle cx="650" cy="750" r="3"/><circle cx="680" cy="540" r="3"/></g>
-            <g className="hero-wire wire-copper"><path d="M1920 890 H1770 L1720 840 H1590"/><path className="wire-signal" d="M1920 890 H1770 L1720 840 H1590" pathLength="100" style={{animationDelay:"-10.4s"}}/><circle cx="1920" cy="890" r="3"/><circle cx="1720" cy="840" r="3"/></g>
-          </svg></div>
+          <div className="hero-wired-field hero-network-field" aria-hidden="true">
+            <svg className="hero-network-svg" viewBox="0 0 1920 900" preserveAspectRatio="none" focusable="false">
+              <defs>
+                <filter id="heroGlow"><feGaussianBlur stdDeviation="2.5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+              </defs>
+              <g className="hero-net-grid">
+                <path d="M0 150 H1920M0 300 H1920M0 450 H1920M0 600 H1920M0 750 H1920" />
+                <path d="M240 0 V900M480 0 V900M720 0 V900M960 0 V900M1200 0 V900M1440 0 V900M1680 0 V900" />
+              </g>
+              <g className="hero-wire wire-copper"><path d="M0 70 H120 L170 28 H430 L480 74 H640 L700 40"/><path className="wire-signal" d="M0 70 H120 L170 28 H430 L480 74 H640 L700 40" pathLength="100" style={{animationDelay:'0s'}}/><circle cx="170" cy="28" r="3.5"/><circle cx="480" cy="74" r="3"/><circle className="node-pulse" cx="480" cy="74" r="3"/></g>
+              <g className="hero-wire wire-teal"><path d="M0 320 H42 L82 280 V160 L124 118 H220"/><path className="wire-signal" d="M0 320 H42 L82 280 V160 L124 118 H220" pathLength="100" style={{animationDelay:'-1.2s'}}/><circle cx="82" cy="280" r="3.5"/><circle cx="124" cy="118" r="3"/><circle className="node-pulse" cx="82" cy="280" r="3.5"/></g>
+              <g className="hero-wire wire-copper"><path d="M0 660 H50 L86 624 V450 L130 406"/><path className="wire-signal" d="M0 660 H50 L86 624 V450 L130 406" pathLength="100" style={{animationDelay:'-2.4s'}}/><circle cx="86" cy="624" r="3.5"/><circle className="node-pulse" cx="86" cy="624" r="3.5"/></g>
+              <g className="hero-wire wire-teal"><path d="M560 0 V45 L610 90 H760 L810 140"/><path className="wire-signal" d="M560 0 V45 L610 90 H760 L810 140" pathLength="100" style={{animationDelay:'-3.1s'}}/><circle cx="610" cy="90" r="3.5"/><circle className="node-pulse" cx="610" cy="90" r="3.5"/></g>
+              <g className="hero-wire wire-copper"><path d="M980 900 V820 L1030 770 V640 L1080 590"/><path className="wire-signal" d="M980 900 V820 L1030 770 V640 L1080 590" pathLength="100" style={{animationDelay:'-4s'}}/><circle cx="1030" cy="770" r="3.5"/><circle className="node-pulse" cx="1030" cy="770" r="3.5"/></g>
+              <g className="hero-wire wire-teal"><path d="M1540 0 V50 L1590 96 H1720 L1790 156 H1920"/><path className="wire-signal" d="M1540 0 V50 L1590 96 H1720 L1790 156 H1920" pathLength="100" style={{animationDelay:'-5.2s'}}/><circle cx="1590" cy="96" r="3.5"/><circle cx="1790" cy="156" r="3"/><circle className="node-pulse" cx="1790" cy="156" r="3.5"/></g>
+              <g className="hero-wire wire-copper"><path d="M1920 280 H1855 L1810 325 V460 L1755 515 H1640"/><path className="wire-signal" d="M1920 280 H1855 L1810 325 V460 L1755 515 H1640" pathLength="100" style={{animationDelay:'-6.4s'}}/><circle cx="1810" cy="325" r="3.5"/><circle cx="1755" cy="515" r="3"/><circle className="node-pulse" cx="1810" cy="325" r="3.5"/></g>
+              <g className="hero-wire wire-teal"><path d="M1920 560 H1860 L1820 600 V700 L1770 750 H1680"/><path className="wire-signal" d="M1920 560 H1860 L1820 600 V700 L1770 750 H1680" pathLength="100" style={{animationDelay:'-7.3s'}}/><circle cx="1820" cy="600" r="3.5"/><circle className="node-pulse" cx="1820" cy="600" r="3.5"/></g>
+              <g className="hero-wire wire-copper"><path d="M1920 860 H1760 L1710 810 H1580 L1530 760"/><path className="wire-signal" d="M1920 860 H1760 L1710 810 H1580 L1530 760" pathLength="100" style={{animationDelay:'-8.5s'}}/><circle cx="1710" cy="810" r="3.5"/><circle className="node-pulse" cx="1710" cy="810" r="3.5"/></g>
+              <g className="hero-wire wire-teal"><path d="M360 900 V830 L410 780 H520 L560 740"/><path className="wire-signal" d="M360 900 V830 L410 780 H520 L560 740" pathLength="100" style={{animationDelay:'-9.6s'}}/><circle cx="410" cy="780" r="3.5"/><circle className="node-pulse" cx="410" cy="780" r="3.5"/></g>
+              <g className="hero-wire wire-copper"><path d="M1320 0 V60 L1360 100 V210 L1410 260"/><path className="wire-signal" d="M1320 0 V60 L1360 100 V210 L1410 260" pathLength="100" style={{animationDelay:'-10.8s'}}/><circle cx="1360" cy="100" r="3.5"/><circle className="node-pulse" cx="1360" cy="100" r="3.5"/></g>
+            </svg>
+          </div>
+          <div className="hero-net-notes" aria-hidden="true">
+            <span className="hero-net-note note-arch"><i className="note-dot" />System Architecture</span>
+            <span className="hero-net-note note-eng"><i className="note-dot" />Custom Engineering</span>
+            <span className="hero-net-note note-api"><i className="note-dot" />API Integration</span>
+            <span className="hero-net-note note-cloud"><i className="note-dot" />Cloud Ready</span>
+            <span className="hero-net-note note-perf"><i className="note-dot" />Performance</span>
+          </div>
           <div className="wrap"><div className="grid">
             <div className="hero-left">
               <span className="lab a">A UK-led digital consultancy</span>
@@ -104,6 +127,7 @@ export default function HomePage() {
 
         <div className="signal-line"></div>
         <section className="pipeline band contour-drift pipeline-aligned pipeline-spectrum pipeline-refined" data-stage={activeStage}>
+          <AgencyAtmosphere kind="pipeline" />
           <div className="wrap">
             <div className="head-row rv">
               <h2 className="serif">How We Build <span className="it">Better Technology</span>.</h2>
@@ -136,6 +160,7 @@ export default function HomePage() {
         <div className="signal-line"></div>
 
 <section className="services band contour-drift capabilities-v21">
+          <AgencyAtmosphere kind="capabilities" />
   <div className="wrap">
     <div className="eyebrow lab a rv">Capabilities</div>
 
@@ -232,6 +257,7 @@ export default function HomePage() {
 </section>
 
         <section className="feature band feature-ecosystem">
+          <AgencyAtmosphere kind="devices" />
           <div className="wrap"><div className="grid">
             <div className="rv">
               <div className="eyebrow lab a">Cross-Platform Development</div>
@@ -268,6 +294,7 @@ export default function HomePage() {
 
 
         <section className="shop band">
+          <AgencyAtmosphere kind="commerce" />
           <div className="wrap">
 
             <div className="shop-top">
@@ -331,6 +358,7 @@ export default function HomePage() {
 
 
         <section className="clients band selected-work-v26">
+          <AgencyAtmosphere kind="work" />
           <div className="wrap rv">
             <div className="eyebrow lab a">Selected work</div>
             <h2 className="serif">A few examples of the <span className="it">work</span> we’ve helped shape.</h2>
@@ -418,6 +446,7 @@ export default function HomePage() {
 
 
         <section className="sector band">
+          <AgencyAtmosphere kind="sector" />
           <div className="section-net-bg" aria-hidden="true">
             <svg viewBox="0 0 1200 520" preserveAspectRatio="none">
               <g className="net-lines">
@@ -481,6 +510,7 @@ export default function HomePage() {
 
 
         <section className="ethos ethos-v35" onPointerMove={e=>{const r=e.currentTarget.getBoundingClientRect();e.currentTarget.style.setProperty("--ethos-x",`${e.clientX-r.left}px`);e.currentTarget.style.setProperty("--ethos-y",`${e.clientY-r.top}px`);}} onPointerLeave={e=>{e.currentTarget.style.removeProperty("--ethos-x");e.currentTarget.style.removeProperty("--ethos-y");}}>
+          <AgencyAtmosphere kind="ethos" />
           <div className="wrap"><div className="grid">
             <div className="rv">
               <div className="eyebrow lab a">Ethos</div>
@@ -583,6 +613,34 @@ function EngineeringHero(){
       </g>
     </svg>
     <p className="bp-caption serif">From architecture to experience.</p>
-    <div className="bp-footer"><span>1995</span><span className="bp-journey-arrow" aria-hidden="true"><svg viewBox="0 0 240 16" preserveAspectRatio="none"><path d="M1 8H237M229 2L237 8L229 14" fill="none" stroke="currentColor" strokeWidth="1.2" vectorEffect="non-scaling-stroke"/><path className="bp-arrow-signal" d="M1 8H229" fill="none" stroke="currentColor" strokeWidth="2" vectorEffect="non-scaling-stroke"/></svg></span><span>Today</span></div>
+    <div className="bp-footer"><span>1995</span><span className="bp-journey-arrow" aria-hidden="true"><svg viewBox="0 0 240 16" preserveAspectRatio="none"><path d="M6 8H232" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" vectorEffect="non-scaling-stroke" opacity=".45"/><path d="M227 4L234 8L227 12" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" vectorEffect="non-scaling-stroke"/><circle cx="4" cy="8" r="1.8" fill="currentColor" opacity=".7"/><path className="bp-arrow-signal" d="M6 8H228" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" vectorEffect="non-scaling-stroke"/></svg></span><span>Today</span></div>
   </div>;
+}
+
+// Decorative edge-only artwork; each band has its own visual vocabulary.
+function AgencyAtmosphere({kind}) {
+ const paths = {
+  pipeline:['M0 18H92L124 50H220','M0 140H65L105 100H205'],
+  capabilities:['M12 78V15H76','M155 155H218V92'],
+  devices:['M-45 90a105 105 0 1 0 210 0a105 105 0 1 0 -210 0','M-15 90a75 75 0 1 0 150 0a75 75 0 1 0 -150 0'],
+  commerce:['M0 30H50L95 75H165L220 130','M0 145H50L90 105H145L200 50'],
+  work:['M12 15H210V155H12Z','M25 85H195'],
+  sector:['M5 30L70 65L125 15L195 80L145 145L70 65L25 145L145 145'],
+  ethos:['M0 20H220M0 60H220M0 100H220M0 140H220M20 0V170M80 0V170M140 0V170M200 0V170'],
+  footer:['M0 35H80L110 65H220','M0 130H120L150 100H220']
+ }[kind];
+ return <div className={`agency-atmosphere agency-${kind}`} aria-hidden="true">
+ {['work','sector','ethos'].includes(kind)&&<svg className="agency-full-field" viewBox="0 0 1200 800" preserveAspectRatio="none" fill="none" focusable="false">
+ {Array.from({length:5},(_,i)=>{const y=70+i*160;const d=kind==='sector'?`M0 ${y} L180 ${y+45} L390 ${y-25} L620 ${y+55} L850 ${y-20} L1200 ${y+35}`:kind==='work'?`M0 ${y} H160 L210 ${y+45} H510 L560 ${y} H940 L990 ${y+35} H1200`:`M0 ${y} H1200 M${100+i*245} 0 V800`;return <g key={i}><path className="full-track" d={d}/><path className="full-signal" d={d} pathLength="100" style={{animationDelay:`-${i*2.1}s`}}/></g>})}
+ {Array.from({length:24},(_,i)=>{const x=35+(i*173)%1130,y=25+(i*127)%750;return <g key={i} transform={`translate(${x} ${y})`}><circle className="full-node" r="3"/><circle className="full-ring" r="8" style={{animationDelay:`-${i*.7}s`}}/><path className="full-plus" d="M-6 0H6M0 -6V6" style={{animationDelay:`-${i*.8}s`}}/><path className="full-star" d="M0 -7L2 -2L7 0L2 2L0 7L-2 2L-7 0L-2 -2Z" style={{animationDelay:`-${i*.9}s`}}/></g>})}
+ {kind==='work'&&<path className="full-scan" d="M0 0H1200"/>}
+ </svg>}
+ {[0,1].map(side=><svg key={side} className={`agency-edge agency-edge-${side}`} viewBox="0 0 230 170" fill="none" focusable="false">
+ {paths.map((d,i)=><g key={i}><path className="agency-track" d={d}/><path className="agency-travel" d={d} pathLength="100" style={{animationDelay:`-${i*2+side}s`}}/></g>)}
+ {[[30,35],[95,75],[165,125],[205,42]].map(([x,y],i)=><g key={i} transform={`translate(${x} ${y})`}><circle className="agency-node" r="2.8"/><circle className="agency-ring" r="7" style={{animationDelay:`-${i*1.3}s`}}/></g>)}
+ {[[45,115],[145,35],[200,145]].map(([x,y],i)=><g key={i} transform={`translate(${x} ${y})`}><path className="agency-plus" d="M-5 0H5M0 -5V5" style={{animationDelay:`-${i*2}s`}}/></g>)}
+ <path className="agency-star" d="M112 112l2 6 6 2-6 2-2 6-2-6-6-2 6-2Z"/>
+ {kind==='work'&&<path className="agency-scan" d="M20 25H200"/>}
+ </svg>)}
+ </div>;
 }
