@@ -1,398 +1,141 @@
 'use client';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import CapabilityDemo from './components/CapabilityDemo';
+import PhpNoticeBar from './components/PhpNoticeBar';
 
 export default function HomePage() {
+  const [activeStage, setActiveStage] = useState(0);
+  const [deviceFocus, setDeviceFocus] = useState(0);
+  const [focus, setFocus] = useState(0);
+  const [chartMode, setChartMode] = useState(0);
+  const chart = chartMode === 0 ? [56,47,53,38,43,29,23] : [65,59,44,48,32,35,18];
+  const chartCurve = chart.reduce((path, y, i) => {
+    const x = 10 + i * 36;
+    return i === 0 ? `M${x},${y}` : `${path} C${x-18},${chart[i-1]} ${x-18},${y} ${x},${y}`;
+  }, "");
+  const nodes = [[45,42],[255,42],[45,145],[255,145],[150,94]];
+  const labels = ["Build","Migrate","Advise","Scale","Core"];
   useEffect(() => {
-      const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')}),{threshold:.12});
-        document.querySelectorAll('.rv').forEach(el=>io.observe(el));
-
-        const pipe=document.getElementById('pipe');
-        const stages=[...document.querySelectorAll('.stage')];
-        let started=false;
-        const calm=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        // data-anim on #pipe picks the animation:  "spot" (spotlight glides stage to stage)  |  "ink" (progress line inks in)
-        const mode=(pipe&&pipe.dataset.anim)||'spot';
-        const cycle=mode==='ink'?7500:9000;
-        function runPipe(){
-          if(!pipe)return;
-          pipe.classList.add('reset','fade');pipe.classList.remove('done');
-          pipe.style.setProperty('--p','0');pipe.style.setProperty('--i','0');
-          stages.forEach(s=>s.classList.remove('lit','on','past'));
-          void pipe.offsetWidth;
-          pipe.classList.remove('reset');
-          setTimeout(()=>pipe.classList.remove('fade'),60);
-          const last=stages.length-1;
-          if(calm){stages.forEach(s=>s.classList.add(mode==='ink'?'lit':'past'));pipe.style.setProperty('--p','1');pipe.classList.add('done');return;}
-          if(mode==='ink'){
-            stages.forEach((s,i)=>{
-              const t=300+i*1150;
-              if(i>0)setTimeout(()=>pipe.style.setProperty('--p',String(i/last)),t-950);
-              setTimeout(()=>{s.classList.add('lit');if(i===last)setTimeout(()=>pipe.classList.add('done'),250);},t);
-            });
-          }else{
-            stages.forEach((s,i)=>{
-              const t=500+i*1300;
-              setTimeout(()=>{
-                pipe.style.setProperty('--i',String(i));
-                if(i>0){stages[i-1].classList.remove('on');stages[i-1].classList.add('past');}
-                s.classList.add('on');
-              },t);
-            });
-            setTimeout(()=>{stages[last].classList.remove('on');stages[last].classList.add('past');pipe.classList.add('done');},500+stages.length*1300);
-            setTimeout(()=>pipe.classList.add('fade'),cycle-1100);
-          }
-        }
-        const po=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting&&!started){started=true;runPipe();setInterval(runPipe,cycle);}}),{threshold:.4});
-        if(pipe)po.observe(pipe);
-  }, []);
-
-  // Hero background: "traditional -> AI-driven" — a fine, watermark-light layer.
-  // Every horizontal grid line has its own bubble "gun" at the left edge, each on its own random
-  // rhythm, so flow is spread over the whole hero. Bubbles fly straight along the ruled grid,
-  // then drift and zigzag through the neural mesh, flashing each node they pass.
-  // Bubbles always travel left -> right, keep a minimum gap so they never overlap, and ignore the
-  // cursor. Hovering the section only lifts the background: the AI mesh spreads further and
-  // lines/nodes gain a little presence.
-  useEffect(() => {
-    const hero = document.querySelector('.hero');
-    const cv = document.getElementById('hero-canvas');
-    if (!hero || !cv) return;
-    const ctx = cv.getContext('2d');
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const MUTED = [156, 143, 124], ACCENT = [122, 47, 28];
-    let w = 0, h = 0, dpr = 1, sp = 44, spd = 1, cols = 0, rows = 0, nodes = [], edges = [], adjN = [];
-    let pulses = [], trail = [];
-    let emitters = [];
-    let raf = 0, running = false, last = 0, t = 0, introT = reduce ? 99 : 0;
-    let mouse = null, mouseA = 0, hov = 0;
-
-    const smooth = (x) => { x = Math.max(0, Math.min(1, x)); return x * x * (3 - 2 * x); };
-    const ease = (x) => 1 - Math.pow(1 - Math.max(0, Math.min(1, x)), 3);
-    const hsh = (n) => { const s = Math.sin(n * 12.9898) * 43758.5453; return s - Math.floor(s); };
-    const mix = (a, b, k) => Math.round(a + (b - a) * k);
-    const maxPulses = () => (w < 700 ? 10 : 22);
-    const minGap = () => sp * 0.9; // minimum centre-to-centre distance between two bubbles
-    let pid = 0;
-
-    function build() {
-      const r = hero.getBoundingClientRect();
-      w = r.width; h = r.height;
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
-      cv.width = w * dpr; cv.height = h * dpr;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      sp = w < 700 ? 38 : 44; spd = 68 / sp;
-      cols = Math.ceil(w / sp) + 2; rows = Math.ceil(h / sp) + 2;
-      const ox = (w - (cols - 1) * sp) / 2, oy = (h - (rows - 1) * sp) / 2;
-      nodes = []; edges = []; adjN = []; pulses = []; trail = [];
-      for (let r2 = 0; r2 < rows; r2++) for (let c = 0; c < cols; c++) {
-        const i = r2 * cols + c, gx = ox + c * sp, gy = oy + r2 * sp;
-        nodes.push({
-          r: r2, c, gx, gy, x: gx, y: gy, p: 0, l: 0, fl: 0, ox: 0, oy: 0, ovx: 0, ovy: 0,
-          jx: (hsh(i + 1) - 0.5) * sp * 0.55, jy: (hsh(i + 7) - 0.5) * sp * 0.55, ph: hsh(i + 3) * 6.2832
-        });
-        adjN.push([]);
-      }
-      const add = (a, b, d) => { edges.push({ a, b, d }); adjN[a].push(b); adjN[b].push(a); };
-      for (let r2 = 0; r2 < rows; r2++) for (let c = 0; c < cols; c++) {
-        const i = r2 * cols + c;
-        if (c + 1 < cols) add(i, i + 1, 0);
-        if (r2 + 1 < rows) add(i, i + cols, 0);
-        if (r2 + 1 < rows) {
-          if ((r2 + c) % 2 === 0 && c + 1 < cols) add(i, i + cols + 1, 1);
-          if ((r2 + c) % 2 === 1 && c > 0) add(i, i + cols - 1, 1);
-        }
-      }
-      // one emitter per horizontal line, each with its own tempo and a staggered start
-      emitters = Array.from({ length: rows }, (_, r3) => ({ row: r3, k: 0.7 + Math.random() * 0.9, wait: 0.4 + Math.random() * 7 }));
+    const elements = document.querySelectorAll('.p-home .rv');
+    if (!('IntersectionObserver' in window)) {
+      elements.forEach(el => el.classList.add('in'));
+      return;
     }
-
-    // is any other bubble currently travelling to / from this node?
-    function occupied(q, node) {
-      for (const o of pulses) if (o !== q && (o.to === node || o.from === node)) return true;
-      return false;
-    }
-
-    // strictly left -> right: straight along the row (traditional), then a gentle
-    // rightward zigzag through the mesh (AI) — never back, never vertical-only.
-    function nextNode(q) {
-      const n = nodes[q.to];
-      if (n.c + 1 >= cols) return -1;
-      const right = q.to + 1;
-      if (q.mode === 0) {
-        if (nodes[right].p > 0.55) q.mode = 1;
-        else return right;
+    const io = new IntersectionObserver(entries => entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in');
+        io.unobserve(entry.target);
       }
-      if (!q.lastDiag) {
-        let d = -1;
-        if ((n.r + n.c) % 2 === 0 && n.r + 1 < rows) d = q.to + cols + 1;
-        else if ((n.r + n.c) % 2 === 1 && n.r > 0) d = q.to - cols + 1;
-        if (d >= 0 && !occupied(q, d)) { q.lastDiag = true; return d; }
-      }
-      q.lastDiag = false;
-      return right;
-    }
-
-    function step(dt) {
-      t += dt; introT += dt;
-      mouseA += ((mouse ? 1 : 0) - mouseA) * Math.min(1, dt * 5);
-      hov += ((mouse ? 1 : 0) - hov) * Math.min(1, dt * 2.5);
-      const boundary = w * (1.25 - 0.75 * ease(introT / 3.4) - 0.08 * hov) + (introT > 3.4 ? w * 0.05 * Math.sin(t * 0.25) : 0);
-      const band = w * 0.32;
-      const R = Math.min(240, Math.max(150, w * 0.18));
-      for (let i = trail.length - 1; i >= 0; i--) { trail[i].age += dt; if (trail[i].age > 1.4) trail.splice(i, 1); }
-      for (const n of nodes) {
-        let target = smooth((n.gx - boundary) / band + 0.5);
-        let lens = 0;
-        if (mouse) lens = smooth(1 - Math.hypot(n.gx - mouse.x, n.gy - mouse.y) / R) * mouseA;
-        target = Math.max(target, lens);
-        for (const tp of trail) {
-          const d = Math.hypot(n.gx - tp.x, n.gy - tp.y);
-          if (d < 70) target = Math.max(target, smooth(1 - d / 70) * (1 - tp.age / 1.4) * 0.9);
-        }
-        n.p += (target - n.p) * Math.min(1, dt * 4);
-        n.l += (lens - n.l) * Math.min(1, dt * 6);
-        n.fl = Math.max(0, n.fl - dt * 1.3);
-        n.ovx += (-60 * n.ox - 7 * n.ovx) * dt; n.ovy += (-60 * n.oy - 7 * n.ovy) * dt;
-        n.ox = Math.max(-18, Math.min(18, n.ox + n.ovx * dt)); n.oy = Math.max(-18, Math.min(18, n.oy + n.ovy * dt));
-        n.x = n.gx + n.p * (n.jx + Math.sin(t * 0.35 + n.ph) * sp * 0.07) + n.ox;
-        n.y = n.gy + n.p * (n.jy + Math.cos(t * 0.3 + n.ph) * sp * 0.07) + n.oy;
-      }
-      // per-row bubble guns: one shot at a time, long rest between shots, and a gun
-      // holds fire if another bubble is still near the launch point or the cap is hit
-      if (introT > 0.6) for (const e of emitters) {
-        e.wait -= dt * (1 + 0.5 * hov);
-        if (e.wait > 0) continue;
-        const s0 = nodes[e.row * cols], gap = minGap();
-        let clear = pulses.length < maxPulses();
-        if (clear) for (const o of pulses) {
-          const a = nodes[o.from], b = nodes[o.to];
-          if (Math.hypot(a.x + (b.x - a.x) * o.u - s0.x, a.y + (b.y - a.y) * o.u - s0.y) < gap * 1.6) { clear = false; break; }
-        }
-        if (!clear) { e.wait = 0.35; continue; }
-        pulses.push({ id: pid++, from: e.row * cols, to: e.row * cols + 1, u: 0, mode: 0, lastDiag: false, v: 1.15, trail: [], x: s0.x, y: s0.y });
-        e.wait = (5 + Math.random() * 7) * e.k;
-      }
-      // current head position of every bubble (used for spacing)
-      for (const q of pulses) {
-        const a = nodes[q.from], b = nodes[q.to];
-        q.x = a.x + (b.x - a.x) * q.u; q.y = a.y + (b.y - a.y) * q.u;
-      }
-      const gap = minGap();
-      for (let i = pulses.length - 1; i >= 0; i--) {
-        const q = pulses[i];
-        // yield to any bubble just ahead (further right; id breaks ties) so none ever overlap
-        let blocked = false;
-        for (const o of pulses) {
-          if (o === q) continue;
-          if ((o.x > q.x || (o.x === q.x && o.id < q.id)) && Math.hypot(o.x - q.x, o.y - q.y) < gap) { blocked = true; break; }
-        }
-        if (blocked) continue;
-        q.u += dt * q.v * spd * (q.mode === 1 ? 0.9 : 1.5);
-        if (q.u >= 1) {
-          nodes[q.to].fl = 1;
-          const nx = nextNode(q);
-          if (nx < 0) { pulses.splice(i, 1); continue; }
-          q.from = q.to; q.to = nx; q.u = 0;
-        }
-        const a = nodes[q.from], b = nodes[q.to];
-        q.trail.push({ x: a.x + (b.x - a.x) * q.u, y: a.y + (b.y - a.y) * q.u });
-        if (q.trail.length > 7) q.trail.shift();
-      }
-      return R;
-    }
-
-    function draw(R) {
-      ctx.clearRect(0, 0, w, h);
-      ctx.lineWidth = 0.8;
-      for (const e of edges) {
-        const a = nodes[e.a], b = nodes[e.b];
-        const pm = (a.p + b.p) / 2, boost = Math.max((a.l + b.l) / 2, (a.fl + b.fl) / 2 * 0.6);
-        let alpha;
-        if (e.d === 1) { if (pm < 0.12) continue; alpha = pm * pm * (0.022 + 0.12 * boost); }
-        else alpha = 0.09 * (1 - pm) + pm * (0.03 + 0.12 * boost);
-        alpha *= 1 + 0.45 * hov;
-        const cm = Math.max(pm * 0.55, boost);
-        ctx.strokeStyle = `rgba(${mix(MUTED[0], ACCENT[0], cm)},${mix(MUTED[1], ACCENT[1], cm)},${mix(MUTED[2], ACCENT[2], cm)},${alpha})`;
-        ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
-      }
-      for (const n of nodes) {
-        const p = n.p, pe = Math.max(p * 0.5, n.fl * 0.75), s = 0.9 + p * 0.45 + n.fl * 0.8;
-        if (p > 0.5 || n.fl > 0.05) {
-          const gl = p * (0.5 + 0.5 * Math.sin(t * 0.9 + n.ph));
-          ctx.fillStyle = `rgba(181,115,90,${0.008 * gl + 0.04 * n.l + 0.1 * n.fl})`;
-          ctx.beginPath(); ctx.arc(n.x, n.y, s + 3 * gl + 2 * n.l + 5 * n.fl, 0, 6.2832); ctx.fill();
-        }
-        ctx.fillStyle = `rgba(${mix(MUTED[0], ACCENT[0], pe)},${mix(MUTED[1], ACCENT[1], pe)},${mix(MUTED[2], ACCENT[2], pe)},${(0.13 + 0.14 * pe) * (1 + 0.3 * hov)})`;
-        if (pe < 0.4) ctx.fillRect(n.x - s, n.y - s, s * 2, s * 2);
-        else { ctx.beginPath(); ctx.arc(n.x, n.y, s, 0, 6.2832); ctx.fill(); }
-      }
-      for (const q of pulses) {
-        const tr = q.trail, a = nodes[q.from];
-        const fadeIn = Math.min(1, (a.c + q.u) / 1.2);
-        for (let i = 1; i < tr.length; i++) {
-          ctx.strokeStyle = `rgba(122,47,28,${0.2 * (i / tr.length) * fadeIn})`;
-          ctx.beginPath(); ctx.moveTo(tr[i - 1].x, tr[i - 1].y); ctx.lineTo(tr[i].x, tr[i].y); ctx.stroke();
-        }
-        if (!tr.length) continue;
-        const p0 = tr[tr.length - 1], r = 3.4;
-        ctx.fillStyle = `rgba(181,115,90,${0.09 * fadeIn})`; ctx.beginPath(); ctx.arc(p0.x, p0.y, r, 0, 6.2832); ctx.fill();
-        ctx.strokeStyle = `rgba(122,47,28,${0.45 * fadeIn})`; ctx.beginPath(); ctx.arc(p0.x, p0.y, r, 0, 6.2832); ctx.stroke();
-        ctx.fillStyle = `rgba(255,245,235,${0.5 * fadeIn})`; ctx.beginPath(); ctx.arc(p0.x - r * 0.3, p0.y - r * 0.3, 0.8, 0, 6.2832); ctx.fill();
-      }
-    }
-
-    function still() { for (let i = 0; i < 30; i++) step(0.05); pulses = []; draw(step(0.016)); }
-    function loop(now) {
-      if (!running) return;
-      const dt = Math.min(0.05, (now - last) / 1000 || 0.016); last = now;
-      draw(step(dt));
-      raf = requestAnimationFrame(loop);
-    }
-    function start() { if (running || reduce) return; running = true; last = performance.now(); raf = requestAnimationFrame(loop); }
-    function stop() { running = false; cancelAnimationFrame(raf); }
-
-    const move = (e) => {
-      const r = hero.getBoundingClientRect();
-      const x = e.clientX - r.left, y = e.clientY - r.top, now = performance.now();
-      if (mouse && !reduce) {
-        const dx = x - mouse.x, dy = y - mouse.y, d2 = Math.hypot(dx, dy);
-        if (d2 > 0.5) {
-          for (const n of nodes) {
-            const d = Math.hypot(n.gx - x, n.gy - y);
-            if (d < 110) { const f = smooth(1 - d / 110) * 0.2; n.ovx += dx * f * 12; n.ovy += dy * f * 12; }
-          }
-          const lt = trail[trail.length - 1];
-          if (!lt || Math.hypot(x - lt.x, y - lt.y) > 12) { trail.push({ x, y, age: 0 }); if (trail.length > 40) trail.shift(); }
-        }
-      }
-      mouse = { x, y };
-    };
-    const leave = () => { mouse = null; };
-
-    build();
-    if (reduce) still();
-    const ro = new ResizeObserver(() => { build(); if (reduce) still(); });
-    ro.observe(hero);
-    const io = new IntersectionObserver((es) => es.forEach((e) => (e.isIntersecting ? start() : stop())), { threshold: 0.01 });
-    io.observe(hero);
-    const vis = () => (document.hidden ? stop() : start());
-    document.addEventListener('visibilitychange', vis);
-    hero.addEventListener('pointermove', move);
-    hero.addEventListener('pointerleave', leave);
-    return () => {
-      stop(); ro.disconnect(); io.disconnect();
-      document.removeEventListener('visibilitychange', vis);
-      hero.removeEventListener('pointermove', move);
-      hero.removeEventListener('pointerleave', leave);
-    };
+    }), { threshold: 0, rootMargin: '0px 0px -16px 0px' });
+    elements.forEach(el => io.observe(el));
+    return () => io.disconnect();
   }, []);
 
   return (
     <div className="p-home">
+        <PhpNoticeBar />
         <div className="topbar">
           <div className="wrap">
             <a href="/" className="brand">Sala<span>ro</span></a>
             <nav className="nav"><a href="/practice">Practice</a><a href="/work">Work</a><a href="/studio">Studio</a><a href="/writing">Writing</a><a href="/contact">Contact</a></nav>
-            <a href="tel:+447485222490" className="top-cta">Start a project</a>
+            <a href="/contact" className="top-cta">Start a project</a>
           </div>
         </div>
 
 
-        <header className="hero drifting-field">
-          <canvas id="hero-canvas" className="hero-canvas" aria-hidden="true"></canvas>
+        <header className="hero drifting-field hero-motion-v13" onPointerLeave={e=>{e.currentTarget.style.removeProperty("--hero-x");e.currentTarget.style.removeProperty("--hero-y");}} onPointerMove={e=>{const r=e.currentTarget.getBoundingClientRect(); e.currentTarget.style.setProperty("--hero-x",`${e.clientX-r.left}px`);e.currentTarget.style.setProperty("--hero-y",`${e.clientY-r.top}px`);}}>
+          <div className="hero-wired-field" aria-hidden="true"><svg viewBox="0 0 1920 900" preserveAspectRatio="none" focusable="false">
+            <g className="hero-wire wire-copper"><path d="M0 75 H125 L170 30 H460 L500 70 H610"/><path className="wire-signal" d="M0 75 H125 L170 30 H460 L500 70 H610" pathLength="100" style={{animationDelay:"-0.0s"}}/><circle cx="0" cy="75" r="3"/><circle cx="170" cy="30" r="3"/><circle cx="500" cy="70" r="3"/></g>
+            <g className="hero-wire wire-teal"><path d="M0 310 H38 L72 276 V155 L105 122"/><path className="wire-signal" d="M0 310 H38 L72 276 V155 L105 122" pathLength="100" style={{animationDelay:"-1.3s"}}/><circle cx="0" cy="310" r="3"/><circle cx="72" cy="276" r="3"/><circle cx="105" cy="122" r="3"/></g>
+            <g className="hero-wire wire-copper"><path d="M0 650 H45 L75 620 V440"/><path className="wire-signal" d="M0 650 H45 L75 620 V440" pathLength="100" style={{animationDelay:"-2.6s"}}/><circle cx="0" cy="650" r="3"/><circle cx="75" cy="620" r="3"/></g>
+            <g className="hero-wire wire-copper"><path d="M650 0 V38 L690 78 H820"/><path className="wire-signal" d="M650 0 V38 L690 78 H820" pathLength="100" style={{animationDelay:"-3.9s"}}/><circle cx="650" cy="0" r="3"/><circle cx="690" cy="78" r="3"/></g>
+            <g className="hero-wire wire-teal"><path d="M1600 0 V42 L1640 82 H1770 L1840 152 H1920"/><path className="wire-signal" d="M1600 0 V42 L1640 82 H1770 L1840 152 H1920" pathLength="100" style={{animationDelay:"-5.2s"}}/><circle cx="1600" cy="0" r="3"/><circle cx="1640" cy="82" r="3"/><circle cx="1840" cy="152" r="3"/></g>
+            <g className="hero-wire wire-copper"><path d="M1920 290 H1850 L1810 330 V470 L1760 520 H1650"/><path className="wire-signal" d="M1920 290 H1850 L1810 330 V470 L1760 520 H1650" pathLength="100" style={{animationDelay:"-6.5s"}}/><circle cx="1920" cy="290" r="3"/><circle cx="1810" cy="330" r="3"/><circle cx="1760" cy="520" r="3"/></g>
+            <g className="hero-wire wire-copper"><path d="M1920 720 H1830 L1780 670 H1660"/><path className="wire-signal" d="M1920 720 H1830 L1780 670 H1660" pathLength="100" style={{animationDelay:"-7.8s"}}/><circle cx="1920" cy="720" r="3"/><circle cx="1780" cy="670" r="3"/></g>
+            <g className="hero-wire wire-teal"><path d="M610 900 V790 L650 750 V570 L680 540"/><path className="wire-signal" d="M610 900 V790 L650 750 V570 L680 540" pathLength="100" style={{animationDelay:"-9.1s"}}/><circle cx="610" cy="900" r="3"/><circle cx="650" cy="750" r="3"/><circle cx="680" cy="540" r="3"/></g>
+            <g className="hero-wire wire-copper"><path d="M1920 890 H1770 L1720 840 H1590"/><path className="wire-signal" d="M1920 890 H1770 L1720 840 H1590" pathLength="100" style={{animationDelay:"-10.4s"}}/><circle cx="1920" cy="890" r="3"/><circle cx="1720" cy="840" r="3"/></g>
+          </svg></div>
           <div className="wrap"><div className="grid">
             <div className="hero-left">
-              <div className="hl-top"><span className="lab a">A UK-led digital consultancy</span><span className="lab since">Practising since 1995</span></div>
-              <div className="hero-graphic">
-                <svg viewBox="0 0 150 130" aria-hidden="true">
-                  <line className="edge hot" x1="20" y1="26" x2="72" y2="52"/>
-                  <line className="edge hot" x1="72" y1="52" x2="126" y2="34"/>
-                  <line className="edge hot" x1="72" y1="52" x2="100" y2="98"/>
-                  <line className="edge" x1="20" y1="26" x2="34" y2="88"/>
-                  <line className="edge" x1="34" y1="88" x2="100" y2="98"/>
-                  <line className="edge" x1="126" y1="34" x2="100" y2="98"/>
-                  <circle className="node" cx="20" cy="26" r="3.5"/>
-                  <circle className="node hot" cx="72" cy="52" r="5"/>
-                  <circle className="node" cx="126" cy="34" r="3.5"/>
-                  <circle className="node" cx="34" cy="88" r="3.5"/>
-                  <circle className="node hot" cx="100" cy="98" r="3.5"/>
+              <span className="lab a">A UK-led digital consultancy</span>
+              <span className="lab">Practising since 1995</span>
+              <div className="journey-ledger"><span className="lab a">Our journey</span><div className="journey-years"><b>1995</b><span className="hero-journey-track" aria-hidden="true"><i /></span><b>Today</b></div><p>Built on code, not templates.</p></div>
+              <div className="hero-graphic editorial-network">
+                <span className="lab">Topology · explore the practice</span>
+                <svg viewBox="0 0 300 185" aria-hidden="true">
+                  <defs><pattern id="hero-grid-v5" width="15" height="15" patternUnits="userSpaceOnUse"><path d="M15 0H0V15" fill="none" stroke="#b69b85" strokeOpacity=".18"/></pattern></defs>
+                  <rect width="300" height="185" fill="url(#hero-grid-v5)"/>
+                  <ellipse cx="150" cy="94" rx="110" ry="67" className="v5-orbit"/><circle cx="150" cy="94" r="38" className="v5-orbit inner"/>
+                  <circle r="3" fill="#a4442a" className="v5-packet"><animateMotion key={focus} dur="1.8s" repeatCount="indefinite" path={`M150 94 L${nodes[focus][0]} ${nodes[focus][1]} L150 94`}/></circle>
+                  {nodes.slice(0,4).map(([x,y],i)=><line key={i} x1={x} y1={y} x2="150" y2="94" className={focus===i||focus===4?'active-edge':'quiet-edge'}/>)}
+                  {nodes.map(([x,y],i)=><g key={i} onPointerEnter={()=>setFocus(i)} onClick={()=>setFocus(i)}><circle cx={x} cy={y} r="19" fill="transparent"/><circle cx={x} cy={y} r={focus===i?8:5} className={focus===i?'active-node':'quiet-node'}/><text x={x} y={y+(i<2?-16:23)} textAnchor="middle">{labels[i].toUpperCase()}</text></g>)}
                 </svg>
+                <div className="topology-controls">{labels.map((label,i)=><button key={label} aria-pressed={focus===i} onFocus={()=>setFocus(i)} onPointerEnter={()=>setFocus(i)} onClick={()=>setFocus(i)}>{label}</button>)}</div>
+                <p className="topology-description" aria-live="polite">{["Bespoke digital products.","Practical digital transformation.","Expert human oversight.","Long-term support and growth.","Strategy, development and review."][focus]}</p>
               </div>
-              <div className="hl-bottom">
-                <div className="ops">
+
+            </div>
+
+            <div className="hero-right">
+              <div className="hero-kicker"><span></span> BUILD · MIGRATE · ADVISE</div>
+              <h1 className="serif"><span className="hero-reveal-part">Custom digital solutions for</span>{" "}<em className="it hero-reveal-part">businesses</em>{" "}<span className="hero-reveal-part">ready to scale.</span></h1>
+              <p className="sub">We work with growing businesses to shape bespoke digital products, practical transformation, and long-term support with calm delivery.</p>
+              <div className="actions">
+                <a href="/contact" className="btn-line">Take your business online <span className="arw">→</span></a>
+                <a href="tel:+447485222490" className="direct-call">
+                  <span className="direct-call-icon" aria-hidden="true"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.96.35 1.9.69 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.26a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.69A2 2 0 0 1 22 16.92z"/><path d="M15 2a7 7 0 0 1 7 7M15 6a3 3 0 0 1 3 3"/></svg></span>
+                  <span className="direct-call-content"><span>Call us directly</span><strong>07485 222490</strong></span><span className="direct-call-arrow" aria-hidden="true">↗</span>
+                </a>
+              </div>
+              <div className="built">Built on code, not templates.</div>
+              <div className="hero-proof">            <div className="hero-viz">
+              <div className="viz-head"><span className="lab a">Pipeline</span><span className="live"><i></i>Illustrative</span></div>
+              <div className="v5-chart-tabs">{["Delivery", "Capacity"].map((name,i)=><button key={name} aria-pressed={chartMode===i} onClick={()=>setChartMode(i)}>{name}</button>)}</div>
+              <svg className="spark teal-pipeline" viewBox="0 0 240 84" role="img" aria-label="Illustrative delivery and capacity workflow curve">
+                <defs><linearGradient id="hero-teal-area" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#527c76" stopOpacity=".32"/><stop offset="100%" stopColor="#527c76" stopOpacity=".02"/></linearGradient></defs>
+                {[20,40,60,80].map(y=><line key={y} x1="10" x2="230" y1={y} y2={y} stroke="#b9cbc3" strokeDasharray="2 4" opacity=".65"/>)}
+                <g key={chartMode}>
+                  <path className="teal-area" d={`${chartCurve} L226,80 L10,80 Z`} fill="url(#hero-teal-area)"/>
+                  <path className="teal-curve" d={chartCurve} pathLength="1" fill="none"/>
+                  <circle className="teal-particle" r="2.8" fill="#39736b"><animateMotion dur="4s" repeatCount="indefinite" path={chartCurve}/></circle>
+                  {chart.map((y,i)=><g key={i} className="teal-point"><circle cx={10+i*36} cy={y} r="9" fill="transparent"/><circle className={i===6?'teal-halo endpoint':'teal-halo'} cx={10+i*36} cy={y} r="7"/><circle className="teal-dot" cx={10+i*36} cy={y} r={i===6?3.5:2.5}/></g>)}
+                </g>
+              </svg>
+              <div className="hstat"><b className="serif">30+</b><span>years of practice</span></div>
+              <div className="hstat"><b className="serif">Direct</b><span>collaboration</span></div>
+            </div>              <div className="ops">
                 <span className="lab">Pipeline live · queue clear</span>
                 <span className="lab">Human review · engaged</span>
                 <span className="lab">Repo access · on request</span>
               </div>
-              </div>
+</div>
             </div>
 
-            <div className="hero-right">
-              <h1 className="serif">
-                <span className="reveal-line"><span>Custom digital</span></span>
-                <span className="reveal-line"><span>solutions for <span className="it">businesses</span></span></span>
-                <span className="reveal-line"><span>ready to scale.</span></span>
-              </h1>
-              <p className="sub">We work with growing businesses to shape bespoke digital products, practical transformation, and long-term support with calm delivery.</p>
-              <div className="actions">
-                <a href="tel:+447485222490" className="btn-line">Take your business online <span className="arw">→</span></a>
-                <a href="tel:+447485222490" className="phone">
-                  <span className="ph-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg></span>
-                  <span className="ph-tx"><em className="lab">Call us directly</em><b className="serif">07485 222490</b></span>
-                </a>
-              </div>
-              <div className="built">Built on code, not templates.</div>
-            </div>
-
-            <div className="hero-side">
-              <div className="hero-viz">
-                <div className="viz-head"><span className="lab a">Pipeline</span><span className="live"><i></i>Live</span></div>
-                <svg className="spark" viewBox="0 0 240 84" aria-hidden="true">
-                  <path className="s-area" d="M10,56 L50,47 L90,53 L130,38 L170,43 L210,29 L230,23 L230,80 L10,80 Z"/>
-                  <path className="s-line" d="M10,56 L50,47 L90,53 L130,38 L170,43 L210,29 L230,23"/>
-                  <circle className="s-end" cx="230" cy="23" r="3.5"/>
-                </svg>
-                <div className="hstat"><b className="serif">30+</b><span>years of practice</span></div>
-                <div className="hstat"><b className="serif">Direct</b><span>collaboration</span></div>
-              </div>
-
-              <div className="hero-journey">
-                <div className="viz-head"><span className="lab a">Our journey</span></div>
-                <ol className="jr-list">
-                  <li className="jr-item">
-                    <i className="jr-dot"></i>
-                    <div><b className="serif">1995</b><span className="lab">Traditional craft</span><p>Hand-built, bespoke.</p></div>
-                  </li>
-                  <li className="jr-item now">
-                    <i className="jr-dot"></i>
-                    <div><b className="serif">Today</b><span className="lab a">AI-driven era</span><p>AI-built, human-led.</p></div>
-                  </li>
-                </ol>
-              </div>
-            </div>
           </div></div>
         </header>
 
 
         <div className="signal-line"></div>
-        <section className="pipeline band">
+        <section className="pipeline band contour-drift pipeline-aligned pipeline-spectrum pipeline-refined" data-stage={activeStage}>
           <div className="wrap">
             <div className="head-row rv">
-              <h2 className="serif">How We Build<br /><span className="it">Better Technology</span>.</h2>
+              <h2 className="serif">How We Build <span className="it">Better Technology</span>.</h2>
               <p className="desc">Every project follows a proven delivery pipeline—strategy, research, development, and review. Each stage builds on the last, with expert human oversight throughout, ensuring every solution is thoughtful, reliable, and ready to perform.</p>
             </div>
             <div className="pipe-markers">
               <span className="lab a">Human judgment · lead</span>
-              <span className="lab">Build pipeline · live</span>
+              <span className="lab">Build pipeline · explore</span>
             </div>
-            <div className="pipe rv" id="pipe" data-anim="spot">
-              <div className="track"><span className="pulse"></span></div>
-              <div className="stages">
-<div className="stage"><div className="dot"></div><div className="n">i</div><h4>Discover</h4></div>
-<div className="stage"><div className="dot"></div><div className="n">ii</div><h4>Strategy</h4></div>
-<div className="stage"><div className="dot"></div><div className="n">iii</div><h4>Design</h4></div>
-<div className="stage"><div className="dot"></div><div className="n">iv</div><h4>Develop</h4></div>
-<div className="stage"><div className="dot"></div><div className="n">v</div><h4>Launch</h4></div>
+            <div className="journey-panel journey-linear">
+              <div className="journey-progress" aria-hidden="true"><span style={{width:`${activeStage*25}%`,"--journey-progress":`${activeStage*25}%`}} /></div>
+              <div className="journey-steps" aria-label="Development stages">
+                {deliveryStages.map((item,i)=>(<button type="button" key={item.name} className={`journey-step ${activeStage===i?'selected':''}`} aria-pressed={activeStage===i} onMouseEnter={()=>setActiveStage(i)} onFocus={()=>setActiveStage(i)} onClick={()=>setActiveStage(i)}>
+                  <span className="journey-art"><StageGraphic index={i}/></span><span className="journey-node" aria-hidden="true"><i/></span><span className="journey-index">{["i","ii","iii","iv","v"][i]}</span><span className="journey-name">{item.name}</span><span className="journey-short">{item.short}</span>
+                </button>))}
+              </div>
+              <div className="journey-detail" key={activeStage}>
+                <div><span className="lab a">Stage 0{activeStage+1} · {deliveryStages[activeStage].name}</span><h3 className="serif">{deliveryStages[activeStage].title}</h3><p>{deliveryStages[activeStage].description}</p></div>
+                <div className="journey-detail-right"><span className="lab">Focus areas</span><div className="journey-focus-row"><div className="journey-tags">{deliveryStages[activeStage].tags.map(tag=><span key={tag}>{tag}</span>)}</div><button type="button" onClick={()=>setActiveStage((activeStage+1)%5)}>{activeStage===4?'Back to discover':'Explore next stage'} <span aria-hidden="true">→</span></button></div></div>
               </div>
             </div>
             <div className="pipe-foot">
@@ -405,13 +148,13 @@ export default function HomePage() {
 
         <div className="signal-line"></div>
 
-<section className="services band contour-drift">
+<section className="services band contour-drift capabilities-v21">
   <div className="wrap">
     <div className="eyebrow lab a rv">Capabilities</div>
 
     <h2
       className="serif rv"
-      style={{ fontSize: "clamp(32px,4.4vw,54px)", marginBottom: "64px" }}
+      
     >
       Digital solutions <span className="it">built to scale</span>.
     </h2>
@@ -419,7 +162,8 @@ export default function HomePage() {
     <div className="svc-grid rv">
 
       <div className="svc">
-        <div className="idx serif">01</div>
+        <div className="svc-visual"><div className="idx serif">01</div></div>
+        <CapabilityDemo type={0} />
         <div className="kind lab a">Development</div>
         <h3 className="serif"><span className="it">Web</span> Experiences.</h3>
         <p>
@@ -432,7 +176,8 @@ export default function HomePage() {
       </div>
 
       <div className="svc">
-        <div className="idx serif">02</div>
+        <div className="svc-visual"><div className="idx serif">02</div></div>
+        <CapabilityDemo type={1} />
         <div className="kind lab a">Commerce</div>
         <h3 className="serif"><span className="it">E-commerce</span> Platforms.</h3>
         <p>
@@ -445,7 +190,8 @@ export default function HomePage() {
       </div>
 
       <div className="svc">
-        <div className="idx serif">03</div>
+        <div className="svc-visual"><div className="idx serif">03</div></div>
+        <CapabilityDemo type={2} />
         <div className="kind lab a">Mobile</div>
         <h3 className="serif"><span className="it">Apps</span> & Platforms.</h3>
         <p>
@@ -458,7 +204,8 @@ export default function HomePage() {
       </div>
 
       <div className="svc">
-        <div className="idx serif">04</div>
+        <div className="svc-visual"><div className="idx serif">04</div></div>
+        <CapabilityDemo type={3} />
         <div className="kind lab a">Intelligence</div>
         <h3 className="serif"><span className="it">AI</span> Solutions.</h3>
         <p>
@@ -497,106 +244,32 @@ export default function HomePage() {
   </div>
 </section>
 
-        <section className="feature band">
+        <section className="feature band feature-ecosystem">
           <div className="wrap"><div className="grid">
             <div className="rv">
               <div className="eyebrow lab a">Cross-Platform Development</div>
               <h2 className="serif">Built for every<span className="it"> device</span>.</h2>
               <p>We design and develop high-performance applications that deliver a seamless experience across web, iOS, Android, tablets, and desktop—engineered to scale with your business.</p>
-              <div className="marker lab">Bespoke digital products · practical delivery</div>
+              <div className="marker lab device-signature"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true"><path d="m12 3 9 5-9 5-9-5 9-5Z M3 12l9 5 9-5 M3 16l9 5 9-5"/></svg>Bespoke digital products</span><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></svg>Practical delivery</span></div>
             </div>
             <div className="device rv">
               <div className="mobile-signal">
-         <svg width="100%" viewBox="0 28 680 336" xmlns="http://www.w3.org/2000/svg" style={{display:"block"}}>
-<defs>
-<marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-  <path d="M2 1L8 5L2 9" fill="none" stroke="#3d3d3a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-</marker>
-</defs>
-
-<circle cx="340" cy="190" r="52" fill="var(--paper)" stroke="var(--accent)" stroke-width="2"/>
-<text x="340" y="187" textAnchor="middle" fontFamily="'Fraunces', Georgia, serif" fontSize="17" fontWeight="300" fill="var(--accent)">Shared</text>
-<text x="340" y="207" textAnchor="middle" fontFamily="'Fraunces', Georgia, serif" fontSize="17" fontWeight="300" fontStyle="italic" fill="var(--accent)">core</text>
-
-<g transform="translate(280,30)">
-<rect x="0" y="0" width="120" height="76" rx="4" fill="var(--paper)" stroke="var(--accent)" stroke-width="1.5"/>
-<rect x="8" y="8" width="104" height="60" rx="2" fill="rgba(122,47,28,.06)" opacity="0.8"/>
-<g className="site" style={{'--dl':'1.1s'}}>
-  <rect className="sx sb" x="8" y="8" width="104" height="2" />
-  <g className="sx s1"><rect className="hd" x="12" y="14" width="20.8" height="3" rx="1.5"/><rect className="ln" x="78" y="14.5" width="8" height="2" rx="1"/><rect className="ln" x="90" y="14.5" width="8" height="2" rx="1"/><rect className="ln" x="102" y="14.5" width="6" height="2" rx="1"/></g>
-  <rect className="sx s2 hero" x="12" y="22" width="49.9" height="30.0" rx="2"/>
-  <g className="sx s3"><rect className="ln" x="67.7" y="24" width="38.4" height="4" rx="2"/><rect className="ln" x="67.7" y="32" width="28.8" height="3" rx="1.5"/><rect className="ln" x="67.7" y="39" width="34.6" height="3" rx="1.5"/></g>
-  <rect className="sx s4 btn" x="67.7" y="58" width="16" height="5" rx="2.5"/>
-</g>
-<rect x="45" y="76" width="30" height="8" fill="var(--accent)"/>
-<rect x="30" y="84" width="60" height="5" rx="2" fill="var(--accent)"/>
-</g>
-<line x1="330" y1="106" x2="330" y2="140" stroke="var(--line-fine)" stroke-width="1.5"/>
-
-<g transform="translate(70,120)">
-<rect x="0" y="0" width="130" height="80" rx="6" fill="var(--paper)" stroke="var(--accent)" stroke-width="1.5"/>
-<rect x="8" y="8" width="114" height="64" rx="2" fill="rgba(122,47,28,.06)" opacity="0.8"/>
-<g className="site" style={{'--dl':'1.8s'}}>
-  <rect className="sx sb" x="8" y="8" width="114" height="2" />
-  <g className="sx s1"><rect className="hd" x="12" y="14" width="22.8" height="3" rx="1.5"/><rect className="ln" x="88" y="14.5" width="8" height="2" rx="1"/><rect className="ln" x="100" y="14.5" width="8" height="2" rx="1"/><rect className="ln" x="112" y="14.5" width="6" height="2" rx="1"/></g>
-  <rect className="sx s2 hero" x="12" y="22" width="55.1" height="32.0" rx="2"/>
-  <g className="sx s3"><rect className="ln" x="73.5" y="24" width="42.4" height="4" rx="2"/><rect className="ln" x="73.5" y="32" width="31.8" height="3" rx="1.5"/><rect className="ln" x="73.5" y="39" width="38.2" height="3" rx="1.5"/></g>
-  <rect className="sx s4 btn" x="73.5" y="62" width="16" height="5" rx="2.5"/>
-</g>
-<rect x="-10" y="80" width="150" height="7" rx="3" fill="var(--accent)"/>
-</g>
-<line x1="200" y1="160" x2="288" y2="180" stroke="var(--line-fine)" stroke-width="1.5"/>
-
-<g transform="translate(480,110)">
-<rect x="0" y="0" width="90" height="120" rx="8" fill="var(--paper)" stroke="var(--accent)" stroke-width="1.5"/>
-<rect x="8" y="10" width="74" height="90" rx="2" fill="rgba(122,47,28,.06)" opacity="0.8"/>
-<g className="site" style={{'--dl':'2.5s'}}>
-  <rect className="sx sb" x="8" y="10" width="74" height="2" />
-  <g className="sx s1"><rect className="hd" x="12" y="16" width="22.2" height="3" rx="1.5"/><rect className="ln" x="70" y="15.5" width="8" height="1.8" rx=".9"/><rect className="ln" x="70" y="19" width="8" height="1.8" rx=".9"/></g>
-  <rect className="sx s2 hero" x="12" y="25" width="66" height="27.0" rx="2"/>
-  <g className="sx s3"><rect className="ln" x="12" y="59.0" width="56.1" height="3.5" rx="1.7"/><rect className="ln" x="12" y="66.0" width="42.9" height="3" rx="1.5"/><rect className="ln" x="12" y="72.0" width="49.5" height="3" rx="1.5"/></g>
-  <rect className="sx s4 btn" x="12" y="91" width="27.7" height="5" rx="2.5"/>
-</g>
-<circle cx="45" cy="108" r="3" fill="var(--accent)"/>
-</g>
-<line x1="480" y1="170" x2="392" y2="185" stroke="var(--line-fine)" stroke-width="1.5"/>
-
-<g transform="translate(150,260)">
-<rect x="0" y="0" width="56" height="100" rx="10" fill="var(--paper)" stroke="var(--accent)" stroke-width="1.5"/>
-<rect x="6" y="12" width="44" height="74" rx="2" fill="rgba(122,47,28,.06)" opacity="0.8"/>
-<g className="site" style={{'--dl':'3.2s'}}>
-  <rect className="sx sb" x="6" y="12" width="44" height="2" />
-  <g className="sx s1"><rect className="hd" x="10" y="18" width="13.2" height="3" rx="1.5"/><rect className="ln" x="38" y="17.5" width="8" height="1.8" rx=".9"/><rect className="ln" x="38" y="21" width="8" height="1.8" rx=".9"/></g>
-  <rect className="sx s2 hero" x="10" y="27" width="36" height="22.2" rx="2"/>
-  <g className="sx s3"><rect className="ln" x="10" y="56.2" width="30.6" height="3.5" rx="1.7"/><rect className="ln" x="10" y="63.2" width="23.4" height="3" rx="1.5"/><rect className="ln" x="10" y="69.2" width="27.0" height="3" rx="1.5"/></g>
-  <rect className="sx s4 btn" x="10" y="77" width="15.1" height="5" rx="2.5"/>
-</g>
-<circle cx="28" cy="92" r="3" fill="var(--accent)"/>
-</g>
-<line x1="200" y1="270" x2="292" y2="225" stroke="var(--line-fine)" stroke-width="1.5"/>
-
-<g transform="translate(470,260)">
-<rect x="0" y="0" width="56" height="100" rx="10" fill="var(--paper)" stroke="var(--accent)" stroke-width="1.5"/>
-<rect x="6" y="12" width="44" height="74" rx="2" fill="rgba(122,47,28,.06)" opacity="0.8"/>
-<g className="site" style={{'--dl':'3.9s'}}>
-  <rect className="sx sb" x="6" y="12" width="44" height="2" />
-  <g className="sx s1"><rect className="hd" x="10" y="18" width="13.2" height="3" rx="1.5"/><rect className="ln" x="38" y="17.5" width="8" height="1.8" rx=".9"/><rect className="ln" x="38" y="21" width="8" height="1.8" rx=".9"/></g>
-  <rect className="sx s2 hero" x="10" y="27" width="36" height="22.2" rx="2"/>
-  <g className="sx s3"><rect className="ln" x="10" y="56.2" width="30.6" height="3.5" rx="1.7"/><rect className="ln" x="10" y="63.2" width="23.4" height="3" rx="1.5"/><rect className="ln" x="10" y="69.2" width="27.0" height="3" rx="1.5"/></g>
-  <rect className="sx s4 btn" x="10" y="77" width="15.1" height="5" rx="2.5"/>
-</g>
-<circle cx="28" cy="92" r="3" fill="var(--accent)"/>
-</g>
-<line x1="480" y1="270" x2="388" y2="225" stroke="var(--line-fine)" stroke-width="1.5"/>
-
-<circle className="core-ring" cx="340" cy="190" r="52" fill="none" />
-<circle className="packet" r="3" cx="0" cy="0" opacity="0"><animateMotion dur="7s" begin="0s" repeatCount="indefinite" path="M330 140 L330 106" keyPoints="0;1;1" keyTimes="0;.16;1" calcMode="linear"/><animate attributeName="opacity" dur="7s" begin="0s" repeatCount="indefinite" values="0;1;1;0;0" keyTimes="0;.02;.14;.16;1"/></circle>
-<circle className="packet" r="3" cx="0" cy="0" opacity="0"><animateMotion dur="7s" begin="0.7s" repeatCount="indefinite" path="M288 180 L200 160" keyPoints="0;1;1" keyTimes="0;.16;1" calcMode="linear"/><animate attributeName="opacity" dur="7s" begin="0.7s" repeatCount="indefinite" values="0;1;1;0;0" keyTimes="0;.02;.14;.16;1"/></circle>
-<circle className="packet" r="3" cx="0" cy="0" opacity="0"><animateMotion dur="7s" begin="1.4s" repeatCount="indefinite" path="M392 185 L480 170" keyPoints="0;1;1" keyTimes="0;.16;1" calcMode="linear"/><animate attributeName="opacity" dur="7s" begin="1.4s" repeatCount="indefinite" values="0;1;1;0;0" keyTimes="0;.02;.14;.16;1"/></circle>
-<circle className="packet" r="3" cx="0" cy="0" opacity="0"><animateMotion dur="7s" begin="2.1s" repeatCount="indefinite" path="M292 225 L200 270" keyPoints="0;1;1" keyTimes="0;.16;1" calcMode="linear"/><animate attributeName="opacity" dur="7s" begin="2.1s" repeatCount="indefinite" values="0;1;1;0;0" keyTimes="0;.02;.14;.16;1"/></circle>
-<circle className="packet" r="3" cx="0" cy="0" opacity="0"><animateMotion dur="7s" begin="2.8s" repeatCount="indefinite" path="M388 225 L480 270" keyPoints="0;1;1" keyTimes="0;.16;1" calcMode="linear"/><animate attributeName="opacity" dur="7s" begin="2.8s" repeatCount="indefinite" values="0;1;1;0;0" keyTimes="0;.02;.14;.16;1"/></circle>
-<text x="340" y="318" textAnchor="middle" fontFamily="'Fraunces', Georgia, serif" fontSize="25" fontWeight="300" letterSpacing="-0.3" fill="var(--ink)"><tspan x="340" dy="0">One architecture,</tspan><tspan x="340" dy="30" fontStyle="italic" fill="var(--accent)">every device</tspan></text>
-</svg>
+<div className="responsive-lab">
+  <div className="lab-toolbar"><span><i /> RESPONSIVE WORKSPACE</span><span>{['Desktop','Laptop','Tablet','Mobile'][deviceFocus]} · {['1440','1024','768','390'][deviceFocus]} px</span></div>
+  <div className="lab-stage">
+    <div className="lab-orbit" aria-hidden="true" />
+    <div className={`lab-device lab-device-${deviceFocus}`}>
+      <div className="lab-browser"><span><i/><i/><i/></span><small>Responsive preview</small><span>↗</span></div>
+      <div className="lab-screen">
+        <div className="lab-screen-nav"><b>Studio.</b><span>Work &nbsp; About</span><i/></div>
+        <div className="lab-screen-hero"><div><small>DESIGNED TO ADAPT</small><strong>One idea.<br/>Every screen.</strong><span className="lab-mini-cta">Explore →</span></div><svg viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="48" fill="#dce9df"/><circle cx="60" cy="60" r="34" fill="none" stroke="#70978b" strokeDasharray="3 5"/><path d="M24 80L60 20L96 80Z" fill="#426e68" opacity=".85"/><circle cx="78" cy="70" r="23" fill="#d7a57f"/><circle cx="60" cy="60" r="5" fill="#fffaf3"/></svg></div>
+        <div className="lab-screen-grid">{['Design','Build','Scale'].map((label,i)=><div key={label}><span>0{i+1}</span><b>{label}</b><i/><i/></div>)}</div>
+      </div>
+    </div>
+  </div>
+</div>
+<div className="eco-controls" aria-label="Explore devices">{['Desktop','Laptop','Tablet','Mobile'].map((label,i)=><button type="button" key={label} aria-pressed={deviceFocus===i} onClick={()=>setDeviceFocus(i)} onPointerEnter={(event)=>{if(event.pointerType==='mouse')setDeviceFocus(i)}}>{label}</button>)}</div>
+<p className="eco-caption">One architecture, every device</p>
               </div>
             </div>
           </div></div>
@@ -609,198 +282,56 @@ export default function HomePage() {
             <div className="shop-top">
               <div className="shop-copy rv">
                 <div className="eyebrow lab a">E-commerce Solutions</div>
-                <h2 className="serif">Online stores built to<br /><span className="it">grow your business</span>.</h2>
+                <h2 className="serif">Online stores built to <span className="it">grow your business</span>.</h2>
                 <p>We design and develop high-performance e-commerce platforms that deliver seamless shopping experiences, simplify management, and turn visitors into loyal customers.</p>
                 <div className="actions">
-                  <a href="tel:+447485222490" className="btn-line">Start a Project <span className="arw">→</span></a>
+                  <a href="/contact" className="btn-line">Start a Project <span className="arw">→</span></a>
                   <a href="/work" className="arwlink">View Our Work <span className="arw">→</span></a>
                 </div>
               </div>
 
-              <div className="shop-stage rv">
-                <svg className="shop-art" viewBox="0 0 540 412" role="img" aria-label="Animated storefront: a shopper picks a category, chooses a product, adds it to the cart, checks out and gets an order confirmation">
-                  {/* browser chrome + persistent site header */}
-                  <rect className="pane" x="20" y="20" width="500" height="310" rx="6" />
-                  <line className="ln" x1="20" y1="52" x2="520" y2="52" />
-                  <circle className="dot" cx="38" cy="36" r="3.5" />
-                  <circle className="dot" cx="52" cy="36" r="3.5" />
-                  <circle className="dot" cx="66" cy="36" r="3.5" />
-                  <rect className="bar" x="100" y="29" width="220" height="14" rx="7" />
-                  <line className="ln" x1="20" y1="86" x2="520" y2="86" />
-                  <rect className="hot" x="36" y="64" width="54" height="9" rx="4.5" />
-                  <rect className="bar" x="150" y="66" width="30" height="5" rx="2.5" />
-                  <rect className="bar" x="190" y="66" width="30" height="5" rx="2.5" />
-                  <rect className="bar" x="230" y="66" width="30" height="5" rx="2.5" />
-                  <rect className="bar" x="330" y="62" width="110" height="14" rx="7" />
-                  <g className="line" transform="translate(464,56)"><path d="M3,6 H21 L19,19 H5 Z" /><path d="M8,6 V4 a4,4 0 0 1 8,0 V6" /></g>
-                  <g className="badge"><circle className="hot" cx="490" cy="60" r="7" /><text className="tx-w" x="490" y="63" textAnchor="middle">1</text></g>
-                  {/* 1 · category */}<g className="sc sc1">
-                  <rect className="wash" x="36" y="98" width="468" height="64" rx="4" />
-                  <rect className="hot" x="52" y="112" width="120" height="9" rx="4.5" />
-                  <rect className="bar" x="52" y="128" width="190" height="6" rx="3" />
-                  <rect className="hot" x="52" y="142" width="60" height="12" rx="6" />
-                  <text className="tx" x="36" y="182">Shop by category</text>
-                  <rect className="pane" x="36" y="192" width="148" height="124" rx="4" />
-                  <rect className="wash" x="46" y="202" width="128" height="70" rx="2" />
-                  <text className="ts" x="46" y="298" fontSize="14">Homeware</text>
-                  <rect className="bar" x="46" y="305" width="36" height="3" rx="1.5" />
-                  <rect className="pane" x="196" y="192" width="148" height="124" rx="4" />
-                  <rect className="wash hot-wash" x="206" y="202" width="128" height="70" rx="2" />
-                  <text className="ts" x="206" y="298" fontSize="14">Apparel</text>
-                  <rect className="bar" x="206" y="305" width="36" height="3" rx="1.5" />
-                  <rect className="pane" x="356" y="192" width="148" height="124" rx="4" />
-                  <rect className="wash" x="366" y="202" width="128" height="70" rx="2" />
-                  <text className="ts" x="366" y="298" fontSize="14">Gadgets</text>
-                  <rect className="bar" x="366" y="305" width="36" height="3" rx="1.5" />
-                  <rect className="hl" x="196" y="192" width="148" height="124" rx="4" style={{animationDelay:'1.65s'}} />
-                  <circle className="rip" cx="270" cy="238" r="10" style={{animationDelay:'1.65s'}} />
-                  </g>
-                  {/* 2 · products */}<g className="sc sc2">
-                  <text className="ts" x="36" y="116" fontSize="17">Apparel</text>
-                  <rect className="bar" x="400" y="104" width="104" height="8" rx="4" />
-                  <rect className="pane" x="36" y="128" width="148" height="186" rx="4" />
-                  <rect className="wash" x="46" y="138" width="128" height="96" rx="2" />
-                  <rect className="bar" x="46" y="248" width="84" height="7" rx="3.5" />
-                  <rect className="bar" x="46" y="262" width="50" height="6" rx="3" />
-                  <rect className="hot" x="46" y="284" width="54" height="10" rx="5" />
-                  <rect className="pane" x="196" y="128" width="148" height="186" rx="4" />
-                  <rect className="wash hot-wash" x="206" y="138" width="128" height="96" rx="2" />
-                  <rect className="bar" x="206" y="248" width="84" height="7" rx="3.5" />
-                  <rect className="bar" x="206" y="262" width="50" height="6" rx="3" />
-                  <rect className="hot" x="206" y="284" width="54" height="10" rx="5" />
-                  <rect className="pane" x="356" y="128" width="148" height="186" rx="4" />
-                  <rect className="wash" x="366" y="138" width="128" height="96" rx="2" />
-                  <rect className="bar" x="366" y="248" width="84" height="7" rx="3.5" />
-                  <rect className="bar" x="366" y="262" width="50" height="6" rx="3" />
-                  <rect className="hot" x="366" y="284" width="54" height="10" rx="5" />
-                  <rect className="hl" x="196" y="128" width="148" height="186" rx="4" style={{animationDelay:'4.65s'}} />
-                  <circle className="rip" cx="270" cy="188" r="10" style={{animationDelay:'4.65s'}} />
-                  </g>
-                  {/* 3 · add to cart */}<g className="sc sc3">
-                  <rect className="pane" x="36" y="102" width="214" height="212" rx="4" />
-                  <rect className="wash" x="46" y="112" width="194" height="192" rx="2" />
-                  <path className="tee" d="M103,170 L125,156 Q143,170 161,156 L183,170 L172,186 L164,180 V232 H122 V180 L114,186 Z" />
-                  <rect className="hot" x="270" y="114" width="160" height="10" rx="5" />
-                  <rect className="bar" x="270" y="134" width="110" height="7" rx="3.5" />
-                  <rect className="bar" x="270" y="158" width="220" height="6" rx="3" />
-                  <rect className="bar" x="270" y="170" width="200" height="6" rx="3" />
-                  <rect className="bar" x="270" y="182" width="150" height="6" rx="3" />
-                  <text className="tx" x="270" y="212">Size</text>
-                  <rect className="pane" x="270" y="220" width="26" height="20" rx="2" />
-                  <rect className="pane sel" x="302" y="220" width="26" height="20" rx="2" />
-                  <rect className="pane" x="334" y="220" width="26" height="20" rx="2" />
-                  <rect className="hot" x="270" y="262" width="160" height="34" rx="17" />
-                  <text className="tx-w btn1" x="350" y="283" textAnchor="middle">Add to cart</text>
-                  <text className="tx-w btn2" x="350" y="283" textAnchor="middle">Added ✓</text>
-                  <circle className="rip" cx="350" cy="279" r="10" style={{animationDelay:'7.65s'}} />
-                  <circle className="hot fly" cx="350" cy="279" r="5" />
-                  </g>
-                  {/* 4 · checkout */}<g className="sc sc4">
-                  <text className="ts" x="36" y="118" fontSize="17">Checkout</text>
-                  <rect className="pane" x="36" y="132" width="262" height="26" rx="3" />
-                  <rect className="bar grow" x="46" y="141" width="120" height="8" rx="4" style={{animationDelay:'9.3s'}} />
-                  <rect className="pane" x="36" y="166" width="262" height="26" rx="3" />
-                  <rect className="bar grow" x="46" y="175" width="170" height="8" rx="4" style={{animationDelay:'9.8s'}} />
-                  <rect className="pane" x="36" y="200" width="262" height="26" rx="3" />
-                  <rect className="bar grow" x="46" y="209" width="90" height="8" rx="4" style={{animationDelay:'10.3s'}} />
-                  <rect className="pane" x="36" y="238" width="262" height="40" rx="3" />
-                  <rect className="hot" x="46" y="251" width="30" height="14" rx="2" />
-                  <circle className="dot" cx="96" cy="258" r="3" />
-                  <circle className="dot" cx="110" cy="258" r="3" />
-                  <circle className="dot" cx="124" cy="258" r="3" />
-                  <rect className="pane" x="318" y="104" width="186" height="210" rx="4" />
-                  <rect className="wash" x="330" y="116" width="40" height="40" rx="3" />
-                  <rect className="bar" x="380" y="122" width="90" height="7" rx="3.5" />
-                  <rect className="bar" x="380" y="136" width="56" height="6" rx="3" />
-                  <line className="ln" x1="330" y1="172" x2="492" y2="172" />
-                  <rect className="bar" x="330" y="184" width="50" height="6" rx="3" />
-                  <rect className="bar" x="440" y="184" width="50" height="6" rx="3" />
-                  <rect className="bar" x="330" y="202" width="50" height="6" rx="3" />
-                  <rect className="bar" x="440" y="202" width="50" height="6" rx="3" />
-                  <line className="ln" x1="330" y1="220" x2="492" y2="220" />
-                  <rect className="hot" x="330" y="232" width="60" height="8" rx="4" />
-                  <rect className="hot" x="440" y="231" width="52" height="9" rx="4.5" />
-                  <rect className="hot" x="330" y="262" width="162" height="34" rx="17" />
-                  <text className="tx-w" x="411" y="283" textAnchor="middle">Place order</text>
-                  <rect className="hl" x="330" y="262" width="162" height="34" rx="17" style={{animationDelay:'10.65s'}} />
-                  <circle className="rip" cx="411" cy="279" r="10" style={{animationDelay:'10.65s'}} />
-                  </g>
-                  {/* 5 · confirmed */}<g className="sc sc5">
-                  <circle className="rip" cx="270" cy="150" r="34" style={{animationDelay:'12.3s'}} />
-                  <circle className="ok" cx="270" cy="150" r="34" /><path className="tick" d="M254,151 L265,162 L287,138" />
-                  <text className="ts" x="270" y="214" textAnchor="middle" fontSize="21">Order confirmed</text>
-                  <rect className="pane" x="190" y="228" width="160" height="22" rx="11" />
-                  <text className="tx" x="270" y="243" textAnchor="middle">Order #SL-20418</text>
-                  <rect className="bar" x="205" y="264" width="130" height="6" rx="3" />
-                  <rect className="bar" x="225" y="278" width="90" height="6" rx="3" />
-                  <rect className="hot" x="220" y="294" width="100" height="18" rx="9" />
-                  <text className="tx-w" x="270" y="306" textAnchor="middle" fontSize="8">Track order</text>
-                  </g>
-                  <g className="cur"><path d="M0,0 L0,16 L4.2,12.2 L7.2,19 L9.8,17.8 L6.9,11.2 L12.5,11 Z" /></g>
-                  {/* step tracker */}
-                  <circle className="stpr stpr0" cx="70" cy="364" r="10" />
-                  <circle className="stp stp0" cx="70" cy="364" r="10" />
-                  <text className="stn stn0" x="70" y="367.5" textAnchor="middle">1</text>
-                  <text className="stl stl0" x="70" y="392" textAnchor="middle">Category</text>
-                  <circle className="stpr stpr1" cx="175" cy="364" r="10" />
-                  <circle className="stp stp1" cx="175" cy="364" r="10" />
-                  <text className="stn stn1" x="175" y="367.5" textAnchor="middle">2</text>
-                  <text className="stl stl1" x="175" y="392" textAnchor="middle">Product</text>
-                  <circle className="stpr stpr2" cx="280" cy="364" r="10" />
-                  <circle className="stp stp2" cx="280" cy="364" r="10" />
-                  <text className="stn stn2" x="280" y="367.5" textAnchor="middle">3</text>
-                  <text className="stl stl2" x="280" y="392" textAnchor="middle">Add to cart</text>
-                  <circle className="stpr stpr3" cx="385" cy="364" r="10" />
-                  <circle className="stp stp3" cx="385" cy="364" r="10" />
-                  <text className="stn stn3" x="385" y="367.5" textAnchor="middle">4</text>
-                  <text className="stl stl3" x="385" y="392" textAnchor="middle">Checkout</text>
-                  <circle className="stpr stpr4" cx="490" cy="364" r="10" />
-                  <circle className="stp stp4" cx="490" cy="364" r="10" />
-                  <text className="stn stn4" x="490" y="367.5" textAnchor="middle">5</text>
-                  <text className="stl stl4" x="490" y="392" textAnchor="middle">Confirmed</text>
-                  </svg>
-              </div>
+              <div className="shop-stage rv"><CommerceShowcase /></div>
             </div>
 
-            <div className="shop-feats rv">
+            <div className="shop-feats shop-feats-v25 shop-feats-v29 rv">
               <div className="feat">
-                <span className="fic"><svg viewBox="0 0 24 24"><path d="M4 7 h16 l-1.6 12 H5.6 Z" /><path d="M9 7 V5.5 a3 3 0 0 1 6 0 V7" /><path d="M8.5 11 h7" /></svg></span>
+                <span className="fic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 7 h16 l-1.6 12 H5.6 Z" /><path d="M9 7 V5.5 a3 3 0 0 1 6 0 V7" /><path d="M8.5 11 h7" /></svg></span>
                 <div><h4 className="serif">Fast, intuitive shopping</h4><p>Discovery, cart, and checkout tuned so buying never stalls.</p></div>
               </div>
               <div className="feat">
-                <span className="fic"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="2" /><path d="M3 10.5 h18" /><path d="M6.5 15.5 h4" /></svg></span>
+                <span className="fic" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="2" /><path d="M3 10.5 h18" /><path d="M6.5 15.5 h4" /></svg></span>
                 <div><h4 className="serif">Secure payments</h4><p>Stripe, PayPal, and Razorpay integrated and properly tested.</p></div>
               </div>
               <div className="feat">
-                <span className="fic"><svg viewBox="0 0 24 24"><rect x="2.5" y="5" width="13" height="14" rx="2" /><rect x="17.5" y="8" width="4" height="11" rx="1.5" /><path d="M6 16 h6" /></svg></span>
+                <span className="fic" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="2.5" y="5" width="13" height="14" rx="2" /><rect x="17.5" y="8" width="4" height="11" rx="1.5" /><path d="M6 16 h6" /></svg></span>
                 <div><h4 className="serif">Responsive by default</h4><p>One build that holds its shape on desktop, tablet, and phone.</p></div>
               </div>
               <div className="feat">
-                <span className="fic"><svg viewBox="0 0 24 24"><path d="M12 3 21 7.5 V16.5 L12 21 3 16.5 V7.5 Z" /><path d="M3 7.5 12 12 21 7.5 M12 12 V21" /></svg></span>
+                <span className="fic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3 21 7.5 V16.5 L12 21 3 16.5 V7.5 Z" /><path d="M3 7.5 12 12 21 7.5 M12 12 V21" /></svg></span>
                 <div><h4 className="serif">Inventory &amp; orders</h4><p>Stock, fulfilment, and returns managed from one calm place.</p></div>
               </div>
               <div className="feat">
-                <span className="fic"><svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5" /><path d="M15.5 15.5 21 21" /><path d="M8 10.5 h5" /></svg></span>
+                <span className="fic" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5" /><path d="M15.5 15.5 21 21" /><path d="M8 10.5 h5" /></svg></span>
                 <div><h4 className="serif">SEO-ready architecture</h4><p>Clean structure and metadata so the right pages get found.</p></div>
               </div>
               <div className="feat">
-                <span className="fic"><svg viewBox="0 0 24 24"><path d="M4 18 V13 M10 18 V9 M16 18 V11 M22 18 V5" /><path d="M2 21 h20" /></svg></span>
+                <span className="fic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 18 V13 M10 18 V9 M16 18 V11 M22 18 V5" /><path d="M2 21 h20" /></svg></span>
                 <div><h4 className="serif">Built to scale</h4><p>Foundations that cope as catalogue, traffic, and team grow.</p></div>
               </div>
             </div>
 
-            <div className="mini-table rv">
+            <div className="mini-table commerce-specs-v25 rv">
               <div>
                 <div className="mt-k">Platform</div>
-                <div className="mt-v lab">Shopify · WooCommerce · Custom</div>
+                <div className="mt-v lab"><span className="commerce-pill">Shopify</span><span className="commerce-pill">WooCommerce</span><span className="commerce-pill">Custom</span></div>
               </div>
               <div>
                 <div className="mt-k">Payments</div>
-                <div className="mt-v lab">Stripe · PayPal · Razorpay</div>
+                <div className="mt-v lab"><span className="commerce-pill">Stripe</span><span className="commerce-pill">PayPal</span><span className="commerce-pill">Razorpay</span></div>
               </div>
               <div>
                 <div className="mt-k">Performance</div>
-                <div className="mt-v lab">Fast · Secure · Scalable</div>
+                <div className="mt-v lab"><span className="commerce-pill">Fast</span><span className="commerce-pill">Secure</span><span className="commerce-pill">Scalable</span></div>
               </div>
             </div>
 
@@ -808,16 +339,65 @@ export default function HomePage() {
         </section>
 
 
-        <section className="clients band">
+        <section className="clients band selected-work-v26">
           <div className="wrap rv">
             <div className="eyebrow lab a">Selected work</div>
             <h2 className="serif">A few examples of the <span className="it">work</span> we’ve helped shape.</h2>
-            <div className="two">
-              <div className="rows">
+            <div className="client-row">
+              <div className="c">
+                <svg width="52" height="52" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M8 38L14 26L22 32L36 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <rect x="4" y="4" width="44" height="44" rx="2" stroke="currentColor" strokeWidth="1.5" fill="none"/>
+                </svg>
+                <span>Product strategy</span>
+              </div>
+              <div className="c">
+                <svg width="52" height="52" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 16L20 12L28 16V32L20 36L12 32V16Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+                  <path d="M28 16L36 12L44 16V32L36 36L28 32V16Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+                  <path d="M20 36V44L12 40V32" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                <span>Digital build</span>
+              </div>
+              <div className="c">
+                <svg width="52" height="52" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M10 26L19 35L42 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <circle cx="26" cy="26" r="22" stroke="currentColor" strokeWidth="1.5" fill="none"/>
+                </svg>
+                <span>Platform review</span>
+              </div>
+              <div className="c">
+                <svg width="52" height="52" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="8" y="16" width="36" height="24" rx="2" stroke="currentColor" strokeWidth="1.5" fill="none"/>
+                  <path d="M8 20H44" stroke="currentColor" strokeWidth="1.5"/>
+                  <circle cx="12" cy="34" r="1.5" fill="currentColor"/>
+                  <circle cx="18" cy="34" r="1.5" fill="currentColor"/>
+                </svg>
+                <span>Experience design</span>
+              </div>
+            </div>
+              <div className="rows featured-work-v34">
 
-                <a href="https://hbmpartners.fr/" target="_blank" rel="noopener noreferrer" className="feat-card">
+                <a href="https://www.hbmpartners.fr/" target="_blank" rel="noopener noreferrer" className="feat-card">
                   <div className="feat-media">
-                    <img src="/images/portfolio/hbmpartners.png" alt="Preview of the HBM Partners site" />
+                    <svg viewBox="0 0 400 200" role="img" aria-label="Illustrative HBM Partners website concept">
+                      <rect className="fr" x="20" y="14" width="360" height="172" rx="5" />
+                      <line className="fr-l" x1="20" y1="42" x2="380" y2="42" />
+                      <circle className="fr-d" cx="36" cy="28" r="2.5" />
+                      <circle className="fr-d" cx="46" cy="28" r="2.5" />
+                      <circle className="fr-d" cx="56" cy="28" r="2.5" />
+                      <rect className="fr-b" x="238" y="24" width="30" height="7" rx="3.5" />
+                      <rect className="fr-b" x="276" y="24" width="30" height="7" rx="3.5" />
+                      <rect className="fr-h" x="314" y="22" width="46" height="11" rx="5.5" />
+                      <rect className="fr-t" x="44" y="66" width="150" height="12" rx="6" />
+                      <rect className="fr-t" x="44" y="86" width="112" height="12" rx="6" />
+                      <rect className="fr-b" x="44" y="112" width="176" height="6" rx="3" />
+                      <rect className="fr-b" x="44" y="124" width="140" height="6" rx="3" />
+                      <rect className="fr-h" x="44" y="146" width="62" height="14" rx="7" />
+                      <rect className="fr-w" x="246" y="62" width="112" height="102" rx="4" />
+                      <path className="fr-s" d="M258,140 L286,118 L312,126 L346,88" />
+                      <circle className="fr-e" cx="346" cy="88" r="4" />
+                    </svg>
                     <span className="feat-ribbon lab">Featured · Website</span>
                   </div>
                   <div className="feat-body">
@@ -831,7 +411,7 @@ export default function HomePage() {
                   </div>
                 </a>
 
-                <a href="tel:+447485222490" className="next-card">
+                <a href="/contact" className="next-card">
                   <div className="next-mark" aria-hidden="true">
                     <svg viewBox="0 0 64 64"><path d="M32 18 V46 M18 32 H46" /></svg>
                   </div>
@@ -842,7 +422,6 @@ export default function HomePage() {
                 </a>
 
               </div>
-            </div>
           </div>
         </section>
 
@@ -862,67 +441,28 @@ export default function HomePage() {
                     <span className="lab a">Web platforms</span><span className="lab a">Product design</span><span className="lab a">Digital strategy</span><span className="lab a">Long-term support</span>
                   </div>
                 </div>
-                <div className="image" style={{display:'flex', justifyContent:'center'}}>
-                  <div style={{width:'100%', minHeight:'220px', display:'grid', gridTemplateColumns:'1fr 1fr', gridTemplateRows:'1fr 1fr', alignItems:'center', maxWidth:720}}>
-                    <div style={{padding:'45px 48px', textAlign:'center', borderRight:'1px solid var(--line-fine)'}}>
-                      <b className="serif" style={{fontSize:'48px', lineHeight:1, color:'var(--accent)'}}>98<em style={{fontStyle:'normal', fontSize:'20px', marginLeft:'6px', color:'var(--accent)'}}>%</em></b>
-                      <div className="tag" style={{marginTop:'12px', color:'var(--ink-soft)'}}>CLIENT RETENTION</div>
+                <div className="sector-metrics" aria-label="Business statistics">
+                  {[
+                    ['98','%','Client retention','M4 12l5 5L20 6 M12 2a10 10 0 1 0 10 10'],
+                    ['40','+','Projects delivered','M12 3 22 8 12 13 2 8Z M2 12l10 5 10-5 M2 16l10 5 10-5'],
+                    ['24','','Years combined experience','M3 6h18v15H3Z M7 3v6 M17 3v6 M3 11h18 M8 15h2 M14 15h2'],
+                    ['24/7','','Support','M4 13v-2a8 8 0 0 1 16 0v2 M4 12H2v6h5v-6Z M20 12h2v6h-5v-6Z M20 18q0 4-8 4']
+                  ].map(([value,suffix,label,path])=>(
+                    <div className="sector-metric" key={label}>
+                      <div className="sector-metric-top"><span className="sector-metric-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d={path}/></svg></span><b className="serif">{value}<small>{suffix}</small></b></div>
+                      <span className="sector-metric-label">{label}</span>
+                      <svg className="sector-wave" viewBox="0 0 240 45" preserveAspectRatio="none" aria-hidden="true"><path d="M0 45Q80 48 140 22T240 4V45Z" fill="currentColor" opacity=".12"/><path d="M0 45Q110 50 170 25T240 15V45Z" fill="currentColor" opacity=".13"/></svg>
                     </div>
-                    <div style={{padding:'34px 48px', textAlign:'center', borderLeft:'1px solid var(--line-fine)'}}>
-                      <b className="serif" style={{fontSize:'44px', lineHeight:1, color:'var(--accent)'}}>40<em style={{fontStyle:'normal', fontSize:'18px', marginLeft:'6px', color:'var(--accent)'}}>+</em></b>
-                      <div className="tag" style={{marginTop:'12px', color:'var(--ink-soft)'}}>PROJECTS DELIVERED</div>
-                    </div>
-
-                    <div style={{padding:'34px 48px', textAlign:'center', borderTop:'1px solid var(--line-fine)', borderRight:'1px solid var(--line-fine)'}}>
-                      <b className="serif" style={{fontSize:'40px', lineHeight:1, color:'var(--accent)'}}>24</b>
-                      <div className="tag" style={{marginTop:'12px', color:'var(--ink-soft)'}}>YEARS COMBINED EXPERIENCE</div>
-                    </div>
-                    <div style={{padding:'48px 48px', textAlign:'center', borderTop:'1px solid var(--line-fine)', borderLeft:'1px solid var(--line-fine)'}}>
-                      <b className="serif" style={{fontSize:'40px', lineHeight:1, color:'var(--accent)'}}>24/7</b>
-                      <div className="tag" style={{marginTop:'12px', color:'var(--ink-soft)'}}>SUPPORT</div>
-                    </div>
-                  </div>
+                  ))}
                 </div>
               </div>
-            <div className="client-row">
-              <div className="c">
-                <svg width="52" height="52" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg" style={{marginBottom: '16px'}}>
-                  <path d="M8 38L14 26L22 32L36 12" stroke="#7a2f1c" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  <rect x="4" y="4" width="44" height="44" rx="2" stroke="#7a2f1c" strokeWidth="1.5" fill="none"/>
-                </svg>
-                <span>Product strategy</span>
-              </div>
-              <div className="c">
-                <svg width="52" height="52" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg" style={{marginBottom: '16px'}}>
-                  <path d="M12 16L20 12L28 16V32L20 36L12 32V16Z" stroke="#7a2f1c" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
-                  <path d="M28 16L36 12L44 16V32L36 36L28 32V16Z" stroke="#7a2f1c" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
-                  <path d="M20 36V44L12 40V32" stroke="#7a2f1c" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-                <span>Digital build</span>
-              </div>
-              <div className="c">
-                <svg width="52" height="52" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg" style={{marginBottom: '16px'}}>
-                  <path d="M10 26L19 35L42 12" stroke="#7a2f1c" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  <circle cx="26" cy="26" r="22" stroke="#7a2f1c" strokeWidth="1.5" fill="none"/>
-                </svg>
-                <span>Platform review</span>
-              </div>
-              <div className="c">
-                <svg width="52" height="52" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg" style={{marginBottom: '16px'}}>
-                  <rect x="8" y="16" width="36" height="24" rx="2" stroke="#7a2f1c" strokeWidth="1.5" fill="none"/>
-                  <path d="M8 20H44" stroke="#7a2f1c" strokeWidth="1.5"/>
-                  <circle cx="12" cy="34" r="1.5" fill="#7a2f1c"/>
-                  <circle cx="18" cy="34" r="1.5" fill="#7a2f1c"/>
-                </svg>
-                <span>Experience design</span>
-              </div>
-            </div>
+
             </div>
           </div>
         </section>
 
 
-        <section className="ethos">
+        <section className="ethos ethos-v35" onPointerMove={e=>{const r=e.currentTarget.getBoundingClientRect();e.currentTarget.style.setProperty("--ethos-x",`${e.clientX-r.left}px`);e.currentTarget.style.setProperty("--ethos-y",`${e.clientY-r.top}px`);}} onPointerLeave={e=>{e.currentTarget.style.removeProperty("--ethos-x");e.currentTarget.style.removeProperty("--ethos-y");}}>
           <div className="wrap"><div className="grid">
             <div className="rv">
               <div className="eyebrow lab a">Ethos</div>
@@ -940,16 +480,63 @@ export default function HomePage() {
                 <div className="fbrand">Salaro</div>
                 <p>A UK-led digital consultancy. Practising since 1995.</p>
               </div>
-              <div className="fcol"><h5>Practice</h5><a href="/build">Build</a><a href="/migrate">Migrate</a><a href="/advise">Advise</a></div>
+              <div className="fcol"><h5>Practice</h5><a href="/build">Build</a><a href="/migrate">Migrate</a><a href="/move-from-php">Move from PHP</a><a href="/advise">Advise</a></div>
               <div className="fcol"><h5>Work</h5><a href="/work">Recent projects</a><a href="/archive">Archive</a></div>
-              <div className="fcol"><h5>Contact</h5><a href="mailto:team@salaro.com">team@salaro.com</a><a href="#">UK-based</a><a href="https://uk.linkedin.com/in/salaro">LinkedIn</a></div>
+              <div className="fcol"><h5>Contact</h5><a href="mailto:hello@salaro.com">hello@salaro.com</a><a href="#">UK-based</a><a href="https://uk.linkedin.com/in/salaro">LinkedIn</a></div>
             </div>
             <div className="foot-bot">
-              <span className="lab">© 2026 Salaro Ltd · Registered in England &amp; Wales</span>
+              <span className="lab">© 2026 Salaro · a trading name of S. Golestanian, sole trader · 39 Cater Gardens, Guildford, Surrey GU3 3BY</span>
               <span className="lab">Practising since 1995</span>
             </div>
           </div>
         </footer>
     </div>
   );
+}
+
+const deliveryStages = [
+ {name:'Discover',short:'Understand the challenge',title:'Start with the right questions.',description:'Understand the business, its users and the challenges that technology needs to solve.',tags:['Research','Business needs','User insight']},
+ {name:'Strategy',short:'Define the direction',title:'Turn insight into direction.',description:'Shape a practical plan that connects business objectives with the right technical approach.',tags:['Planning','Architecture','Priorities']},
+ {name:'Design',short:'Shape the experience',title:'Make complexity feel simple.',description:'Translate the strategy into thoughtful interfaces and clear, intuitive user journeys.',tags:['UX','Visual design','Prototyping']},
+ {name:'Develop',short:'Build with precision',title:'Bring the experience to life.',description:'Develop and review the solution with expert human oversight throughout the process.',tags:['Engineering','Integration','Review']},
+ {name:'Launch',short:'Deliver with confidence',title:'Ready for the real world.',description:'Review the finished experience and prepare it for a reliable launch and ongoing support.',tags:['Testing','Deployment','Support']}
+];
+function StageGraphic({index}) {return <svg className="journey-svg" viewBox="0 0 120 82" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+ <circle cx="60" cy="41" r="39" opacity=".13" strokeDasharray="2 5"/><path d="M4 41h112M60 2v78" opacity=".12" strokeDasharray="2 4"/><circle cx="60" cy="41" r="32" opacity=".12"/>
+ {index===0?<><circle cx="53" cy="37" r="19"/><circle cx="53" cy="37" r="11" opacity=".4"/><path d="M67 51l19 19" strokeWidth="4"/><path className="journey-motion" d="M53 18v19l15 10"/><circle cx="53" cy="37" r="3" fill="currentColor"/></>:index===1?<><path d="M25 22h70M25 41h70M25 60h70" opacity=".4"/>{[ [42,22],[76,41],[54,60] ].map(([x,y])=><circle key={y} cx={x} cy={y} r="6" fill="#fff9f2"/>)}<path className="journey-motion" d="M42 22L76 41 54 60" strokeDasharray="4 4"/></>:index===2?<><rect x="22" y="15" width="76" height="52" rx="3"/><path d="M22 25h76M31 33h27v24H31zM65 34h24M65 42h24M65 50h16"/><rect className="journey-motion" x="31" y="33" width="27" height="24" fill="currentColor" opacity=".2"/></>:index===3?<><rect x="20" y="15" width="80" height="52" rx="4"/><path d="M20 25h80M45 35L34 43l11 8M75 35l11 8-11 8M65 32L55 55" strokeWidth="2"/><path className="journey-motion" d="M31 60h58" strokeDasharray="5 4"/></>:<><path d="M60 13C76 25 79 43 60 58 41 43 44 25 60 13Z"/><circle cx="60" cy="33" r="7"/><path d="M47 43l-10 14 15-3M73 43l10 14-15-3"/><path className="journey-motion" d="M54 62l6 12 6-12" strokeWidth="2"/></>}
+ </svg>}
+
+
+function CommerceShowcase() {
+  const [step, setStep] = useState(0);
+  const stages = ['Browse', 'Basket', 'Checkout'];
+  const notes = ['Discover products in a clear, responsive storefront.', 'Review your selection in a frictionless basket.', 'Complete the journey with a streamlined checkout.'];
+  return <div className="commerce-demo" data-step={step}>
+    <div className="commerce-demo-head"><span>COMMERCE / INTERACTIVE DEMO</span><span className="commerce-status">● {stages[step]}</span></div>
+    <svg viewBox="0 0 540 330" role="img" aria-label={`Illustrative storefront: ${stages[step]}`}>
+      <defs><linearGradient id="commerceWash" x2="1" y2="1"><stop stopColor="#e3eee7"/><stop offset="1" stopColor="#f4e4cb"/></linearGradient></defs>
+      <rect x="18" y="15" width="504" height="300" rx="12" fill="#fffdf8" stroke="#c8cfc4"/>
+      <path d="M18 49H522" stroke="#d9ded5"/>
+      {[35,47,59].map(x=><circle key={x} cx={x} cy="32" r="3" fill="#b8a38b"/>)}
+      <text x="270" y="35" textAnchor="middle" fontSize="10" fill="#526d65" letterSpacing="2">STOREFRONT / PREVIEW</text>
+      <rect x="35" y="64" width="310" height="90" rx="6" fill="url(#commerceWash)"/>
+      <text x="50" y="91" fontSize="11" fill="#426e68">THE COLLECTION</text><text x="50" y="115" fontSize="21" fontFamily="Georgia" fill="#273f39">Made for everyday.</text>
+      <rect x="50" y="127" width="65" height="13" rx="6" fill="#426e68"/>
+      <g transform="translate(275 76)" fill="none" stroke="#426e68" strokeWidth="1.5"><path d="M0 20H42L38 64H4Z M11 20V12a10 10 0 0 1 20 0v8"/></g>
+      {[0,1,2].map(i=><g key={i} className={`commerce-product ${i===1?'featured':''}`} transform={`translate(${35+i*105} 169)`}>
+        <rect width="98" height="125" rx="5" fill="#fffdf8" stroke="#d5dcd2"/>
+        <rect x="7" y="7" width="84" height="73" rx="4" fill={['#e9e0d1','#dce9e2','#e7e8ec'][i]}/>
+        <g fill="none" stroke="#52776b" strokeWidth="1.5">{i===0?<path d="M32 30H66L63 66H35Z M40 30V23a9 9 0 0 1 18 0v7"/>:i===1?<><rect x="36" y="29" width="26" height="40" rx="6"/><path d="M42 29V20H56V29 M40 46H58"/></>:<><path d="M30 34H65V61Q48 75 30 61Z M65 38Q82 38 73 52H65"/></>}</g>
+        <path d="M12 91H68 M12 100H47" stroke="#aabbb0" strokeWidth="3" strokeLinecap="round"/>
+        <rect x="12" y="109" width="37" height="8" rx="4" fill="#52776b"/>
+      </g>)}
+      <rect x="360" y="64" width="145" height="230" rx="8" fill="#f2f5ef" stroke="#c8d7cc"/>
+      <text x="374" y="88" fontSize="10" letterSpacing="1" fill="#426e68">{['YOUR JOURNEY','YOUR BASKET','SECURE CHECKOUT'][step]}</text>
+      {[0,1,2].map(i=><g key={i} className="commerce-flow-row" opacity={i<=step?1:.42}><circle cx="382" cy={115+i*44} r="9" fill={i<=step?'#426e68':'#c9d4c9'}/><path d={`M378 ${115+i*44}l3 3 5 -6`} stroke="white" fill="none"/><text x="399" y={119+i*44} fontSize="11" fill="#334c43">{stages[i]}</text></g>)}
+      <path d="M382 124V150M382 168V194" stroke="#8eae9d" strokeDasharray="3 4" className="commerce-flow-line"/>
+      <rect x="374" y="254" width="117" height="24" rx="12" fill={step===2?'#426e68':'#d9e5da'}/><text x="432" y="270" textAnchor="middle" fontSize="10" fill={step===2?'white':'#426e68'}>{['Explore','Review basket','Ready to pay'][step]}</text>
+    </svg>
+    <div className="commerce-tabs" aria-label="Explore shopping stages">{stages.map((s,i)=><button type="button" key={s} aria-pressed={step===i} onClick={()=>setStep(i)} onPointerEnter={()=>setStep(i)} onFocus={()=>setStep(i)}>{String(i+1).padStart(2,'0')} · {s}</button>)}</div>
+    <p className="commerce-note" aria-live="polite">{notes[step]}</p>
+  </div>;
 }
