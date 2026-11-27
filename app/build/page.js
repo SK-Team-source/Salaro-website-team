@@ -18,14 +18,33 @@ export default function BuildPage() {
 
     const items = [...document.querySelectorAll('.disc-item')];
     const panes = [...document.querySelectorAll('.disc-pane')];
-
-    items.forEach((btn) =>
-      btn.addEventListener('click', () => {
-        const key = btn.dataset.disc;
-        items.forEach((item) => item.classList.toggle('on', item === btn));
-        panes.forEach((pane) => pane.classList.toggle('on', pane.dataset.pane === key));
-      })
-    );
+    const activateDiscipline = (key) => {
+      if (!items.some((item) => item.dataset.disc === key)) return false;
+      items.forEach((item) => {
+        const selected = item.dataset.disc === key;
+        item.classList.toggle('on', selected);
+        item.setAttribute('aria-selected', String(selected));
+      });
+      panes.forEach((pane) => pane.classList.toggle('on', pane.dataset.pane === key));
+      return true;
+    };
+    const onDisciplineClick = (event) => {
+      const key = event.currentTarget.dataset.disc;
+      activateDiscipline(key);
+      window.history.replaceState(null, '', `#${key}`);
+    };
+    const onHashChange = () => {
+      const key = window.location.hash.slice(1);
+      if (activateDiscipline(key)) {
+        window.requestAnimationFrame(() => document.getElementById(key)?.scrollIntoView({ block: 'center' }));
+      }
+    };
+    items.forEach((item) => item.addEventListener('click', onDisciplineClick));
+    const initialDiscipline = window.location.hash.slice(1);
+    if (activateDiscipline(initialDiscipline)) {
+      window.requestAnimationFrame(() => document.getElementById(initialDiscipline)?.scrollIntoView({ block: 'center' }));
+    }
+    window.addEventListener('hashchange', onHashChange);
 
     const links = [...document.querySelectorAll('.subnav a[href^="#"]')];
     const map = new Map(links.map((link) => [link.getAttribute('href').slice(1), link]));
@@ -41,7 +60,7 @@ export default function BuildPage() {
       { rootMargin: '-45% 0px -50% 0px' }
     );
 
-    ['why', 'process', 'types', 'native', 'included', 'engage'].forEach((id) => {
+    ['why', 'process', 'types', 'included', 'engage'].forEach((id) => {
       const el = document.getElementById(id);
       if (el) spy.observe(el);
     });
@@ -49,15 +68,17 @@ export default function BuildPage() {
     return () => {
       io.disconnect();
       spy.disconnect();
+      items.forEach((item) => item.removeEventListener('click', onDisciplineClick));
+      window.removeEventListener('hashchange', onHashChange);
     };
   }, []);
 
   return (
-    <div className="pg-build">
+    <div className="pg-build build-editorial">
       <div className="topbar">
         <div className="wrap">
-          <a href="/" className="brand">Sala<span>ro</span></a>
-          <nav className="nav"><a href="/practice" className="active">Practice</a><a href="/work">Work</a><a href="/migrate">Migrate</a><a href="/studio">Studio</a><a href="/contact">Contact</a></nav>
+          <a href="https://salaro.com/" className="brand">Sala<span>ro</span></a>
+          <nav className="nav"><a href="https://salaro.com/practice" className="active">Practice</a><a href="https://salaro.com/work">Work</a><a href="https://salaro.com/migrate">Migrate</a><a href="https://salaro.com/studio">Studio</a><a href="https://salaro.com/contact">Contact</a></nav>
           <a href="tel:+447485222490" className="top-cta">Start a project</a>
         </div>
       </div>
@@ -65,11 +86,21 @@ export default function BuildPage() {
       {/* PAGE MASTHEAD */}
       <header className="masthead">
         <div className="wrap"><div className="grid">
-          <div className="rv">
+          <div className="build-blueprint" aria-hidden="true">
+            <span className="lab a">System architecture · 01</span>
+            <svg viewBox="0 0 360 300" fill="none">
+              <defs><pattern id="build-engineering-grid" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M20 0H0V20" stroke="#c9c5b6" strokeWidth=".6"/></pattern></defs>
+              <rect x="8" y="8" width="344" height="284" rx="8" fill="url(#build-engineering-grid)"/>
+              <g stroke="#899483" strokeWidth="1.3"><path d="M90 68H180V120M270 68H180M90 232H180V180M270 232H180"/><path className="engineering-flow" d="M90 68H180V120M270 68H180M90 232H180V180M270 232H180" stroke="#7a2f1c" strokeWidth="2"/></g>
+              {[[22,38,'ARCHITECTURE'],[202,38,'RESEARCH'],[22,202,'CODE'],[202,202,'REVIEW']].map(([x,y,label],i)=><g key={label} transform={`translate(${x} ${y})`}><rect width="136" height="60" rx="5" fill={i%2?'#e5ebe1':'#f6e8db'} stroke="#b6b6a5"/><circle cx="14" cy="15" r="3" fill="#7a2f1c" className="engineering-node" style={{animationDelay:`${i*.7}s`}}/><path d="M14 29H105M14 36H84" stroke="#9b9e8c"/><text x="14" y="51" fontSize="9" fontFamily="monospace" fill="#51483d">{label}</text></g>)}
+              <rect x="132" y="116" width="96" height="68" rx="8" fill="#faf7ef" stroke="#7a2f1c" strokeWidth="1.5"/><text x="180" y="151" textAnchor="middle" fontSize="24" fontFamily="monospace" fill="#7a2f1c">{'</>'}</text><text x="180" y="169" textAnchor="middle" fontSize="9" fontFamily="monospace" fill="#526b59">BUILD SYSTEM</text>
+            </svg>
+            <div className="build-blueprint-foot lab"><span>Plan → Build → Review</span><span>1995 — Today</span></div>
+          </div>
+          <div className="build-hero-copy rv">
             <div className="eyebrow lab a kicker">Practice · Build</div>
             <h1>Built on <span className="it">code</span>, not templates.</h1>
             <p className="lead">Millions of sites already exist — a template makes you one more. We design and build platforms from first principles: an architect, a researcher, a developer and a reviewer working in sequence, under human judgment, to ship work a generalist agency can't.</p>
-          </div>
           <div className="aside rv">
             <div className="row"><span className="k">Service</span><span className="v">Build</span></div>
             <div className="row"><span className="k">Covers</span><span className="v">Web · Commerce · Apps · AI</span></div>
@@ -80,6 +111,7 @@ export default function BuildPage() {
              
             </div>
           </div>
+          </div>
         </div></div>
       </header>
 
@@ -89,7 +121,7 @@ export default function BuildPage() {
           <a href="#why" className="on">Why bespoke</a>
           <a href="#process">Process</a>
           <a href="#types">What we build</a>
-          <a href="#native">Native apps</a>
+          <a href="#apps">Native apps</a>
           <a href="#included">What's included</a>
           <a href="#engage">Engagement</a>
           <span className="grow"></span>
@@ -135,7 +167,7 @@ export default function BuildPage() {
         <div className="wrap">
           <div className="head-row rv">
             <h2 className="serif">How we <span className="it">ship</span>.</h2>
-            <p className="desc">Not a black box. Five roles work the build in sequence — each handing to the next, every stage signed off under human review. Thirty years of practice, compressed into steps.</p>
+            <p className="desc">Not a black box. Five roles work the build in sequence — each handing to the next, every stage signed off under human review. Practising since 1995, we bring that experience to every step.</p>
           </div>
           <div className="ladder rv">
             <div className="rung">
@@ -145,31 +177,31 @@ export default function BuildPage() {
               <p className="r-note">Shapes the data model, structure and stack before a line is written.</p>
               <svg width="100%" viewBox="0 0 680 480" xmlns="http://www.w3.org/2000/svg">
 <defs>
-<pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse">
-<path d="M30 0H0V30" fill="none" stroke="#d8cfba" stroke-width="1"/>
+<pattern id="build-grid-3" width="30" height="30" patternUnits="userSpaceOnUse">
+<path d="M30 0H0V30" fill="none" stroke="#d8cfba" strokeWidth="1"/>
 </pattern>
 </defs>
 
-<rect x="40" y="40" width="600" height="400" fill="url(#grid)"/>
-<circle cx="340" cy="240" r="150" fill="none" stroke="#b0523c" stroke-width="2"/>
-<circle cx="340" cy="240" r="90" fill="none" stroke="#b0523c" stroke-width="1.5" stroke-dasharray="6 6"/>
-<line x1="340" y1="90" x2="340" y2="390" stroke="#928a6c" stroke-width="1"/>
-<line x1="190" y1="240" x2="490" y2="240" stroke="#928a6c" stroke-width="1"/>
-<path d="M340 130 L400 320 L280 320 Z" fill="none" stroke="#37322a" stroke-width="2.5" stroke-linejoin="round"/>
+<rect x="40" y="40" width="600" height="400" fill="url(#build-grid-3)"/>
+<circle cx="340" cy="240" r="150" fill="none" stroke="#b0523c" strokeWidth="2"/>
+<circle cx="340" cy="240" r="90" fill="none" stroke="#b0523c" strokeWidth="1.5" strokeDasharray="6 6"/>
+<line x1="340" y1="90" x2="340" y2="390" stroke="#928a6c" strokeWidth="1"/>
+<line x1="190" y1="240" x2="490" y2="240" stroke="#928a6c" strokeWidth="1"/>
+<path d="M340 130 L400 320 L280 320 Z" fill="none" stroke="#37322a" strokeWidth="2.5" strokeLinejoin="round"/>
 <circle cx="340" cy="130" r="7" fill="#37322a"/>
 <rect x="300" y="200" width="80" height="60" rx="4" fill="#bb7259"/>
 <rect x="300" y="270" width="80" height="30" rx="4" fill="#928a6c"/>
 <circle cx="340" cy="240" r="6" fill="#37322a"/>
 
-<text x="340" y="225" text-anchor="middle" font-family="'Courier New', monospace" font-size="11" letter-spacing="1.5" fill="#efe9db">DATA MODEL</text>
-<text x="340" y="289" text-anchor="middle" font-family="'Courier New', monospace" font-size="11" letter-spacing="1.5" fill="#efe9db">STRUCTURE</text>
-<text x="340" y="115" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="16" fill="#37322a">plan</text>
+<text x="340" y="225" textAnchor="middle" fontFamily="'Courier New', monospace" fontSize="11" letterSpacing="1.5" fill="#efe9db">DATA MODEL</text>
+<text x="340" y="289" textAnchor="middle" fontFamily="'Courier New', monospace" fontSize="11" letterSpacing="1.5" fill="#efe9db">STRUCTURE</text>
+<text x="340" y="115" textAnchor="middle" fontFamily="Georgia, 'Times New Roman', serif" fontSize="16" fill="#37322a">plan</text>
 
-<rect x="130" y="380" width="60" height="20" rx="10" fill="none" stroke="#b0523c" stroke-width="1.5"/>
-<text x="160" y="394" text-anchor="middle" font-family="'Courier New', monospace" font-size="10" letter-spacing="1" fill="#b0523c">STACK</text>
+<rect x="130" y="380" width="60" height="20" rx="10" fill="none" stroke="#b0523c" strokeWidth="1.5"/>
+<text x="160" y="394" textAnchor="middle" fontFamily="'Courier New', monospace" fontSize="10" letterSpacing="1" fill="#b0523c">STACK</text>
 
-<rect x="490" y="380" width="60" height="20" rx="10" fill="none" stroke="#928a6c" stroke-width="1.5"/>
-<text x="520" y="394" text-anchor="middle" font-family="'Courier New', monospace" font-size="10" letter-spacing="1" fill="#928a6c">BUILD</text>
+<rect x="490" y="380" width="60" height="20" rx="10" fill="none" stroke="#928a6c" strokeWidth="1.5"/>
+<text x="520" y="394" textAnchor="middle" fontFamily="'Courier New', monospace" fontSize="10" letterSpacing="1" fill="#928a6c">BUILD</text>
 </svg>
             </div>
             <div className="rung">
@@ -180,7 +212,7 @@ export default function BuildPage() {
          <svg width="100%" viewBox="0 0 680 480" xmlns="http://www.w3.org/2000/svg">
 <defs>
 <pattern id="lines" width="14" height="14" patternUnits="userSpaceOnUse">
-<path d="M0 14L14 0" fill="none" stroke="#d8cfba" stroke-width="1"/>
+<path d="M0 14L14 0" fill="none" stroke="#d8cfba" strokeWidth="1"/>
 </pattern>
 </defs>
 
@@ -191,22 +223,22 @@ export default function BuildPage() {
 <rect x="250" y="244" width="180" height="20" rx="4" fill="#928a6c"/>
 <rect x="265" y="216" width="150" height="20" rx="4" fill="#bb7259"/>
 
-<text x="340" y="315" text-anchor="middle" font-family="'Courier New', monospace" font-size="12" letter-spacing="2" fill="#efe9db">EVIDENCE</text>
-<text x="340" y="287" text-anchor="middle" font-family="'Courier New', monospace" font-size="12" letter-spacing="2" fill="#efe9db">PATTERNS</text>
-<text x="340" y="259" text-anchor="middle" font-family="'Courier New', monospace" font-size="12" letter-spacing="2" fill="#efe9db">STANDARDS</text>
-<text x="340" y="231" text-anchor="middle" font-family="'Courier New', monospace" font-size="12" letter-spacing="2" fill="#efe9db">PRIOR ART</text>
+<text x="340" y="315" textAnchor="middle" fontFamily="'Courier New', monospace" fontSize="12" letterSpacing="2" fill="#efe9db">EVIDENCE</text>
+<text x="340" y="287" textAnchor="middle" fontFamily="'Courier New', monospace" fontSize="12" letterSpacing="2" fill="#efe9db">PATTERNS</text>
+<text x="340" y="259" textAnchor="middle" fontFamily="'Courier New', monospace" fontSize="12" letterSpacing="2" fill="#efe9db">STANDARDS</text>
+<text x="340" y="231" textAnchor="middle" fontFamily="'Courier New', monospace" fontSize="12" letterSpacing="2" fill="#efe9db">PRIOR ART</text>
 
-<circle cx="420" cy="150" r="80" fill="url(#lines)" stroke="#37322a" stroke-width="3"/>
-<circle cx="420" cy="150" r="80" fill="none" stroke="#37322a" stroke-width="3"/>
-<line x1="475" y1="205" x2="540" y2="270" stroke="#37322a" stroke-width="10" stroke-linecap="round"/>
+<circle cx="420" cy="150" r="80" fill="url(#lines)" stroke="#37322a" strokeWidth="3"/>
+<circle cx="420" cy="150" r="80" fill="none" stroke="#37322a" strokeWidth="3"/>
+<line x1="475" y1="205" x2="540" y2="270" stroke="#37322a" strokeWidth="10" strokeLinecap="round"/>
 
-<text x="420" y="155" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="18" fill="#37322a">research</text>
+<text x="420" y="155" textAnchor="middle" fontFamily="Georgia, 'Times New Roman', serif" fontSize="18" fill="#37322a">research</text>
 
-<rect x="105" y="380" width="110" height="24" rx="12" fill="none" stroke="#b0523c" stroke-width="1.5"/>
-<text x="160" y="397" text-anchor="middle" font-family="'Courier New', monospace" font-size="11" letter-spacing="1.5" fill="#b0523c">GROUND TRUTH</text>
+<rect x="105" y="380" width="110" height="24" rx="12" fill="none" stroke="#b0523c" strokeWidth="1.5"/>
+<text x="160" y="397" textAnchor="middle" fontFamily="'Courier New', monospace" fontSize="11" letterSpacing="1.5" fill="#b0523c">GROUND TRUTH</text>
 
-<rect x="460" y="380" width="115" height="24" rx="12" fill="none" stroke="#928a6c" stroke-width="1.5"/>
-<text x="517" y="397" text-anchor="middle" font-family="'Courier New', monospace" font-size="11" letter-spacing="1.5" fill="#928a6c">INFORM BUILD</text>
+<rect x="460" y="380" width="115" height="24" rx="12" fill="none" stroke="#928a6c" strokeWidth="1.5"/>
+<text x="517" y="397" textAnchor="middle" fontFamily="'Courier New', monospace" fontSize="11" letterSpacing="1.5" fill="#928a6c">INFORM BUILD</text>
 </svg>
         
            </div>
@@ -218,33 +250,33 @@ export default function BuildPage() {
           
           <svg width="100%" viewBox="0 0 680 480" xmlns="http://www.w3.org/2000/svg">
 <defs>
-<pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse">
-<path d="M30 0H0V30" fill="none" stroke="#d8cfba" stroke-width="1"/>
+<pattern id="build-grid-5" width="30" height="30" patternUnits="userSpaceOnUse">
+<path d="M30 0H0V30" fill="none" stroke="#d8cfba" strokeWidth="1"/>
 </pattern>
 </defs>
 
 
-<rect x="40" y="300" width="600" height="140" fill="url(#grid)"/>
-<line x1="40" y1="300" x2="640" y2="300" stroke="#b0523c" stroke-width="1.5" stroke-dasharray="6 6"/>
+<rect x="40" y="300" width="600" height="140" fill="url(#build-grid-5)"/>
+<line x1="40" y1="300" x2="640" y2="300" stroke="#b0523c" strokeWidth="1.5" strokeDasharray="6 6"/>
 
-<text x="340" y="290" text-anchor="middle" font-family="'Courier New', monospace" font-size="11" letter-spacing="1.5" fill="#b0523c">ARCHITECTURE</text>
+<text x="340" y="290" textAnchor="middle" fontFamily="'Courier New', monospace" fontSize="11" letterSpacing="1.5" fill="#b0523c">ARCHITECTURE</text>
 
-<text x="220" y="220" font-family="'Courier New', monospace" font-weight="700" font-size="90" fill="#37322a">&lt;</text>
-<text x="420" y="220" font-family="'Courier New', monospace" font-weight="700" font-size="90" fill="#37322a">/&gt;</text>
+<text x="220" y="220" fontFamily="'Courier New', monospace" fontWeight="700" fontSize="90" fill="#37322a">&lt;</text>
+<text x="420" y="220" fontFamily="'Courier New', monospace" fontWeight="700" fontSize="90" fill="#37322a">/&gt;</text>
 
 <rect x="260" y="120" width="160" height="24" rx="4" fill="#bb7259"/>
 <rect x="280" y="152" width="120" height="24" rx="4" fill="#928a6c"/>
 <rect x="270" y="184" width="140" height="24" rx="4" fill="#bb7259"/>
 
-<text x="340" y="137" text-anchor="middle" font-family="'Courier New', monospace" font-size="11" letter-spacing="1.5" fill="#efe9db">CLEAN CODE</text>
-<text x="340" y="169" text-anchor="middle" font-family="'Courier New', monospace" font-size="11" letter-spacing="1.5" fill="#efe9db">DOCS</text>
-<text x="340" y="201" text-anchor="middle" font-family="'Courier New', monospace" font-size="11" letter-spacing="1.5" fill="#efe9db">TESTS</text>
+<text x="340" y="137" textAnchor="middle" fontFamily="'Courier New', monospace" fontSize="11" letterSpacing="1.5" fill="#efe9db">CLEAN CODE</text>
+<text x="340" y="169" textAnchor="middle" fontFamily="'Courier New', monospace" fontSize="11" letterSpacing="1.5" fill="#efe9db">DOCS</text>
+<text x="340" y="201" textAnchor="middle" fontFamily="'Courier New', monospace" fontSize="11" letterSpacing="1.5" fill="#efe9db">TESTS</text>
 
-<rect x="105" y="380" width="60" height="20" rx="10" fill="none" stroke="#b0523c" stroke-width="1.5"/>
-<text x="135" y="394" text-anchor="middle" font-family="'Courier New', monospace" font-size="10" letter-spacing="1" fill="#b0523c">BUILD</text>
+<rect x="105" y="380" width="60" height="20" rx="10" fill="none" stroke="#b0523c" strokeWidth="1.5"/>
+<text x="135" y="394" textAnchor="middle" fontFamily="'Courier New', monospace" fontSize="10" letterSpacing="1" fill="#b0523c">BUILD</text>
 
-<rect x="515" y="380" width="60" height="20" rx="10" fill="none" stroke="#928a6c" stroke-width="1.5"/>
-<text x="545" y="394" text-anchor="middle" font-family="'Courier New', monospace" font-size="10" letter-spacing="1" fill="#928a6c">SHIP</text>
+<rect x="515" y="380" width="60" height="20" rx="10" fill="none" stroke="#928a6c" strokeWidth="1.5"/>
+<text x="545" y="394" textAnchor="middle" fontFamily="'Courier New', monospace" fontSize="10" letterSpacing="1" fill="#928a6c">SHIP</text>
 </svg>
           
             </div>
@@ -256,37 +288,37 @@ export default function BuildPage() {
            
               <svg width="100%" viewBox="0 0 680 480" xmlns="http://www.w3.org/2000/svg">
 <defs>
-<pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse">
-<path d="M30 0H0V30" fill="none" stroke="#d8cfba" stroke-width="1"/>
+<pattern id="build-grid-6" width="30" height="30" patternUnits="userSpaceOnUse">
+<path d="M30 0H0V30" fill="none" stroke="#d8cfba" strokeWidth="1"/>
 </pattern>
 </defs>
 
 
-<rect x="40" y="40" width="600" height="400" fill="url(#grid)"/>
+<rect x="40" y="40" width="600" height="400" fill="url(#build-grid-6)"/>
 
-<rect x="230" y="110" width="220" height="260" rx="8" fill="#ffffff" stroke="#37322a" stroke-width="2"/>
+<rect x="230" y="110" width="220" height="260" rx="8" fill="#ffffff" stroke="#37322a" strokeWidth="2"/>
 
-<rect x="256" y="140" width="20" height="20" rx="4" fill="none" stroke="#928a6c" stroke-width="2"/>
-<path d="M260 150 L265 156 L273 144" fill="none" stroke="#928a6c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<text x="290" y="155" font-family="'Courier New', monospace" font-size="12" letter-spacing="1" fill="#4a453d">TESTS</text>
+<rect x="256" y="140" width="20" height="20" rx="4" fill="none" stroke="#928a6c" strokeWidth="2"/>
+<path d="M260 150 L265 156 L273 144" fill="none" stroke="#928a6c" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+<text x="290" y="155" fontFamily="'Courier New', monospace" fontSize="12" letterSpacing="1" fill="#4a453d">TESTS</text>
 
-<rect x="256" y="180" width="20" height="20" rx="4" fill="none" stroke="#928a6c" stroke-width="2"/>
-<path d="M260 190 L265 196 L273 184" fill="none" stroke="#928a6c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<text x="290" y="195" font-family="'Courier New', monospace" font-size="12" letter-spacing="1" fill="#4a453d">AUDITS</text>
+<rect x="256" y="180" width="20" height="20" rx="4" fill="none" stroke="#928a6c" strokeWidth="2"/>
+<path d="M260 190 L265 196 L273 184" fill="none" stroke="#928a6c" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+<text x="290" y="195" fontFamily="'Courier New', monospace" fontSize="12" letterSpacing="1" fill="#4a453d">AUDITS</text>
 
-<rect x="256" y="220" width="20" height="20" rx="4" fill="none" stroke="#b0523c" stroke-width="2"/>
-<line x1="259" y1="223" x2="273" y2="237" stroke="#b0523c" stroke-width="2" stroke-linecap="round"/>
-<line x1="273" y1="223" x2="259" y2="237" stroke="#b0523c" stroke-width="2" stroke-linecap="round"/>
-<text x="290" y="235" font-family="'Courier New', monospace" font-size="12" letter-spacing="1" fill="#4a453d">CHALLENGES</text>
+<rect x="256" y="220" width="20" height="20" rx="4" fill="none" stroke="#b0523c" strokeWidth="2"/>
+<line x1="259" y1="223" x2="273" y2="237" stroke="#b0523c" strokeWidth="2" strokeLinecap="round"/>
+<line x1="273" y1="223" x2="259" y2="237" stroke="#b0523c" strokeWidth="2" strokeLinecap="round"/>
+<text x="290" y="235" fontFamily="'Courier New', monospace" fontSize="12" letterSpacing="1" fill="#4a453d">CHALLENGES</text>
 
-<circle cx="480" cy="200" r="55" fill="none" stroke="#37322a" stroke-width="4"/>
-<line x1="518" y1="238" x2="565" y2="285" stroke="#37322a" stroke-width="9" stroke-linecap="round"/>
+<circle cx="480" cy="200" r="55" fill="none" stroke="#37322a" strokeWidth="4"/>
+<line x1="518" y1="238" x2="565" y2="285" stroke="#37322a" strokeWidth="9" strokeLinecap="round"/>
 
-<rect x="130" y="380" width="90" height="20" rx="10" fill="none" stroke="#928a6c" stroke-width="1.5"/>
-<text x="175" y="394" text-anchor="middle" font-family="'Courier New', monospace" font-size="10" letter-spacing="1" fill="#928a6c">CHECK ALL</text>
+<rect x="130" y="380" width="90" height="20" rx="10" fill="none" stroke="#928a6c" strokeWidth="1.5"/>
+<text x="175" y="394" textAnchor="middle" fontFamily="'Courier New', monospace" fontSize="10" letterSpacing="1" fill="#928a6c">CHECK ALL</text>
 
-<rect x="460" y="380" width="90" height="20" rx="10" fill="none" stroke="#b0523c" stroke-width="1.5"/>
-<text x="505" y="394" text-anchor="middle" font-family="'Courier New', monospace" font-size="10" letter-spacing="1" fill="#b0523c">MOVE ON</text>
+<rect x="460" y="380" width="90" height="20" rx="10" fill="none" stroke="#b0523c" strokeWidth="1.5"/>
+<text x="505" y="394" textAnchor="middle" fontFamily="'Courier New', monospace" fontSize="10" letterSpacing="1" fill="#b0523c">MOVE ON</text>
 </svg>
             </div>
             <div className="rung">
@@ -297,40 +329,40 @@ export default function BuildPage() {
               <p className="r-note">Released, monitored and handed over — code that's yours to own.</p>
            <svg width="100%" viewBox="0 0 680 480" xmlns="http://www.w3.org/2000/svg">
 <defs>
-<pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse">
-<path d="M30 0H0V30" fill="none" stroke="#d8cfba" stroke-width="1"/>
+<pattern id="build-grid-7" width="30" height="30" patternUnits="userSpaceOnUse">
+<path d="M30 0H0V30" fill="none" stroke="#d8cfba" strokeWidth="1"/>
 </pattern>
 </defs>
 
 
-<rect x="40" y="40" width="600" height="400" fill="url(#grid)"/>
+<rect x="40" y="40" width="600" height="400" fill="url(#build-grid-7)"/>
 
-<line x1="150" y1="430" x2="530" y2="430" stroke="#37322a" stroke-width="2.5"/>
+<line x1="150" y1="430" x2="530" y2="430" stroke="#37322a" strokeWidth="2.5"/>
 
-<path d="M340 120 C300 160 300 260 320 320 L360 320 C380 260 380 160 340 120 Z" fill="#bb7259" stroke="#37322a" stroke-width="2"/>
-<circle cx="340" cy="195" r="18" fill="#efe9db" stroke="#37322a" stroke-width="2"/>
+<path d="M340 120 C300 160 300 260 320 320 L360 320 C380 260 380 160 340 120 Z" fill="#bb7259" stroke="#37322a" strokeWidth="2"/>
+<circle cx="340" cy="195" r="18" fill="#efe9db" stroke="#37322a" strokeWidth="2"/>
 <path d="M320 320 L295 360 L320 350 Z" fill="#928a6c"/>
 <path d="M360 320 L385 360 L360 350 Z" fill="#928a6c"/>
 <path d="M328 320 L340 380 L352 320 Z" fill="#b0523c"/>
 
-<circle cx="500" cy="160" r="46" fill="none" stroke="#37322a" stroke-width="2.5"/>
-<path d="M500 160 L500 128" stroke="#b0523c" stroke-width="3" stroke-linecap="round"/>
-<path d="M500 160 L524 176" stroke="#37322a" stroke-width="3" stroke-linecap="round"/>
-<text x="500" y="222" text-anchor="middle" font-family="'Courier New', monospace" font-size="11" letter-spacing="1.5" fill="#928a6c">MONITOR</text>
+<circle cx="500" cy="160" r="46" fill="none" stroke="#37322a" strokeWidth="2.5"/>
+<path d="M500 160 L500 128" stroke="#b0523c" strokeWidth="3" strokeLinecap="round"/>
+<path d="M500 160 L524 176" stroke="#37322a" strokeWidth="3" strokeLinecap="round"/>
+<text x="500" y="222" textAnchor="middle" fontFamily="'Courier New', monospace" fontSize="11" letterSpacing="1.5" fill="#928a6c">MONITOR</text>
 
-<text x="340" y="105" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="18" fill="#37322a">go live</text>
+<text x="340" y="105" textAnchor="middle" fontFamily="Georgia, 'Times New Roman', serif" fontSize="18" fill="#37322a">go live</text>
 
-<rect x="115" y="380" width="90" height="20" rx="10" fill="none" stroke="#b0523c" stroke-width="1.5"/>
-<text x="160" y="394" text-anchor="middle" font-family="'Courier New', monospace" font-size="10" letter-spacing="1" fill="#b0523c">RELEASED</text>
+<rect x="115" y="380" width="90" height="20" rx="10" fill="none" stroke="#b0523c" strokeWidth="1.5"/>
+<text x="160" y="394" textAnchor="middle" fontFamily="'Courier New', monospace" fontSize="10" letterSpacing="1" fill="#b0523c">RELEASED</text>
 
-<rect x="475" y="380" width="90" height="20" rx="10" fill="none" stroke="#928a6c" stroke-width="1.5"/>
-<text x="520" y="394" text-anchor="middle" font-family="'Courier New', monospace" font-size="10" letter-spacing="1" fill="#928a6c">HANDED OVER</text>
+<rect x="475" y="380" width="90" height="20" rx="10" fill="none" stroke="#928a6c" strokeWidth="1.5"/>
+<text x="520" y="394" textAnchor="middle" fontFamily="'Courier New', monospace" fontSize="10" letterSpacing="1" fill="#928a6c">HANDED OVER</text>
 </svg>
             </div>
           </div>
           <div className="pipe-foot" style={{borderTop:'none', marginTop:'26px', paddingTop:'0'}}>
             <span className="lab">Every stage · human reviewed</span>
-            <span className="lab a">i → v · thirty years of practice</span>
+            <span className="lab a">i → v · practising since 1995</span>
           </div>
         </div>
       </section>
@@ -350,14 +382,14 @@ export default function BuildPage() {
           </div>
 
           <div className="disc rv">
-            <div className="disc-list" role="tablist">
-              <button className="disc-item on" data-disc="web"><span className="di serif">01</span><span className="dt serif">Web development</span></button>
-              <button className="disc-item" data-disc="commerce"><span className="di serif">02</span><span className="dt serif">E-commerce</span></button>
-              <button className="disc-item" data-disc="apps"><span className="di serif">03</span><span className="dt serif">Apps</span></button>
-              <button className="disc-item" data-disc="ai"><span className="di serif">04</span><span className="dt serif">AI</span></button>
+            <div className="disc-list" role="tablist" aria-label="Build services">
+              <button type="button" role="tab" aria-selected="true" aria-controls="web" className="disc-item on" data-disc="web"><span className="di serif">01</span><span className="dt serif">Web development</span></button>
+              <button type="button" role="tab" aria-selected="false" aria-controls="commerce" className="disc-item" data-disc="commerce"><span className="di serif">02</span><span className="dt serif">E-commerce</span></button>
+              <button type="button" role="tab" aria-selected="false" aria-controls="apps" className="disc-item" data-disc="apps"><span className="di serif">03</span><span className="dt serif">Apps</span></button>
+              <button type="button" role="tab" aria-selected="false" aria-controls="ai" className="disc-item" data-disc="ai"><span className="di serif">04</span><span className="dt serif">AI</span></button>
             </div>
             <div className="disc-panel">
-              <div className="disc-pane on" data-pane="web">
+              <div className="disc-pane on" id="web" role="tabpanel" data-pane="web">
                 <div className="p-kind lab a">Web · Discipline 01</div>
                 <h3 className="serif">Sites made to <span className="it">stand apart</span>.</h3>
                 <p>Millions of sites already exist. We design and build marketing sites, portals and platforms from first principles — so yours reflects the business rather than a theme someone else shipped.</p>
@@ -367,11 +399,11 @@ export default function BuildPage() {
                   <li>Accessible to WCAG 2.2 AA</li>
                 </ul>
                 <div className="p-foot">
-                  <span className="p-stat">Built on code, not templates.</span>
-                  <a href="#" className="arwlink">Discover <span className="arw">→</span></a>
+                  <span className="p-stat">The right platform for the job — custom code where it counts.</span>
+                  <a href="/build#web" className="arwlink">Discover <span className="arw">→</span></a>
                 </div>
               </div>
-              <div className="disc-pane" data-pane="commerce">
+              <div className="disc-pane" id="commerce" role="tabpanel" data-pane="commerce">
                 <div className="p-kind lab a">Commerce · Discipline 02</div>
                 <h3 className="serif">A webshop built around <span className="it">your margins</span>.</h3>
                 <p>Products, services or a full catalogue — a content-managed webshop shaped by the customer journey, with conversion designed in rather than bolted on afterwards.</p>
@@ -382,10 +414,10 @@ export default function BuildPage() {
                 </ul>
                 <div className="p-foot">
                   <span className="p-stat">Increasing sales is the goal.</span>
-                  <a href="#" className="arwlink">Discover <span className="arw">→</span></a>
+                  <a href="/build#commerce" className="arwlink">Discover <span className="arw">→</span></a>
                 </div>
               </div>
-              <div className="disc-pane" data-pane="apps">
+              <div className="disc-pane" id="apps" role="tabpanel" data-pane="apps">
                 <div className="p-kind lab a">Apps · Discipline 03</div>
                 <h3 className="serif">Rich native apps, <span className="it">any device</span>.</h3>
                 <p>We handle device and OS compatibility so you don't have to — building rich native and cross-platform apps for iOS and Android at production quality and at scale.</p>
@@ -396,10 +428,10 @@ export default function BuildPage() {
                 </ul>
                 <div className="p-foot">
                   <span className="p-stat">Production quality, at scale.</span>
-                  <a href="#" className="arwlink">Discover <span className="arw">→</span></a>
+                  <a href="/build#apps" className="arwlink">Discover <span className="arw">→</span></a>
                 </div>
               </div>
-              <div className="disc-pane" data-pane="ai">
+              <div className="disc-pane" id="ai" role="tabpanel" data-pane="ai">
                 <div className="p-kind lab a">Intelligence · Discipline 04</div>
                 <h3 className="serif">AI applied with <span className="it">intent</span>.</h3>
                 <p>Machine learning, natural language and computer vision — used where they earn their place. Features that solve a real problem, not a demo bolted onto a product.</p>
@@ -410,7 +442,7 @@ export default function BuildPage() {
                 </ul>
                 <div className="p-foot">
                   <span className="p-stat">Devised, not decorative.</span>
-                  <a href="#" className="arwlink">Discover <span className="arw">→</span></a>
+                  <a href="/build#ai" className="arwlink">Discover <span className="arw">→</span></a>
                 </div>
               </div>
             </div>
@@ -430,11 +462,8 @@ export default function BuildPage() {
       <section className="shop band" id="included">
         <div className="wrap"><div className="grid">
           <div className="rv">
-            <div style={{display:'flex', alignItems:'center', gap:'14px', marginBottom:'16px'}}>
-              <svg width="42" height="42" viewBox="0 0 64 64" fill="none" aria-hidden="true" style={{flexShrink:0}}>
-                <path d="M18 18h28v28H18z" stroke="var(--accent)" strokeWidth="2"/>
-                <path d="M24 30h16M24 36h10" stroke="var(--ink)" strokeWidth="2" strokeLinecap="round"/>
-              </svg>
+            <div className="fund-label">
+              
               <div className="eyebrow lab a">What's included</div>
             </div>
             <h2 className="serif">Every build ships with the <span className="it">fundamentals</span>.</h2>
@@ -446,12 +475,12 @@ export default function BuildPage() {
           </div>
           <div className="rv">
             <ul className="checklist">
-              <li>Core Web Vitals tuned to pass</li>
-              <li>WCAG 2.2 AA accessibility baseline</li>
-              <li>A composable, content-managed CMS</li>
-              <li>SEO, metadata &amp; structured data built in</li>
-              <li>Responsive design across every breakpoint</li>
-              <li>Clean, documented, handover-ready code</li>
+              <li><svg className="fund-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M3 17a9 9 0 0 1 18 0M12 15l5-6"/></svg>Core Web Vitals tuned to pass</li>
+              <li><svg className="fund-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M12 3v3M5 8l7 3 7-3M12 11v10M12 15l-5 5M12 15l5 5"/></svg>WCAG 2.2 AA accessibility baseline</li>
+              <li><svg className="fund-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M3 4h18v16H3zM3 9h18M9 9v11"/></svg>A composable, content-managed CMS</li>
+              <li><svg className="fund-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M10 4a6 6 0 1 0 0 12 6 6 0 0 0 0-12M15 15l6 6"/></svg>SEO, metadata &amp; structured data built in</li>
+              <li><svg className="fund-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M2 4h15v12H2zM6 20h7M19 9h4v12h-4z"/></svg>Responsive design across every breakpoint</li>
+              <li><svg className="fund-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M8 6l-6 6 6 6M16 6l6 6-6 6M14 3l-4 18"/></svg>Clean, documented, handover-ready code</li>
             </ul>
             <div className="mini-table">
               <div><div className="mt-k">Performance</div><div className="mt-v lab">Web vitals</div></div>
@@ -513,10 +542,10 @@ export default function BuildPage() {
             </div>
             <div className="fcol"><h5>Practice</h5><a href="/build">Build</a><a href="/migrate">Migrate</a><a href="/advise">Advise</a></div>
             <div className="fcol"><h5>Work</h5><a href="/work">Recent projects</a><a href="/archive">Archive</a></div>
-            <div className="fcol"><h5>Contact</h5><a href="mailto:team@salaro.com">team@salaro.com</a><a href="#">Guildford, Surrey</a><a href="https://uk.linkedin.com/in/salaro">LinkedIn</a></div>
+            <div className="fcol"><h5>Contact</h5><a href="mailto:team@salaro.com">team@salaro.com</a><a href="https://maps.google.com/?q=Guildford%2C%20Surrey">Guildford, Surrey</a><a href="https://uk.linkedin.com/in/salaro">LinkedIn</a></div>
           </div>
           <div className="foot-bot">
-            <span className="lab">© 2026 Salaro Ltd · Registered in England &amp; Wales</span>
+            <span className="lab">© 2026 Salaro · a trading name of S. Golestanian, sole trader</span>
             <span className="lab">Practising since 1995</span>
           </div>
         </div>

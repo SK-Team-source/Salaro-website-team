@@ -2,7 +2,7 @@ import './globals.css';
 
 export const metadata = {
   title: 'Salaro — UK-led digital consultancy',
-  description: 'A UK-led digital consultancy. We build thoughtful, resilient digital products with clear decisions and practical delivery.',
+  description: 'Websites, online stores and AI tools, built by a UK-led studio with a delivery team in India. Building for the web since 1995.',
 };
 
 // Use the dedicated viewport export for Next.js

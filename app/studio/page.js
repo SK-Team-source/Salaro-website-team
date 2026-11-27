@@ -11,7 +11,7 @@ const mut = 'var(--muted)';
 
 function FigContent() {
   return (
-     <svg viewBox="0 0 800 450" style={{ ...figStyle, transform: 'scale(1.18)', transformOrigin: 'center' }} xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+     <svg viewBox="0 0 800 450" style={{ ...figStyle, transform: 'none', transformOrigin: 'center' }} xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
   
       <defs>
         <filter id="glow" x="-25%" y="-25%" width="150%" height="150%">
@@ -91,7 +91,7 @@ function FigContent() {
 
 function FigCrossPlatform() {
   return (
-   <svg viewBox="0 0 800 450" style={{ ...figStyle, transform: 'scale(1.18)', transformOrigin: 'center' }} xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+   <svg viewBox="0 0 800 450" style={{ ...figStyle, transform: 'none', transformOrigin: 'center' }} xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
   <defs>
     {/* Soft architectural glow for the central Shared Core node */}
     <filter id="core-glow" x="-25%" y="-25%" width="150%" height="150%">
@@ -192,7 +192,7 @@ function FigCrossPlatform() {
 
 function FigGrowth() {
   return (
-   <svg viewBox="0 0 800 450" style={{ ...figStyle, transform: 'scale(1.18)', transformOrigin: 'center' }} xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+   <svg viewBox="0 0 800 450" style={{ ...figStyle, transform: 'none', transformOrigin: 'center' }} xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
   <defs>
     {/* Architectural glow for the central AI Review decision point */}
     <filter id="review-glow" x="-20%" y="-20%" width="140%" height="140%">
@@ -279,7 +279,7 @@ function FigGrowth() {
 
 function FigFoundations() {
   return (
-  <svg viewBox="0 0 800 450" style={{ ...figStyle, transform: 'scale(1.18)', transformOrigin: 'center' }} xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <svg viewBox="0 0 800 450" style={{ ...figStyle, transform: 'none', transformOrigin: 'center' }} xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
   <defs>
     {/* Clean overlay glow for primary automation focus areas */}
     <filter id="stack-glow" x="-20%" y="-20%" width="140%" height="140%">
@@ -343,7 +343,7 @@ function FigFoundations() {
 
 function FigCloud() {
   return (
-    <svg viewBox="0 0 800 450" style={{ ...figStyle, transform: 'scale(1.18)', transformOrigin: 'center' }} xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <svg viewBox="0 0 800 450" style={{ ...figStyle, transform: 'none', transformOrigin: 'center' }} xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
   <defs>
     {/* Architectural cloud aura filter */}
     <filter id="cloud-glow" x="-20%" y="-20%" width="140%" height="140%">
@@ -469,54 +469,8 @@ const CASES = [
   },
 ];
 
-/* Responsive + polish styles, scoped to .p-studio. Injected here so this stays
-   a single-file drop-in — no globals.css changes required. */
-const PAGE_CSS = `
-.p-studio .svc-row{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:stretch}
 
-.p-studio .fig-box{border:1px solid var(--line-fine);border-radius:10px;padding:48px;
-  background:linear-gradient(170deg,var(--paper),var(--paper-2));display:grid;place-items:center;
-  min-height:320px;height:100%;transition:border-color .5s}
-.p-studio .fig-box:hover{border-color:var(--line)}
-.p-studio .fig-inner{width:100%;max-width:700px}
 
-.p-studio .cs-viewport{overflow:hidden}
-.p-studio .cs-slide{padding:0 11px;box-sizing:border-box}
-.p-studio .cs-card{border:1px solid var(--line-fine);border-radius:2px;padding:32px 32px 28px;
-  background:linear-gradient(170deg,var(--paper),var(--paper-2));box-shadow:0 18px 40px rgba(23,17,16,.04);
-  display:flex;flex-direction:column;height:100%;box-sizing:border-box;
-  transition:transform .5s cubic-bezier(.19,1,.22,1),border-color .5s,box-shadow .5s}
-.p-studio .cs-card:hover{transform:translateY(-4px);border-color:var(--line);box-shadow:0 26px 52px rgba(23,17,16,.08)}
-.p-studio .cs-mono{width:44px;height:44px;border-radius:50%;border:1px solid var(--accent);color:var(--accent);
-  display:grid;place-items:center;flex:none;font-family:"Fraunces",serif;font-size:13px;letter-spacing:.02em}
-.p-studio .cs-name{display:block;font-family:"Fraunces",serif;font-size:19px;font-weight:400;color:var(--ink);letter-spacing:-.01em}
-.p-studio .cs-body{margin:0;color:var(--ink-soft);font-size:14.5px;line-height:1.75;flex:1}
-
-.p-studio .cs-controls{display:flex;align-items:center;justify-content:center;gap:22px;margin-top:46px}
-.p-studio .cs-controls .dots{margin-top:0}
-.p-studio .cs-arrow{width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:transparent;
-  color:var(--ink-soft);font-family:"JetBrains Mono",monospace;font-size:15px;line-height:1;cursor:pointer;
-  display:grid;place-items:center;transition:border-color .35s,color .35s,background .35s;flex:none}
-.p-studio .cs-arrow:hover:not(:disabled){border-color:var(--accent);color:var(--accent)}
-.p-studio .cs-arrow:disabled{opacity:.3;cursor:default}
-
-.p-studio .tests-intro{max-width:56ch;margin:18px auto 0;text-align:center;color:var(--ink-soft);
-  font-size:15px;line-height:1.8}
-
-@media(max-width:920px){
-  .p-studio .svc-row{grid-template-columns:1fr;gap:34px}
-  .p-studio .svc-row .fig-box{order:-1;min-height:230px;height:auto;padding:34px}
-  .p-studio .fig-inner{max-width:400px}
-  .p-studio .svc-copy{padding-left:28px}
-}
-@media(max-width:560px){
-  .p-studio .svc-row .fig-box{padding:26px;min-height:190px}
-  .p-studio .fig-inner{max-width:300px}
-  .p-studio .cs-controls{gap:16px}
-  .p-studio .cs-card{padding:28px 24px 26px}
-  .p-studio .tests-intro{font-size:14.5px}
-}
-`;
 
 export default function StudioPage() {
   const [index, setIndex] = useState(0);
@@ -525,7 +479,8 @@ export default function StudioPage() {
 
   useEffect(() => {
       const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')}),{threshold:.1});
-      document.querySelectorAll('.rv').forEach(el=>io.observe(el));
+      document.querySelectorAll('.p-studio .rv').forEach(el=>io.observe(el));
+      return () => io.disconnect();
   }, []);
 
   // Responsive slider: 3 per view on desktop, 2 on tablet, 1 on mobile.
@@ -589,20 +544,44 @@ export default function StudioPage() {
 
   return (
     <div className="p-studio">
-        <style>{PAGE_CSS}</style>
 
         <div className="topbar">
           <div className="wrap">
-            <a href="/" className="brand">Sala<span>ro</span></a>
-            <nav className="nav"><a href="/practice">Practice</a><a href="/work">Work</a><a href="/studio" className="active">Studio</a><a href="/writing">Writing</a><a href="/contact">Contact</a></nav>
+            <a href="https://salaro.com/" className="brand">Sala<span>ro</span></a>
+            <nav className="nav"><a href="https://salaro.com/practice">Practice</a><a href="https://salaro.com/work">Work</a><a href="https://salaro.com/studio" className="active">Studio</a><a href="https://salaro.com/writing">Writing</a><a href="https://salaro.com/contact">Contact</a></nav>
             <a href="tel:+447485222490" className="top-cta">Start a project</a>
           </div>
         </div>
 
 
-        <header className="hero drifting-field">
+        <header className="hero drifting-field studio-left-banner">
           <div className="wrap">
+            <div className="studio-top-pills"><div><span className="studio-pill studio-live">Live studio</span></div><div><span className="studio-pill">UK-led digital engineering</span></div></div>
             <div className="hero-inner">
+              <div className="studio-architecture">
+                <div className="studio-cap lab"><span>Delivery profile</span><span>Live studio</span></div>
+                <div className="studio-blueprint">
+                  <svg viewBox="0 0 420 350" role="img" aria-label="Strategy, systems and delivery connected through a digital processing network">
+                    <defs><pattern id="studio-grid-new" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M20 0H0V20" fill="none" stroke="#b9ad9b" strokeWidth=".5" opacity=".35"/></pattern></defs>
+                    <rect x="8" y="8" width="404" height="334" rx="12" fill="url(#studio-grid-new)"/>
+                    {[{y:65,c:'#7a2f1c',t:'STRATEGY',w:'#f2e3d8'},{y:175,c:'#526b59',t:'SYSTEMS',w:'#e3ebe0'},{y:285,c:'#79613b',t:'DELIVERY',w:'#efe4cf'}].map((n,i)=><g key={n.t}>
+                      <path d={`M126 ${n.y} H154 Q170 ${n.y} 170 ${n.y+ (175-n.y)/2} V175 H190`} fill="none" stroke={n.c} opacity=".35" strokeWidth="1.5"/>
+                      <path className="studio-data-stream" style={{animationDelay:`${i*.7}s`}} d={`M126 ${n.y} H154 Q170 ${n.y} 170 ${n.y+(175-n.y)/2} V175 H190`} fill="none" stroke={n.c} strokeWidth="3" strokeDasharray="7 25"/>
+                      <rect x="22" y={n.y-29} width="104" height="58" rx="7" fill={n.w} stroke={n.c}/>
+                      <circle className="studio-status-light" style={{animationDelay:`${i*.7}s`}} cx="36" cy={n.y-14} r="3" fill={n.c}/>
+                      <text x="74" y={n.y+4} textAnchor="middle" fontSize="11" fontFamily="monospace" fill={n.c}>{n.t}</text>
+                      <path d={`M40 ${n.y+15}h68`} stroke={n.c} opacity=".25"/>
+                    </g>)}
+                    <rect x="190" y="130" width="88" height="90" rx="12" fill="#faf6ee" stroke="#7a2f1c"/>
+                    <rect className="studio-chip-pulse" x="201" y="141" width="66" height="68" rx="8" fill="#ead9ca" stroke="#7a2f1c"/>
+                    <text x="234" y="180" textAnchor="middle" fontSize="22" fontFamily="monospace" fill="#7a2f1c">AI</text>
+                    <path d="M278 175H300V105H320 M300 175V245H320" fill="none" stroke="#526b59" strokeWidth="1.5"/>
+                    <path className="studio-data-stream" d="M278 175H300V105H320 M300 175V245H320" fill="none" stroke="#526b59" strokeWidth="3" strokeDasharray="7 25"/>
+                    {[105,245].map((y,i)=><g key={y}><rect x="320" y={y-35} width="78" height="70" rx="7" fill="#fffaf2" stroke="#9c8f7c"/><path d={`M332 ${y-20}h54 M332 ${y-8}h38`} stroke="#b9ad9b" strokeWidth="2"/><path className="studio-output-line" style={{animationDelay:`${i}s`}} d={`M332 ${y+18}l12 -10 12 5 15 -17 15 5`} fill="none" stroke="#526b59" strokeWidth="2"/><text x="359" y={y+50} textAnchor="middle" fontSize="9" fontFamily="monospace" fill="#526b59">{i?'DELIVER':'REFINE'}</text></g>)}
+                  </svg>
+                </div>
+                <div className="studio-legend">{['Thoughtful delivery','Clear systems','Steady delivery'].map((label,i)=><span key={label}><b>0{i+1}</b>{label}</span>)}</div>
+              </div>
               <div className="hero-copy">
                 <div className="eyebrow lab a">Studio / Services &amp; approach</div>
                 <h1 className="serif">
@@ -610,26 +589,7 @@ export default function StudioPage() {
                   <span className="reveal-line"><span>clarity, and scale.</span></span>
                 </h1>
                 <p className="sub">Salaro brings UK-led strategy, thoughtful delivery and practical systems — increasingly AI-assisted — to ambitious teams that need more than a template.</p>
-              </div>
-              <div className="hero-viz">
-                <div className="viz-cap"><span className="lab a">Delivery profile</span><span className="lab">Live studio</span></div>
-                <div className="rings">
-                  <svg viewBox="0 0 200 200" aria-hidden="true">
-                    <g transform="rotate(-90 100 100)">
-                      <circle className="ring-t" cx="100" cy="100" r="80"/>
-                      <circle className="ring-v v1" cx="100" cy="100" r="80" style={{'--dash': '502.66', '--off': '40.2'}}/>
-                      <circle className="ring-t" cx="100" cy="100" r="62"/>
-                      <circle className="ring-v v2" cx="100" cy="100" r="62" style={{'--dash': '389.56', '--off': '46.7'}}/>
-                      <circle className="ring-t" cx="100" cy="100" r="44"/>
-                      <circle className="ring-v v3" cx="100" cy="100" r="44" style={{'--dash': '276.46', '--off': '55.3'}}/>
-                    </g>
-                  </svg>
-                  <div className="legend">
-                    <div><span className="dot d1"></span>Thoughtful delivery</div>
-                    <div><span className="dot d2"></span>Clear systems</div>
-                    <div><span className="dot d3"></span>Steady delivery</div>
-                  </div>
-                </div>
+                <a className="studio-primary" href="#studio-services">Explore our services <span>↘</span></a>
               </div>
             </div>
           </div>
@@ -638,7 +598,7 @@ export default function StudioPage() {
         <div className="signal-line"></div>
 
         {services.map((s, si) => (
-          <section className={si === 0 ? 'svc contour-drift' : 'svc'} key={s.num}>
+          <section id={si === 0 ? 'studio-services' : undefined} className={`svc studio-service studio-service-${si}`} key={s.num}>
             <div className="wrap"><div className="svc-row">
               <div className="rv svc-copy">
                 <div className="svc-node">
@@ -647,7 +607,7 @@ export default function StudioPage() {
                 </div>
                 <h3 className="serif">{s.title}</h3>
                 <p className="desc">{s.desc}</p>
-                <a href="#" className="arwlink">See details <span className="arw">→</span></a>
+                <a href="/contact" className="arwlink">Discuss this service <span className="arw">→</span></a>
                 <div className="incl">
                   <div className="lab">What's included</div>
                   <ul>
@@ -656,7 +616,9 @@ export default function StudioPage() {
                 </div>
               </div>
               <div className="rv fig-box">
+                <div className="service-visual-head"><span>{['CONTENT INTELLIGENCE','CONNECTED EXPERIENCES','PERFORMANCE SIGNALS','SYSTEM AUTOMATION','CLOUD ARCHITECTURE'][si]}</span><span>0{si + 1} / 05</span></div>
                 <div className="fig-inner"><s.Fig /></div>
+                <div className="service-visual-foot">{[['Ingest','Classify','Publish'],['Web','Shared core','Mobile'],['Measure','Review','Optimise'],['Trigger','Process','Deliver'],['Connect','Integrate','Deploy']][si].map((label, i) => <span key={label} style={{'--phase': `${i * 1.4}s`}}><i />{label}</span>)}</div>
               </div>
             </div></div>
           </section>
@@ -689,12 +651,12 @@ export default function StudioPage() {
               </p>
             </div>
 
-            <div className="carousel rv" style={{position:'relative', maxWidth:'1120px', margin:'0 auto'}}>
+            <div className="carousel rv" style={{position:'relative', width:'100%', margin:'0 auto'}}>
               <div className="cs-viewport" onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
                 <div className="track" style={{display:'flex', transform:`translateX(-${index * step}%)`}}>
-                  {CASES.map((c) => (
+                  {CASES.map((c, ci) => (
                     <div key={c.name} className="cs-slide" style={{flex:`0 0 ${step}%`, maxWidth:`${step}%`}}>
-                      <div className="cs-card">
+                      <div className={`cs-card studio-case-${ci}`}>
                         <div style={{display:'flex', alignItems:'center', gap:'14px', marginBottom:'20px'}}>
                           <span className="cs-mono">{c.mono}</span>
                           <span>
@@ -755,10 +717,10 @@ export default function StudioPage() {
               </div>
               <div className="fcol"><h5>Practice</h5><a href="/build">Build</a><a href="/migrate">Migrate</a><a href="/advise">Advise</a></div>
               <div className="fcol"><h5>Work</h5><a href="/work">Recent projects</a><a href="/archive">Archive</a></div>
-              <div className="fcol"><h5>Contact</h5><a href="mailto:team@salaro.com">team@salaro.com</a><a href="#">Guildford, Surrey</a><a href="https://uk.linkedin.com/in/salaro">LinkedIn</a></div>
+              <div className="fcol"><h5>Contact</h5><a href="mailto:team@salaro.com">team@salaro.com</a><a href="https://maps.google.com/?q=Guildford%2C%20Surrey">Guildford, Surrey</a><a href="https://uk.linkedin.com/in/salaro">LinkedIn</a></div>
             </div>
             <div className="foot-bot">
-              <span className="lab">© 2026 Salaro Ltd · Registered in England &amp; Wales · Guildford, Surrey</span>
+              <span className="lab">© 2026 Salaro · a trading name of S. Golestanian, sole trader · Guildford, Surrey</span>
               <span className="lab">Practising since 1995</span>
             </div>
           </div>

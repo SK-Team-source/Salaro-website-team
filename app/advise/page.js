@@ -21,11 +21,13 @@ export default function AdvisePage() {
     const setPane = (item, open) => {
       const a = item.querySelector('.qa-a');
       item.classList.toggle('open', open);
+      item.querySelector('.qa-q').setAttribute('aria-expanded', String(open));
       a.style.maxHeight = open ? a.scrollHeight + 'px' : '0px';
     };
     const clickHandlers = [];
     qaItems.forEach((item) => {
       const btn = item.querySelector('.qa-q');
+      btn.setAttribute('aria-expanded', String(item.classList.contains('open')));
       const onClick = () => {
         const isOpen = item.classList.contains('open');
         qaItems.forEach((i) => { if (i !== item) setPane(i, false); });
@@ -78,21 +80,41 @@ export default function AdvisePage() {
     <div className="pg-advise" ref={rootRef}>
       <div className="topbar">
         <div className="wrap">
-          <a href="/" className="brand">Sala<span>ro</span></a>
-          <nav className="nav"><a href="/practice" className="active">Practice</a><a href="/work">Work</a><a href="/migrate">Migrate</a><a href="/studio">Studio</a><a href="/contact">Contact</a></nav>
+          <a href="https://salaro.com/" className="brand">Sala<span>ro</span></a>
+          <nav className="nav"><a href="https://salaro.com/practice" className="active">Practice</a><a href="https://salaro.com/work">Work</a><a href="https://salaro.com/migrate">Migrate</a><a href="https://salaro.com/studio">Studio</a><a href="https://salaro.com/contact">Contact</a></nav>
           <a href="tel:+447485222490" className="top-cta">Book a call</a>
         </div>
       </div>
 
       {/* PAGE MASTHEAD */}
-      <header className="masthead">
+      <header className="masthead advise-editorial">
         <div className="wrap"><div className="grid">
-          <div className="rv">
-            <div className="eyebrow lab a kicker">Practice · Advise</div>
-            <h1>Clear thinking <span className="it">before</span> you build.</h1>
-            <p className="lead">Not every problem needs a new platform. Sometimes it needs an honest second opinion. We bring thirty years of practice to the decisions that come before the code — what to build, what to fix, what to leave well alone — so you commit with confidence, not on a hunch.</p>
+          <div className="advise-visual rv">
+            <div className="advise-pill">Independent perspective</div>
+            <div className="advise-panel">
+              <div className="advise-label lab">Decision compass <span>01 / 03</span></div>
+              <svg viewBox="0 0 360 270" aria-hidden="true" className="advise-compass">
+                <g fill="none" stroke="#b9aa96" strokeWidth="1">
+                  <circle cx="180" cy="135" r="91"/><circle cx="180" cy="135" r="68" strokeDasharray="2 5"/><circle cx="180" cy="135" r="42"/>
+                  <path d="M180 24V246M69 135H291M116 71L244 199M116 199L244 71" opacity=".45"/>
+                  <path d="M180 44L259 181H101Z" stroke="#526b59" strokeDasharray="4 5"/>
+                </g>
+                <g className="advise-orbit"><circle cx="180" cy="44" r="5" fill="#7a2f1c"/><circle cx="180" cy="226" r="3" fill="#526b59"/></g>
+                <g className="advise-needle"><path d="M180 72L193 135L180 198L167 135Z" fill="#7a2f1c"/><path d="M180 135L180 198L167 135Z" fill="#bda98b"/></g>
+                <circle cx="180" cy="135" r="9" fill="#f5f0e6" stroke="#7a2f1c"/>
+                <g fontFamily="JetBrains Mono, monospace" fontSize="10" fill="#526b59" textAnchor="middle"><text x="180" y="15">ASSESS</text><text x="61" y="202">OPTIONS</text><text x="300" y="202">DECIDE</text></g>
+              </svg>
+              <div className="advise-caption"><span className="serif">Clarity first.</span><span className="lab">Practising since 1995</span></div>
+            </div>
           </div>
-          <div className="aside rv">
+          <div className="advise-copy rv">
+            <div className="advise-pill">UK-led advisory</div>
+            <div className="advise-copy-inner">
+              <div className="eyebrow lab a kicker">Practice · Advise</div>
+            <h1>Clear thinking <span className="it">before</span> you build.</h1>
+            <p className="lead">Not every problem needs a new platform. Sometimes it needs an honest second opinion. Practising since 1995, we help you decide what to build, what to fix, and what to leave well alone — so you commit with confidence, not on a hunch.</p>
+
+              <div className="aside">
             <div className="row"><span className="k">Service</span><span className="v">Advisory</span></div>
             <div className="row"><span className="k">Format</span><span className="v">Sprint · Fractional · Retained</span></div>
             <div className="row"><span className="k">Output</span><span className="v">Decisions you can act on</span></div>
@@ -100,6 +122,9 @@ export default function AdvisePage() {
             <div className="cta">
               <a href="tel:+447485222490" className="btn-line">Book a call <span className="arw">→</span></a>
             
+            </div>
+          </div>
+
             </div>
           </div>
         </div></div>
@@ -126,17 +151,17 @@ export default function AdvisePage() {
           </div>
           <div className="sig-grid rv">
             <div className="sig">
-              <div className="n serif">01</div>
+              <div className="signal-top"><div className="n serif">01</div><svg className="signal-art" viewBox="0 0 100 60" aria-hidden="true"><path d="M12 44H86M20 44V28H34V44M42 44V18H56V44M64 44V8H78V44"/><path className="signal-motion" d="M18 24L48 12L76 4"/></svg></div>
               <h4 className="serif">Before a big spend</h4>
               <p>You're about to commit budget to a rebuild, a replatform or a new vendor — and you want the decision pressure-tested by someone with no stake in the answer.</p>
             </div>
             <div className="sig">
-              <div className="n serif">02</div>
+              <div className="signal-top"><div className="n serif">02</div><svg className="signal-art" viewBox="0 0 100 60" aria-hidden="true"><path d="M12 28H35L45 12L57 44L67 28H88"/><circle className="signal-pulse" cx="45" cy="12" r="5"/></svg></div>
               <h4 className="serif">When something's stuck</h4>
               <p>Delivery has slowed, quality is slipping, or nobody can quite say why the platform feels fragile. You need a clear diagnosis, not more opinions.</p>
             </div>
             <div className="sig">
-              <div className="n serif">03</div>
+              <div className="signal-top"><div className="n serif">03</div><svg className="signal-art" viewBox="0 0 100 60" aria-hidden="true"><rect x="15" y="8" width="46" height="40" rx="3"/><path d="M24 19H50M24 27H44M24 35H39"/><circle cx="65" cy="34" r="13"/><path className="signal-motion" d="M74 44L87 55"/></svg></div>
               <h4 className="serif">When you're diligencing</h4>
               <p>You're buying, investing in, or inheriting a codebase, and you need an independent read on what you're actually taking on.</p>
             </div>
@@ -253,10 +278,10 @@ export default function AdvisePage() {
             </div>
             <div className="fcol"><h5>Practice</h5><a href="/build">Build</a><a href="/migrate">Migrate</a><a href="/advise">Advise</a></div>
             <div className="fcol"><h5>Work</h5><a href="/work">Recent projects</a><a href="/archive">Archive</a></div>
-            <div className="fcol"><h5>Contact</h5><a href="mailto:team@salaro.com">team@salaro.com</a><a href="#">Guildford, Surrey</a><a href="https://uk.linkedin.com/in/salaro">LinkedIn</a></div>
+            <div className="fcol"><h5>Contact</h5><a href="mailto:team@salaro.com">team@salaro.com</a><a href="https://maps.google.com/?q=Guildford%2C%20Surrey">Guildford, Surrey</a><a href="https://uk.linkedin.com/in/salaro">LinkedIn</a></div>
           </div>
           <div className="foot-bot">
-            <span className="lab">© 2026 Salaro Ltd · Registered in England &amp; Wales</span>
+            <span className="lab">© 2026 Salaro · a trading name of S. Golestanian, sole trader</span>
             <span className="lab">Practising since 1995</span>
           </div>
         </div>

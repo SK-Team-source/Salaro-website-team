@@ -53,36 +53,57 @@ export default function ContactPage() {
   }, []);
 
   return (
-    <div className="p-contact">
+    <div className="p-contact contact-editorial">
         <div className="topbar">
           <div className="wrap">
-            <a href="/" className="brand">Sala<span>ro</span></a>
+            <a href="https://salaro.com/" className="brand">Sala<span>ro</span></a>
             <nav className="nav">
-              <a href="/practice">Practice</a><a href="/work">Work</a><a href="/studio">Studio</a><a href="/writing">Writing</a><a href="/contact">Contact</a>
+              <a href="https://salaro.com/practice">Practice</a><a href="https://salaro.com/work">Work</a><a href="https://salaro.com/studio">Studio</a><a href="https://salaro.com/writing">Writing</a><a href="https://salaro.com/contact">Contact</a>
             </nav>
             <div className="status"><span className="dot"></span><span className="tag">Replies within one morning</span></div>
           </div>
         </div>
 
 
-        <header className="hero drifting-field">
+        <header className="hero contact-hero">
           <div className="wrap">
+            <div className="contact-pills"><span>● Open for projects</span><span>UK-led digital consultancy</span></div>
             <div className="hero-inner">
               <div className="hero-copy">
+                <div className="contact-hero-upper">
                 <div className="eyebrow tag">Contact — start a conversation</div>
                 <h1 className="serif">
                   <span className="reveal-line"><span>Let's <span className="it">start</span> a</span></span>
                   <span className="reveal-line"><span>conversation.</span></span>
                 </h1>
                 <p>We work with founders, product teams and marketing leads who need a calm partner for their next digital build.</p>
+                <div className="contact-actions"><a className="btn primary" href="#contact-form">Send a note →</a><a className="btn ghost" href="tel:+447485222490">07485 222490</a></div>
+                </div>
+                <div className="contact-hero-details">
+                  <div><span className="tag">01 / Connect</span><a href="mailto:team@salaro.com">team@salaro.com</a></div>
+                  <div><span className="tag">02 / Discuss</span><span>30-minute video call</span></div>
+                  <div><span className="tag">03 / Collaborate</span><span>UK-based · Remote</span></div>
+                </div>
               </div>
               <div className="hero-viz">
+                <div className="contact-viz-upper">
                 <div className="viz-cap"><span className="tag">Response window</span><span className="dotlive"><i></i>Open for projects</span></div>
-                <div className="viz-fig"><span className="serif">Direct</span><span className="tag">response</span></div>
+                <svg className="contact-signal contact-dialogue" viewBox="0 0 360 230" aria-hidden="true">
+                  <defs><linearGradient id="contactPaper" x2="1" y2="1"><stop stopColor="#fffdf8"/><stop offset="1" stopColor="#e8ede3"/></linearGradient></defs>
+                  <path className="dialogue-route" d="M46 55H180V115H314V177H180"/>
+                  <path className="dialogue-route secondary" d="M46 55V177H180"/>
+                  <g className="dialogue-stage stage-one"><rect x="16" y="32" width="110" height="48" rx="5" fill="#e4ebe0" stroke="#526b59"/><path d="M28 44H48V59H28Z M28 44L38 52L48 44" fill="none" stroke="#526b59"/><path d="M57 46H113M57 54H99M57 62H107" stroke="#526b59" strokeWidth="1.5"/><text x="16" y="94">01 / YOUR NOTE</text></g>
+                  <g className="dialogue-stage stage-two"><rect x="133" y="91" width="94" height="48" rx="5" fill="url(#contactPaper)" stroke="#7a2f1c"/><circle cx="150" cy="107" r="5" fill="#7a2f1c"/><path d="M163 107H214M146 118H214M146 126H195" stroke="#7a2f1c" strokeWidth="1.5"/><text x="133" y="153">02 / REVIEW</text></g>
+                  <g className="dialogue-stage stage-three"><rect x="234" y="153" width="110" height="48" rx="5" fill="#e1e9ec" stroke="#405d70"/><path d="M247 168H329M247 177H305M247 186H315" stroke="#405d70" strokeWidth="1.5"/><text x="234" y="215">03 / RESPONSE</text></g>
+                  <g className="dialogue-confirm"><circle cx="314" cy="55" r="24" fill="#f1e6d2" stroke="#79613b"/><circle className="dialogue-ring" cx="314" cy="55" r="29" fill="none" stroke="#79613b"/><path d="M304 55L311 62L324 47" fill="none" stroke="#79613b" strokeWidth="2"/></g>
+                  <path className="dialogue-route secondary" d="M314 79V153"/>
+                  <circle className="dialogue-packet" r="3.5" fill="#7a2f1c"/><circle className="dialogue-packet packet-two" r="3" fill="#526b59"/>
+                </svg><div className="viz-fig"><span className="serif">Direct</span><span className="tag">response</span></div>
                 <div className="respbar"><span className="resp-fill"></span></div>
                 <div className="resp-axis"><span>Now</span><span>Within a day</span><span>Clear next step</span></div>
+                </div>
                 <div className="viz-stats">
-                  <div><b className="serif">30+</b><span className="tag">years of practice</span></div>
+                  <div><b className="serif">1995</b><span className="tag">building for the web since</span></div>
                 </div>
               </div>
             </div>
@@ -101,7 +122,7 @@ export default function ContactPage() {
 
 
         <div className="signal-line"></div>
-        <section className="main contour-drift">
+        <section className="main" id="contact-form">
           <div className="wrap"><div className="split">
 
     
@@ -118,10 +139,10 @@ export default function ContactPage() {
                 </div>
               ) : (
                 <form onSubmit={handleSubmit}>
-                  <div className="field"><label className="tag">Name</label><input required type="text" placeholder="Your name" value={form.name} onChange={e=>setForm(f=>({...f,name:e.target.value}))} /></div>
-                  <div className="field"><label className="tag">Email</label><input required type="email" placeholder="you@example.com" value={form.email} onChange={e=>setForm(f=>({...f,email:e.target.value}))} /></div>
-                  <div className="field"><label className="tag">Company</label><input type="text" placeholder="Optional" value={form.company} onChange={e=>setForm(f=>({...f,company:e.target.value}))} /></div>
-                  <div className="field"><label className="tag">What are you trying to build?</label><textarea required rows="3" placeholder="A short note is enough" value={form.message} onChange={e=>setForm(f=>({...f,message:e.target.value}))}></textarea></div>
+                  <div className="field"><label className="tag" htmlFor="contact-name">Name</label><input required type="text" placeholder="Your name" id="contact-name" value={form.name} onChange={e=>setForm(f=>({...f,name:e.target.value}))} /></div>
+                  <div className="field"><label className="tag" htmlFor="contact-email">Email</label><input required type="email" placeholder="you@example.com" id="contact-email" value={form.email} onChange={e=>setForm(f=>({...f,email:e.target.value}))} /></div>
+                  <div className="field"><label className="tag" htmlFor="contact-company">Company</label><input type="text" placeholder="Optional" id="contact-company" value={form.company} onChange={e=>setForm(f=>({...f,company:e.target.value}))} /></div>
+                  <div className="field"><label className="tag" htmlFor="contact-message">What are you trying to build?</label><textarea required rows="3" placeholder="A short note is enough" id="contact-message" value={form.message} onChange={e=>setForm(f=>({...f,message:e.target.value}))}></textarea></div>
                   {status === 'error' && <p style={{color:'var(--accent)',marginBottom:'12px'}}>Something went wrong — please email us directly at team@salaro.com</p>}
                   <div className="submit-row">
                     <button className="send" type="submit" disabled={status==='sending'}>{status==='sending' ? 'Sending…' : 'Send'} {status!=='sending' && <span className="arw">→</span>}</button>
@@ -171,9 +192,9 @@ export default function ContactPage() {
           <div className="wrap"><div className="split">
             <div className="rv"><h2>Questions teams <span className="it">ask</span> before they begin.</h2></div>
             <div className="rv">
-              <div className="qa open"><div className="q">Do you work with startups or established companies?<span className="sign">+</span></div><div className="a"><p>We work with both. The process shifts depending on where you are in the journey, but the standard is always the same: clear decisions and practical delivery.</p></div></div>
-              <div className="qa"><div className="q">What kind of work do you take on?<span className="sign">+</span></div><div className="a"><p>Web platforms, product interfaces, marketing sites and the design systems behind them. If it lives in a browser and needs to feel considered, it's in scope.</p></div></div>
-              <div className="qa"><div className="q">Do you need a full brief before we talk?<span className="sign">+</span></div><div className="a"><p>No. A few sentences about what you're trying to build is enough to start. We'll shape the brief together on the first call.</p></div></div>
+              <div className="qa open"><button type="button" className="q">Do you work with startups or established companies?<span className="sign">+</span></button><div className="a"><p>We work with both. The process shifts depending on where you are in the journey, but the standard is always the same: clear decisions and practical delivery.</p></div></div>
+              <div className="qa"><button type="button" className="q">What kind of work do you take on?<span className="sign">+</span></button><div className="a"><p>Web platforms, product interfaces, marketing sites and the design systems behind them. If it lives in a browser and needs to feel considered, it's in scope.</p></div></div>
+              <div className="qa"><button type="button" className="q">Do you need a full brief before we talk?<span className="sign">+</span></button><div className="a"><p>No. A few sentences about what you're trying to build is enough to start. We'll shape the brief together on the first call.</p></div></div>
             </div>
           </div></div>
         </section>
@@ -194,7 +215,7 @@ export default function ContactPage() {
               <h2 className="serif">Take your <em>business</em> online — the right way.</h2>
             </div>
             <div className="btns">
-              <a href="tel:+447485222490" className="btn primary">Start a conversation</a>
+              <a href="#contact-form" className="btn primary">Start a conversation</a>
               <a href="tel:+447485222490" className="btn ghost">Call us</a>
             </div>
           </div>
@@ -208,12 +229,12 @@ export default function ContactPage() {
                 <div className="brand">Sala<span style={{color: 'var(--accent)'}}>ro</span></div>
                 <p>A UK-led digital consultancy. Practising since 1995.</p>
               </div>
-              <div className="fcol"><h5>Pages</h5><a href="#">Home</a><a href="/practice">Practice</a><a href="/work">Work</a><a href="/studio">Studio</a><a href="/writing">Writing</a></div>
+              <div className="fcol"><h5>Pages</h5><a href="https://salaro.com/">Home</a><a href="/practice">Practice</a><a href="/work">Work</a><a href="/studio">Studio</a><a href="/writing">Writing</a></div>
               <div className="fcol"><h5>Recent work</h5><a href="/work">Recent projects</a><a href="/archive">Archive</a><a href="/studio">Studio services</a></div>
               <div className="fcol"><h5>Connect</h5><a href="mailto:team@salaro.com">team@salaro.com</a><a href="https://uk.linkedin.com/in/salaro">LinkedIn</a><a href="https://twitter.com/salaro">Twitter / X</a><a href="https://www.instagram.com/salaro">Instagram</a></div>
             </div>
             <div className="foot-bot">
-              <span className="tag">© 2026 Salaro Ltd · Registered in England &amp; Wales</span>
+              <span className="tag">© 2026 Salaro · a trading name of S. Golestanian, sole trader</span>
               <span className="tag">Practising since 1995</span>
             </div>
           </div>

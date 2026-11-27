@@ -143,23 +143,25 @@ function FigShopify() {
 export default function WritingPage() {
   useEffect(() => {
       const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')}),{threshold:.1});
-        document.querySelectorAll('.rv').forEach(el=>io.observe(el));
+        document.querySelectorAll('.p-writing .rv').forEach(el=>io.observe(el));
+        return () => io.disconnect();
   }, []);
 
   return (
     <div className="p-writing">
         <div className="topbar">
           <div className="wrap">
-            <a href="/" className="brand">Sala<span>ro</span></a>
-            <nav className="nav"><a href="/practice">Practice</a><a href="/work">Work</a><a href="/studio">Studio</a><a href="/writing" className="active">Writing</a><a href="/contact">Contact</a></nav>
+            <a href="https://salaro.com/" className="brand">Sala<span>ro</span></a>
+            <nav className="nav"><a href="https://salaro.com/practice">Practice</a><a href="https://salaro.com/work">Work</a><a href="https://salaro.com/studio">Studio</a><a href="https://salaro.com/writing" className="active">Writing</a><a href="https://salaro.com/contact">Contact</a></nav>
             <a href="tel:+447485222490" className="top-cta">Start a project</a>
           </div>
         </div>
 
 
-        <header className="hero drifting-field">
-          <div className="wrap"><div className="grid">
-            <div>
+        <header className="hero writing-editorial-hero">
+          <div className="wrap"><div className="writing-pills"><span>● Editorial practice</span><span>UK-led · Since 1995</span></div><div className="grid">
+            <div className="writing-visual"><div className="writing-visual-label lab a">Editorial process <span>01 / 03</span></div><div className="writing-art" aria-hidden="true"><svg viewBox="0 0 360 300"><g className="writing-sheet"><rect x="54" y="24" width="218" height="248" rx="4" fill="#fffaf2" stroke="#b9aa96"/><rect x="72" y="42" width="218" height="248" rx="4" fill="#fffdf8" stroke="#b9aa96"/><text x="94" y="82" fontSize="12" fill="#7a2f1c" fontFamily="monospace">FIELD NOTES / 01</text><path d="M94 104H260 M94 118H225" stroke="#7a2f1c" strokeWidth="3"/>{[148,164,180,212,228,244].map((y,i)=><path key={y} className="writing-ink" style={{animationDelay:`${i*.35}s`}} d={`M94 ${y}H${i%2?230:260}`} stroke="#9c8f7c" strokeWidth="2"/>)}<rect className="writing-highlight" x="90" y="171" width="174" height="15" fill="#dbe5d7" opacity=".65"/><path className="writing-cursor" d="M275 166v22" stroke="#7a2f1c" strokeWidth="3"/></g></svg></div><div className="writing-stages lab"><span>Observe</span><span>Refine</span><span>Publish</span></div></div>
+            <div className="writing-copy">
               <div className="eyebrow">
                 <span className="ic"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="12" rx="1"/><line x1="4" y1="20" x2="12" y2="20"/></svg></span>
                 <span className="lab a">Essays &amp; field notes</span>
@@ -172,10 +174,15 @@ export default function WritingPage() {
                 <p>The work is often technical, but the point is usually simple: help a team make a better decision, explain a system more clearly, or preserve a hard-won lesson before it disappears into the next sprint.</p>
                 <p>We write about practical delivery, legacy migration, editorial systems, and the peculiar problems that appear when a business has outgrown its first stack but still needs to move carefully.</p>
               </div>
-              <div className="actions"><a href="tel:+447485222490" className="btn-dark">Read the notes <span className="arw">→</span></a></div>
+              <div className="actions"><a href="#selected-notes" className="btn-dark">Read the notes <span className="arw">→</span></a></div>
             </div>
 
-            <aside className="note-card rv">
+
+          </div></div>
+        </header>
+
+        <div className="signal-line"></div>
+        <section className="writing-note-band"><div className="wrap">            <aside className="note-card rv">
               <div className="kicker lab a">Studio note</div>
               <h3 className="serif">Good writing is <span className="it">operational</span>.</h3>
               <p>It makes hidden decisions visible, preserves context, and gives a team language for what they're shipping and why.</p>
@@ -199,11 +206,7 @@ export default function WritingPage() {
                 <li>Useful long after the launch</li>
               </ul>
               <a href="tel:+447485222490" className="btn-dark">Start a conversation</a>
-            </aside>
-          </div></div>
-        </header>
-
-        <div className="signal-line"></div>
+            </aside></div></section>
 
         <section className="legible band contour-drift">
           <div className="wrap"><div className="split-head">
@@ -227,7 +230,7 @@ export default function WritingPage() {
         </section>
 
 
-        <section className="worknotes band">
+        <section className="worknotes band" id="selected-notes">
           <div className="wrap">
             <div className="wn-head rv">
               <div>
@@ -401,7 +404,7 @@ export default function WritingPage() {
               <div className="fcol"><h5>Contact</h5><a href="mailto:team@salaro.com">team@salaro.com</a><span>Guildford, Surrey</span><a href="https://uk.linkedin.com/in/salaro">LinkedIn</a></div>
             </div>
             <div className="foot-bot">
-              <span className="lab">© 2026 Salaro Ltd · Registered in England &amp; Wales · Guildford, Surrey</span>
+              <span className="lab">© 2026 Salaro · a trading name of S. Golestanian, sole trader · Guildford, Surrey</span>
               <span className="lab">Practising since 1995</span>
             </div>
           </div>

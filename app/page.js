@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import CapabilityDemo from './components/CapabilityDemo';
+import CaseStudies from './components/CaseStudies';
 import PhpNoticeBar from './components/PhpNoticeBar';
 
 export default function HomePage() {
@@ -60,9 +61,9 @@ export default function HomePage() {
         <PhpNoticeBar />
         <div className="topbar">
           <div className="wrap">
-            <a href="/" className="brand">Sala<span>ro</span></a>
-            <nav id="home-navigation" className="nav"><a href="/practice">Practice</a><a href="/work">Work</a><a href="/studio">Studio</a><a href="/writing">Writing</a><a href="/contact">Contact</a></nav>
-            <a href="/contact" className="top-cta">Start a project</a>
+            <a href="https://salaro.com/" className="brand">Sala<span>ro</span></a>
+            <nav id="home-navigation" className="nav"><a href="https://salaro.com/practice">Practice</a><a href="https://salaro.com/work">Work</a><a href="https://salaro.com/studio">Studio</a><a href="https://salaro.com/writing">Writing</a><a href="https://salaro.com/contact">Contact</a></nav>
+            <a href="https://salaro.com/contact" className="top-cta">Start a project</a>
           </div>
         </div>
 
@@ -106,16 +107,16 @@ export default function HomePage() {
 
             <div className="hero-right">
               <div className="hero-kicker"><span></span> BUILD · MIGRATE · ADVISE</div>
-              <h1 className="serif"><span className="hero-reveal-part">Custom digital solutions for</span>{" "}<em className="it hero-reveal-part">businesses</em>{" "}<span className="hero-reveal-part">ready to scale.</span></h1>
-              <p className="sub">We work with growing businesses to shape bespoke digital products, practical transformation, and long-term support with calm delivery.</p>
+              <h1 className="serif"><span className="hero-reveal-part">Websites, stores and AI tools —</span>{" "}<em className="it hero-reveal-part">built by people</em>{" "}<span className="hero-reveal-part">who've been doing this since 1995.</span></h1>
+              <p className="sub">Salaro is a small UK-led studio with a delivery team in India. We build fast websites, online stores and AI automation for growing businesses. We also move ageing PHP sites onto modern, secure hosting. You deal directly with the founder from first call to launch.</p>
               <div className="actions">
-                <a href="/contact" className="btn-line">Take your business online <span className="arw" aria-hidden="true"><svg className="arw-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></span></a>
+                <a href="/contact" className="btn-line">Start a project <span className="arw" aria-hidden="true"><svg className="arw-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg></span></a>
+                <a href="#move-from-php" className="hero-secondary">Move my PHP site <span aria-hidden="true">↓</span></a>
                 <a href="tel:+447485222490" className="direct-call">
                   <span className="direct-call-icon" aria-hidden="true"><svg width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.96.35 1.9.69 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.26a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.69A2 2 0 0 1 22 16.92z"/><path d="M15 2a7 7 0 0 1 7 7M15 6a3 3 0 0 1 3 3"/></svg></span>
-                  <span className="direct-call-content"><span>Call us directly</span><strong>07485 222490</strong></span><span className="direct-call-arrow" aria-hidden="true">↗</span>
+                  <span className="direct-call-content"><span>Prefer to talk?</span><strong>07485 222490</strong></span><span className="direct-call-arrow" aria-hidden="true">↗</span>
                 </a>
               </div>
-              <div className="built">Built on code, not templates.</div>
 
             </div>
 
@@ -129,7 +130,7 @@ export default function HomePage() {
           <div className="wrap">
             <div className="head-row rv">
               <h2 className="serif">How We Build <span className="it">Better Technology</span>.</h2>
-              <p className="desc">Every project follows a proven delivery pipeline—strategy, research, development, and review. Each stage builds on the last, with expert human oversight throughout, ensuring every solution is thoughtful, reliable, and ready to perform.</p>
+              <p className="desc">Every project moves through clear stages, with expert human oversight throughout. Each decision builds on the last so the finished work is reliable and ready to perform.</p>
             </div>
             <div className="pipe-markers">
               <span className="lab a">Human judgment · lead</span>
@@ -149,7 +150,6 @@ export default function HomePage() {
             </div>
             <div className="pipe-foot">
               <span className="lab">Every stage · human reviewed</span>
-              <span className="lab a">i → v · practising since 1995</span>
             </div>
           </div>
         </section>
@@ -166,7 +166,7 @@ export default function HomePage() {
       className="serif rv"
       
     >
-      Digital solutions <span className="it">built to scale</span>.
+      Digital solutions <span className="it">built for the job</span>.
     </h2>
 
     <div className="svc-grid rv">
@@ -180,7 +180,7 @@ export default function HomePage() {
           High-performance websites and custom web applications designed for
           speed, accessibility, and long-term growth.
         </p>
-        <a href="/studio" className="arwlink">
+        <a href="/build#web" className="arwlink">
           Learn More <span className="arw">→</span>
         </a>
       </div>
@@ -194,7 +194,7 @@ export default function HomePage() {
           Custom online stores that simplify purchasing, improve conversions,
           and grow alongside your business.
         </p>
-        <a href="/studio" className="arwlink">
+        <a href="/build#commerce" className="arwlink">
           Learn More <span className="arw">→</span>
         </a>
       </div>
@@ -208,7 +208,7 @@ export default function HomePage() {
           Native and cross-platform mobile applications built with exceptional
           performance, usability, and scalability.
         </p>
-        <a href="/studio" className="arwlink">
+        <a href="/build#apps" className="arwlink">
           Learn More <span className="arw">→</span>
         </a>
       </div>
@@ -222,7 +222,7 @@ export default function HomePage() {
           AI-powered automation, intelligent workflows, chatbots, and data
           solutions that deliver measurable business value.
         </p>
-        <a href="/studio" className="arwlink">
+        <a href="/build#ai" className="arwlink">
           Learn More <span className="arw">→</span>
         </a>
       </div>
@@ -237,12 +237,12 @@ export default function HomePage() {
 
       <div className="mk">
         <div className="k lab a">Solutions</div>
-        <div className="v">Custom Built</div>
+        <div className="v">The right platform for the job — custom code where it counts.</div>
       </div>
 
       <div className="mk">
         <div className="k lab a">Technology</div>
-        <div className="v">Modern & Scalable</div>
+        <div className="v">Modern &amp; adaptable</div>
       </div>
 
       <div className="mk">
@@ -254,13 +254,41 @@ export default function HomePage() {
   </div>
 </section>
 
+        <section className="php-migration band" id="move-from-php">
+          <div className="wrap">
+            <div className="php-migration-head">
+              <div className="php-migration-copy">
+                <div className="eyebrow lab a">Migrate</div>
+                <h2 className="serif">Still running an old PHP site? <span className="it">Let’s move it somewhere safe.</span></h2>
+                <p>Many business sites still run on PHP code that nobody has touched in years. Often a third party manages it, or nobody does at all. Every new PHP vulnerability is another risk. We rebuild these sites on a modern stack hosted on Vercel: faster, more secure and cheaper to run. Your content, design and search rankings come with you.</p>
+                <a href="/contact" className="btn-line">Get a free PHP site audit <span className="arw">→</span></a>
+              </div>
+              <div className="php-stack" aria-label="Move from a legacy PHP site to a modern Vercel-hosted site">
+                <div className="php-stack-card php-stack-old"><span className="lab">Before</span><strong>Legacy PHP site</strong><small>Ageing code · uncertain hosting</small><i aria-hidden="true">&lt;?php</i></div>
+                <span className="php-stack-arrow" aria-hidden="true">→</span>
+                <div className="php-stack-card php-stack-new"><span className="lab">After</span><strong>Modern web stack</strong><small>Rebuilt · hosted on Vercel</small><i aria-hidden="true">↗</i></div>
+              </div>
+            </div>
+            <div className="php-includes">
+              <div className="eyebrow lab a">What’s included</div>
+              <ol>
+                <li><span>01</span><div><h3>Free audit</h3><p>We review your current site, hosting and risks, then send a short written report.</p></div></li>
+                <li><span>02</span><div><h3>Fixed quote</h3><p>One price for the move, agreed up front.</p></div></li>
+                <li><span>03</span><div><h3>Rebuild</h3><p>We rebuild your site on a modern framework, keeping your look, pages and URLs.</p></div></li>
+                <li><span>04</span><div><h3>Switch-over</h3><p>Redirects, SEO checks and a launch with no downtime.</p></div></li>
+                <li><span>05</span><div><h3>Aftercare</h3><p>Optional monthly support, with updates handled for you.</p></div></li>
+              </ol>
+            </div>
+          </div>
+        </section>
+
         <section className="feature band feature-ecosystem">
           <AgencyAtmosphere kind="devices" />
           <div className="wrap"><div className="grid">
             <div className="rv">
               <div className="eyebrow lab a">Cross-Platform Development</div>
               <h2 className="serif">Built for every<span className="it"> device</span>.</h2>
-              <p>We design and develop high-performance applications that deliver a seamless experience across web, iOS, Android, tablets, and desktop—engineered to scale with your business.</p>
+              <p>We design and develop high-performance applications that deliver a seamless experience across web, iOS, Android, tablets, and desktop—built to grow with your business.</p>
               <div className="marker lab device-signature"><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true"><path d="m12 3 9 5-9 5-9-5 9-5Z M3 12l9 5 9-5 M3 16l9 5 9-5"/></svg>Bespoke digital products</span><span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></svg>Practical delivery</span></div>
             </div>
             <div className="device rv">
@@ -270,7 +298,7 @@ export default function HomePage() {
                 onFocusCapture={e => { if (e.target.matches(':focus-visible')) setDeviceKeyboard(true); }}
                 onBlurCapture={e => { if (!e.currentTarget.contains(e.relatedTarget)) setDeviceKeyboard(false); }}>
 <div className="responsive-lab">
-  <div className="lab-toolbar"><span><i /> RESPONSIVE WORKSPACE</span><span>{['Desktop','Laptop','Tablet','Mobile'][deviceFocus]} · {['1440','1024','768','390'][deviceFocus]} px</span></div>
+  <div className="lab-toolbar"><span><i /> DEVICE PREVIEW</span><span>{['Desktop','Laptop','Tablet','Mobile'][deviceFocus]} · {['1440','1024','768','390'][deviceFocus]} px</span></div>
   <div className="lab-stage">
     <div className="lab-orbit" aria-hidden="true" />
     <div className={`lab-device lab-device-${deviceFocus}`}>
@@ -316,7 +344,7 @@ export default function HomePage() {
               </div>
               <div className="feat">
                 <span className="fic" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="2" /><path d="M3 10.5 h18" /><path d="M6.5 15.5 h4" /></svg></span>
-                <div><h4 className="serif">Secure payments</h4><p>Stripe, PayPal, and Razorpay integrated and properly tested.</p></div>
+                <div><h4 className="serif">Secure payments</h4><p>Stripe, PayPal, and Razorpay integrations selected for your store.</p></div>
               </div>
               <div className="feat">
                 <span className="fic" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="2.5" y="5" width="13" height="14" rx="2" /><rect x="17.5" y="8" width="4" height="11" rx="1.5" /><path d="M6 16 h6" /></svg></span>
@@ -324,7 +352,7 @@ export default function HomePage() {
               </div>
               <div className="feat">
                 <span className="fic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3 21 7.5 V16.5 L12 21 3 16.5 V7.5 Z" /><path d="M3 7.5 12 12 21 7.5 M12 12 V21" /></svg></span>
-                <div><h4 className="serif">Inventory &amp; orders</h4><p>Stock, fulfilment, and returns managed from one calm place.</p></div>
+                <div><h4 className="serif">Inventory &amp; orders</h4><p>Stock, fulfilment, and returns managed from one clear place.</p></div>
               </div>
               <div className="feat">
                 <span className="fic" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5" /><path d="M15.5 15.5 21 21" /><path d="M8 10.5 h5" /></svg></span>
@@ -332,7 +360,7 @@ export default function HomePage() {
               </div>
               <div className="feat">
                 <span className="fic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 18 V13 M10 18 V9 M16 18 V11 M22 18 V5" /><path d="M2 21 h20" /></svg></span>
-                <div><h4 className="serif">Built to scale</h4><p>Foundations that cope as catalogue, traffic, and team grow.</p></div>
+                <div><h4 className="serif">Ready to grow</h4><p>A steady foundation for a larger catalogue, more traffic, and a growing team.</p></div>
               </div>
             </div>
 
@@ -356,7 +384,6 @@ export default function HomePage() {
 
 
         <section className="clients band selected-work-v26">
-          <AgencyAtmosphere kind="work" />
           <div className="wrap rv">
             <div className="eyebrow lab a">Selected work</div>
             <h2 className="serif">A few examples of the <span className="it">work</span> we’ve helped shape.</h2>
@@ -393,52 +420,7 @@ export default function HomePage() {
                 <span>Experience design</span>
               </div>
             </div>
-              <div className="rows featured-work-v34">
-
-                <a href="https://www.hbmpartners.fr/" target="_blank" rel="noopener noreferrer" className="feat-card">
-                  <div className="feat-media">
-                    <svg viewBox="0 0 400 200" role="img" aria-label="Illustrative HBM Partners website concept">
-                      <rect className="fr" x="20" y="14" width="360" height="172" rx="5" />
-                      <line className="fr-l" x1="20" y1="42" x2="380" y2="42" />
-                      <circle className="fr-d" cx="36" cy="28" r="2.5" />
-                      <circle className="fr-d" cx="46" cy="28" r="2.5" />
-                      <circle className="fr-d" cx="56" cy="28" r="2.5" />
-                      <rect className="fr-b" x="238" y="24" width="30" height="7" rx="3.5" />
-                      <rect className="fr-b" x="276" y="24" width="30" height="7" rx="3.5" />
-                      <rect className="fr-h" x="314" y="22" width="46" height="11" rx="5.5" />
-                      <rect className="fr-t" x="44" y="66" width="150" height="12" rx="6" />
-                      <rect className="fr-t" x="44" y="86" width="112" height="12" rx="6" />
-                      <rect className="fr-b" x="44" y="112" width="176" height="6" rx="3" />
-                      <rect className="fr-b" x="44" y="124" width="140" height="6" rx="3" />
-                      <rect className="fr-h" x="44" y="146" width="62" height="14" rx="7" />
-                      <rect className="fr-w" x="246" y="62" width="112" height="102" rx="4" />
-                      <path className="fr-s" d="M258,140 L286,118 L312,126 L346,88" />
-                      <circle className="fr-e" cx="346" cy="88" r="4" />
-                    </svg>
-                    <span className="feat-ribbon lab">Featured · Website</span>
-                  </div>
-                  <div className="feat-body">
-                    <div className="feat-row">
-                      <h4 className="serif">HBM Partners</h4>
-                      <span className="feat-host lab">hbmpartners.fr</span>
-                    </div>
-                    <p>A considered digital presence for a professional services firm, built around clarity, trust, and thoughtful product storytelling.</p>
-                    <div className="feat-tags"><span>Professional services</span><span>Brand &amp; build</span><span>Live</span></div>
-                    <span className="arwlink">View the site <span className="arw">→</span></span>
-                  </div>
-                </a>
-
-                <a href="/contact" className="next-card">
-                  <div className="next-mark" aria-hidden="true">
-                    <svg viewBox="0 0 64 64"><path d="M32 18 V46 M18 32 H46" /></svg>
-                  </div>
-                  <div className="lab a">More work</div>
-                  <h4 className="serif">Your project next.</h4>
-                  <p>Digital strategy, bespoke builds, and practical support for teams that need a reliable partner without the usual agency noise.</p>
-                  <span className="arwlink">Start a conversation <span className="arw">→</span></span>
-                </a>
-
-              </div>
+              <CaseStudies />
           </div>
         </section>
 
@@ -480,25 +462,17 @@ export default function HomePage() {
                   <div className="sec-markers">
                     <span className="lab">SMEs</span><span className="lab">Professional services</span><span className="lab">Retail &amp; hospitality</span>
                   </div>
-                  <h2 className="serif">Practical digital work for <span className="it">teams</span> ready to grow.</h2>
-                  <p className="lead">We help ambitious businesses shape clear digital products, modernise legacy systems, and create a calmer path to growth.</p>
+                  <h2 className="serif">Built for SMEs, professional firms, and retail and hospitality.</h2>
+                  <p className="lead">We help ambitious businesses shape clear digital products, modernise legacy systems, and create a clearer route to growth.</p>
                   <div className="sec-markers">
                     <span className="lab a">Web platforms</span><span className="lab a">Product design</span><span className="lab a">Digital strategy</span><span className="lab a">Long-term support</span>
                   </div>
                 </div>
-                <div className="sector-metrics" aria-label="Business statistics">
-                  {[
-                    ['98','%','Client retention','M4 12l5 5L20 6 M12 2a10 10 0 1 0 10 10'],
-                    ['40','+','Projects delivered','M12 3 22 8 12 13 2 8Z M2 12l10 5 10-5 M2 16l10 5 10-5'],
-                    ['24','','Years combined experience','M3 6h18v15H3Z M7 3v6 M17 3v6 M3 11h18 M8 15h2 M14 15h2'],
-                    ['24/7','','Support','M4 13v-2a8 8 0 0 1 16 0v2 M4 12H2v6h5v-6Z M20 12h2v6h-5v-6Z M20 18q0 4-8 4']
-                  ].map(([value,suffix,label,path])=>(
-                    <div className="sector-metric" key={label}>
-                      <div className="sector-metric-top"><span className="sector-metric-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d={path}/></svg></span><b className="serif">{value}<small>{suffix}</small></b></div>
-                      <span className="sector-metric-label">{label}</span>
-                      <svg className="sector-wave" viewBox="0 0 240 45" preserveAspectRatio="none" aria-hidden="true"><path d="M0 45Q80 48 140 22T240 4V45Z" fill="currentColor" opacity=".12"/><path d="M0 45Q110 50 170 25T240 15V45Z" fill="currentColor" opacity=".13"/></svg>
-                    </div>
-                  ))}
+                <div className="home-proof-strip" aria-label="Salaro facts">
+                  <div><strong>1995</strong><span>Building for the web since</span></div>
+                  <div><strong>~1,000</strong><span>Client sites delivered by our team</span></div>
+                  <div><strong>UK + India</strong><span>UK-led, with delivery in Pondicherry</span></div>
+                  <div><strong>Direct</strong><span>You work with the founder, not an account manager</span></div>
                 </div>
               </div>
 
@@ -512,9 +486,9 @@ export default function HomePage() {
           <div className="wrap"><div className="grid">
             <div className="rv">
               <div className="eyebrow lab a">Ethos</div>
-              <div className="small serif">Intelligent design over noise.</div>
+              <div className="small serif">Small team. Senior people. No hand-offs.</div>
             </div>
-            <div className="big serif rv">We solve problems to produce intelligent designs, deliver engaging experiences and build <em>meaningful connections</em>. Whether it's website design or app development, we take your business online <em>the right way</em>.</div>
+            <div className="big serif rv">We’ve been building for the web since 1995. We pick the right tool for each job and stay around after launch.</div>
           </div></div>
         </section>
 
@@ -523,12 +497,12 @@ export default function HomePage() {
           <div className="cols">
             <div className="foot-top">
               <div>
-                <div className="fbrand">Salaro</div>
+                <a href="https://salaro.com/" className="fbrand">Salaro</a>
                 <p>A UK-led digital consultancy. Practising since 1995.</p>
               </div>
-              <div className="fcol"><h5>Practice</h5><a href="/build">Build</a><a href="/migrate">Migrate</a><a href="/move-from-php">Move from PHP</a><a href="/advise">Advise</a></div>
+              <div className="fcol"><h5>Practice</h5><a href="/build">Build</a><a href="/migrate">Migrate</a><a href="/#move-from-php">Move from PHP</a><a href="/advise">Advise</a></div>
               <div className="fcol"><h5>Work</h5><a href="/work">Recent projects</a><a href="/archive">Archive</a></div>
-              <div className="fcol"><h5>Contact</h5><a href="mailto:hello@salaro.com">hello@salaro.com</a><a href="#">UK-based</a><a href="https://uk.linkedin.com/in/salaro">LinkedIn</a></div>
+              <div className="fcol"><h5>Contact</h5><a href="mailto:hello@salaro.com">hello@salaro.com</a><a href="/contact">UK-based</a><a href="https://uk.linkedin.com/in/salaro">LinkedIn</a></div>
             </div>
             <div className="foot-bot">
               <span className="lab">© 2026 Salaro · a trading name of S. Golestanian, sole trader · 39 Cater Gardens, Guildford, Surrey GU3 3BY</span>
@@ -541,11 +515,11 @@ export default function HomePage() {
 }
 
 const deliveryStages = [
- {name:'Discover',short:'Understand the challenge',title:'Start with the right questions.',description:'Understand the business, its users and the challenges that technology needs to solve.',tags:['Research','Business needs','User insight']},
- {name:'Strategy',short:'Define the direction',title:'Turn insight into direction.',description:'Shape a practical plan that connects business objectives with the right technical approach.',tags:['Planning','Architecture','Priorities']},
- {name:'Design',short:'Shape the experience',title:'Make complexity feel simple.',description:'Translate the strategy into thoughtful interfaces and clear, intuitive user journeys.',tags:['UX','Visual design','Prototyping']},
- {name:'Develop',short:'Build with precision',title:'Bring the experience to life.',description:'Develop and review the solution with expert human oversight throughout the process.',tags:['Engineering','Integration','Review']},
- {name:'Launch',short:'Deliver with confidence',title:'Ready for the real world.',description:'Review the finished experience and prepare it for a reliable launch and ongoing support.',tags:['Testing','Deployment','Support']}
+ {name:'Discover',short:'Start with the right questions',title:'Start with the right questions.',description:"We learn how your business works, who your customers are and what's not working today. No brief is too rough to start with.",tags:['Research','Business needs','User insight']},
+ {name:'Strategy',short:'Decide what to build',title:'Decide what to build — and what not to.',description:'We turn what we learned into a clear plan, with scope, platform, budget and timeline. You get a fixed quote before any build work starts.',tags:['Scope','Platform choice','Fixed quote']},
+ {name:'Design',short:'See it before we build it',title:'See it before we build it.',description:'We design the key pages and flows so you can click through and give feedback early. Changes are cheap at this stage, so we make them here.',tags:['Wireframes','Visual design','Prototype']},
+ {name:'Develop',short:'Build in the open',title:'Built in the open.',description:'Our team builds on a live preview link you can check at any time. AI tools speed up routine work, and a person reviews every change.',tags:['Live previews','AI-assisted build','Human review']},
+ {name:'Launch',short:'Go live, then improve',title:'Go live, then keep improving.',description:'We handle hosting, redirects, SEO checks and the switch-over. After launch we stay on for support and improvements.',tags:['Launch','SEO','Ongoing support']}
 ];
 function StageGraphic({index}) {return <svg className="journey-svg" viewBox="0 0 120 82" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
  <circle cx="60" cy="41" r="39" opacity=".13" strokeDasharray="2 5"/><path d="M4 41h112M60 2v78" opacity=".12" strokeDasharray="2 4"/><circle cx="60" cy="41" r="32" opacity=".12"/>

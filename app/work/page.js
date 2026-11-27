@@ -1,59 +1,76 @@
 'use client';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import CaseStudies, { caseStudies } from '../components/CaseStudies';
+import Image from 'next/image';
 
 export default function WorkPage() {
+  const [active, setActive] = useState(0);
+  const [playing, setPlaying] = useState(true);
+  const [hovered, setHovered] = useState(false);
+  useEffect(() => {
+    const media = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (!playing || hovered || media.matches) return;
+    const timer = setTimeout(() => setActive(i => (i + 1) % caseStudies.length), 6500);
+    return () => clearTimeout(timer);
+  }, [active, playing, hovered]);
+  const project = caseStudies[active];
   useEffect(() => {
     const io = new IntersectionObserver(
       es => es.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); }),
       { threshold: 0.1 }
     );
-    document.querySelectorAll('.rv').forEach(el => io.observe(el));
+    document.querySelectorAll('.p-work .rv').forEach(el => io.observe(el));
     return () => io.disconnect();
   }, []);
 
   return (
-    <div className="p-work">
+    <div className="p-work work-showcase">
       <div className="topbar">
         <div className="wrap">
-          <a href="/" className="brand">Sala<span>ro</span></a>
+          <a href="https://salaro.com/" className="brand">Sala<span>ro</span></a>
           <nav className="nav">
-            <a href="/practice">Practice</a>
-            <a href="/work" className="active">Work</a>
-            <a href="/studio">Studio</a>
-            <a href="/writing">Writing</a>
-            <a href="/contact">Contact</a>
+            <a href="https://salaro.com/practice">Practice</a>
+            <a href="https://salaro.com/work" className="active">Work</a>
+            <a href="https://salaro.com/studio">Studio</a>
+            <a href="https://salaro.com/writing">Writing</a>
+            <a href="https://salaro.com/contact">Contact</a>
           </nav>
           <a href="tel:+447485222490" className="top-cta">Start a project</a>
         </div>
       </div>
 
-      <header className="hero drifting-field">
+      <header className="hero drifting-field balanced-work-hero">
         <div className="wrap">
           <div className="hero-inner">
-            <div className="hero-copy">
-              <div className="eyebrow lab a">Selected work</div>
+            <div className="hero-copy"><div className="hero-intro">
+              <div className="eyebrow lab a">Project portfolio</div>
               <h1 className="serif">
-                <span className="reveal-line"><span>Built over time.</span></span>
-                <span className="reveal-line"><span><span className="rust">Shaped</span> with care.</span></span>
+                <span className="reveal-line"><span>Real projects.</span></span>
+                <span className="reveal-line"><span>Lasting <span className="rust">impact.</span></span></span>
               </h1>
-              <p className="sub">We work across strategy, product direction, content systems, and digital platform delivery. The work below reflects the kinds of problems we help teams solve, from early thinking through long-term product care.</p>
+              <p className="sub">Explore how we turn business requirements into usable digital experiences, with a focus on the decisions that make each project effective.</p>
+              <a className="showcase-link" href="#case-studies">Explore our work <span>↗</span></a>
+              </div><aside className="work-hero-note">
+                <div className="lab a">The thinking behind the work</div>
+                <h2 className="serif">Different challenges. <em>Purposeful solutions.</em></h2>
+                <p>Every project begins with understanding what matters to the business and the people it serves.</p>
+                <p>From complex corporate platforms to intuitive commerce experiences, we bring together thoughtful design, modern technology and practical delivery.</p><div className="work-note-values">{['Business focus','Digital craft','Built to evolve'].map((value,i)=><div key={value}><span className="lab a">0{i+1}</span><strong>{value}</strong></div>)}</div>
+              </aside>
             </div>
             <div className="hero-viz">
-              <div className="viz-cap"><span className="lab a">Work overview</span><span className="lab">Selected themes</span></div>
-              <div className="viz-fig"><span className="serif">6</span><span className="lab">focus areas</span></div>
-              <div className="barchart">
-                <span className="bar" style={{ height: '46%' }}></span>
-                <span className="bar" style={{ height: '68%' }}></span>
-                <span className="bar hot" style={{ height: '92%' }}></span>
-                <span className="bar" style={{ height: '61%' }}></span>
-                <span className="bar" style={{ height: '78%' }}></span>
-              </div>
-              <div className="axis"><span>Plan</span><span>Design</span><span>Build</span><span>Care</span></div>
-              <div className="kpis">
-                <div><b className="serif">30+</b><span>Years</span></div>
-                <div><b className="serif">100+</b><span>Products</span></div>
-                <div><b className="serif">UK-led</b><span>Direction</span></div>
-              </div>
+              <div className={`cinema-portfolio ${playing && !hovered ? "is-playing" : ""}`}  onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
+                <div className="cinema-visual"><div className="cinema-top"><span className="lab">Selected projects</span><span className="lab">0{active+1} / 0{caseStudies.length}</span></div>
+                <div className="cinema-stage">
+                  <div className="cinema-grid" aria-hidden="true" />
+                  {[-1,0,1].map(offset => { const index=(active+offset+caseStudies.length)%caseStudies.length; const item=caseStudies[index]; return <div key={item.name} className={`cinema-panel ${offset===0?'front':offset<0?'back-left':'back-right'}`}>
+                    {offset===0 ? <a href={item.url} target="_blank" rel="noopener noreferrer" aria-label={`Visit ${item.name}`}><Image src={item.image} alt={item.alt} width={800} height={450} sizes="(max-width: 920px) 80vw, 45vw" priority={index===0}/></a> : <button type="button" onClick={()=>setActive(index)} aria-label={`Show ${item.name}`}><Image src={item.image} alt="" width={800} height={450} sizes="25vw"/></button>}
+                  </div> })}
+                  <span className="cinema-corner tl"/><span className="cinema-corner br"/>
+                </div>
+                </div><div className="cinema-bottom"><div className="cinema-progress" aria-hidden="true"><i key={active}/></div>
+                <div className="cinema-details"><div key={project.name} className="cinema-copy"><h2 className="serif">{project.name}</h2><p>{project.solution}</p><span className="lab">{project.platform}{project.status ? ` · ${project.status}` : ''}</span> <a className="cinema-visit" href={project.url} target="_blank" rel="noopener noreferrer">Visit site ↗</a></div><div className="cinema-controls"><button type="button" aria-label="Previous project" onClick={()=>setActive(i=>(i+caseStudies.length-1)%caseStudies.length)}>←</button><button type="button" aria-label={playing?'Pause slideshow':'Play slideshow'} onClick={()=>setPlaying(p=>!p)}>{playing?'Ⅱ':'▷'}</button><button type="button" aria-label="Next project" onClick={()=>setActive(i=>(i+1)%caseStudies.length)}>→</button></div></div>
+                <div className="cinema-index">{caseStudies.map((item,i)=><button key={item.name} type="button" aria-pressed={active===i} onClick={()=>setActive(i)}><span>0{i+1}</span>{item.name}</button>)}</div>
+              </div></div>
             </div>
           </div>
           <a href="#s01" className="scroll"><span className="lab">Scroll for more</span><span className="chev"></span></a>
@@ -67,29 +84,38 @@ export default function WorkPage() {
           <div className="rowhead rv">
             <div className="num lab a">(01)</div>
             <h2 className="serif">Quietly practical, <span className="rust">always considered</span>.</h2>
+
           </div>
           <div className="content rv">
-            <p>The work we do is rarely loud. It is usually about making complex things easier to understand, maintain, and grow — systems that support teams and platforms that hold up over time.</p>
-            <p>Strategy-led, clearly structured, and built to be maintained long after launch. We stay close to the work and to the people behind it.</p>
-            <div className="caps">
-              <div className="lab">Focus areas span</div>
-              <div className="cap-tags">
-                <span>Content systems</span><span>Product direction</span><span>Platform delivery</span><span>Product care</span><span>Migration</span>
-              </div>
-            </div>
+            <p>A complicated brief should lead to a straightforward experience. We organise information around the people who use it.</p>
+            <p>For clients, that means fewer unnecessary steps and a more manageable digital presence.</p>
+          </div>
+          <div className="work-transform" aria-label="Requirements are organised into a usable platform">
+            <svg viewBox="0 0 760 180" aria-hidden="true"><g fill="none" stroke="#b5a48e" strokeWidth="1.3"><path d="M105 30H205Q240 30 270 90H350M105 90H350M105 150H205Q240 150 270 90M410 90H500Q535 90 560 30H655M410 90H655M500 90Q535 90 560 150H655"/><path className="wt-flow" d="M105 30H205Q240 30 270 90H500Q535 90 560 150H655M105 90H655M105 150H205Q240 150 270 90H500Q535 90 560 30H655" stroke="#a34c2d" strokeWidth="2"/></g><g fill="#f9f5ec" stroke="#9c8f7c">{[30,90,150].map(y=><g key={y}><rect x="35" y={y-17} width="70" height="34" rx="3"/><path d={`M47 ${y-5}h45M47 ${y+5}h30`}/></g>)}</g><g className="wt-core"><rect x="350" y="55" width="60" height="70" rx="5" fill="#d8e4d3" stroke="#52735a"/><path d="M365 90l10 10 20-25" fill="none" stroke="#52735a" strokeWidth="3"/></g><g fill="#e4eadc" stroke="#78917a">{[30,90,150].map(y=><g key={y}><rect x="655" y={y-20} width="70" height="40" rx="3"/><path d={`M665 ${y-9}h50M665 ${y}h20M690 ${y}h25M665 ${y+9}h50`}/></g>)}</g></svg>
+            <div className="wt-labels"><span>Business needs</span><span>Clear structure</span><span>Usable platform</span></div>
           </div>
         </div></div>
       </section>
 
-      <section className="row">
+      <section className="row work-case-studies" id="case-studies">
+        <div className="wrap">
+          <div className="rowhead rv">
+            <div className="num lab a">Selected work</div>
+            <h2 className="serif">Real sites. <span className="rust">Clear decisions.</span></h2>
+          </div>
+          <div className="rv"><CaseStudies /></div>
+        </div>
+      </section>
+
+      <section className="row showcase-capabilities">
         <div className="wrap"><div className="grid">
           <div className="rowhead rv">
             <div className="num lab a">(02)</div>
             <h2 className="serif">What we help <span className="rust">shape</span></h2>
-            <p className="sub">Four recurring themes across the platforms we plan, build, and look after.</p>
+            <p className="sub">Explore the different needs our projects address.</p>
           </div>
           <div className="content rv">
-            <div className="cards">
+            <div className="cards work-capabilities">
 
               <div className="card">
                 <div className="thumb">
@@ -167,12 +193,12 @@ export default function WorkPage() {
         </div></div>
       </section>
 
-      <section className="row">
+      <section className="row showcase-principles">
         <div className="wrap"><div className="grid">
           <div className="rowhead rv">
             <div className="num lab a">(03)</div>
             <h2 className="serif">How we think about <span className="rust">the work</span></h2>
-            <p className="sub">Six principles that keep delivery steady, visible, and aligned.</p>
+            <p className="sub">Three principles that keep delivery steady, visible, and aligned.</p>
           </div>
           <div className="content rv">
             <div className="loc">
@@ -215,26 +241,11 @@ export default function WorkPage() {
         </div>
       </section>
 
-      <section className="exp">
-        <div className="wrap">
-          <div className="head rv">
-            <div className="num lab a">(05)</div>
-            <h2 className="serif">A record of <span className="rust">steady delivery</span></h2>
-          </div>
-          <div className="metrics-grid rv">
-            <div className="metric-card"><b className="serif">30+</b><div className="lab">Years of practice</div></div>
-            <div className="metric-card"><b className="serif">100+</b><div className="lab">Digital products</div></div>
-            <div className="metric-card"><b className="serif">24/7</b><div className="lab">Support mindset</div></div>
-            <div className="metric-card"><b className="serif">99.9%</b><div className="lab">Reliability focus</div></div>
-          </div>
-        </div>
-      </section>
-
       <section className="cta">
         <div className="wrap">
           <div className="rv">
-            <div className="lab">Ready to talk?</div>
-            <h2 className="serif">Let's talk about the <em>next step</em>.</h2>
+            <div className="lab">Your brief</div>
+            <h2 className="serif">What could we <em>create together</em>?</h2>
             <div className="btns">
               <a href="tel:+447485222490" className="btn-primary">Start a conversation <span>→</span></a>
               <a href="/contact" className="btn-ghost">Get in touch</a>
@@ -247,7 +258,7 @@ export default function WorkPage() {
         <div className="cols">
           <div className="foot-top">
             <div>
-              <a href="/" className="fbrand">Salaro</a>
+              <a href="https://salaro.com/" className="fbrand">Salaro</a>
               <p>Strategy, product direction, and long-term platform care. Practising since 1995.</p>
             </div>
             <div className="fcol"><h5>Sitemap</h5><a href="/practice">Practice</a><a href="/work">Work</a><a href="/studio">Studio</a><a href="/writing">Writing</a></div>
@@ -255,7 +266,7 @@ export default function WorkPage() {
             <div className="fcol"><h5>Legal</h5><a href="/privacy">Privacy</a><a href="/terms">Terms</a></div>
           </div>
           <div className="foot-bot">
-            <span className="lab">© 2026 Salaro Ltd · Registered in England &amp; Wales · Guildford, Surrey</span>
+            <span className="lab">© 2026 Salaro · a trading name of S. Golestanian, sole trader · Guildford, Surrey</span>
             <span className="lab">UK-led practice</span>
           </div>
         </div>
